@@ -1,0 +1,11 @@
+GoldFlow Phase 3D.3.2.1 — Dynamic MT5 Calculation-Mode Guard
+
+Verified 2026-10-20:
+- pytest: 327 passed
+- compileall: passed
+- research readiness: READY_WITH_WARNINGS
+- execution-spec audit: ASSUMPTIONS_ONLY (expected until the intended Windows MT5 terminal captures real symbol specifications)
+- strict M5 backtest: refused before execution with ASSUMPTIONS_ONLY, as designed
+- five metrics audit snapshots refreshed; trade/config payloads unchanged from Phase 3D.3.1
+
+Read reports/PHASE3D3_2_CALC_MODE_GUARD.md and docs/ANTIGRAVITY_REVIEW_PHASE3D3_2.md. No SMC signal, fill, stop/target, holding-period, or historical trade metric logic was changed in this milestone.

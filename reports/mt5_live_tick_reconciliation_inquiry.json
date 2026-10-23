@@ -1,0 +1,125 @@
+{
+  "captured_at_utc": "2026-10-20T14:17:59.875712+00:00",
+  "account_info": {
+    "login": 5057357767,
+    "server": "MetaQuotes-Demo",
+    "company": "MetaQuotes Ltd.",
+    "currency": "USD",
+    "leverage": 100,
+    "trade_mode": 0
+  },
+  "terminal_info": {
+    "name": "MetaTrader 5",
+    "company": "MetaQuotes Ltd.",
+    "build": 6274,
+    "connected": true
+  },
+  "symbol_info": {
+    "name": "XAUUSD",
+    "digits": 2,
+    "point": 0.01,
+    "spread": 40,
+    "spread_float": true,
+    "trade_calc_mode": 4,
+    "trade_contract_size": 100.0,
+    "trade_tick_size": 0.01,
+    "trade_tick_value": 0.1,
+    "trade_tick_value_profit": 0.1,
+    "trade_tick_value_loss": 0.1,
+    "currency_base": "XAU",
+    "currency_profit": "USD",
+    "currency_margin": "USD",
+    "volume_min": 0.01,
+    "volume_step": 0.01,
+    "volume_max": 100.0,
+    "volume_limit": 0.0
+  },
+  "tick_info": {
+    "time": 1792516679,
+    "bid": 4134.6,
+    "ask": 4135.0,
+    "last": 0.0,
+    "volume": 0
+  },
+  "tick_size": 0.01,
+  "one_tick_calculations": [
+    {
+      "volume": 1.0,
+      "buy_favorable_1tick": 1.0,
+      "buy_adverse_1tick": -1.0,
+      "sell_favorable_1tick": 1.0,
+      "sell_adverse_1tick": -1.0,
+      "expected_linear_formula_profit": 1.0
+    },
+    {
+      "volume": 0.5,
+      "buy_favorable_1tick": 0.5,
+      "buy_adverse_1tick": -0.5,
+      "sell_favorable_1tick": 0.5,
+      "sell_adverse_1tick": -0.5,
+      "expected_linear_formula_profit": 0.5
+    },
+    {
+      "volume": 0.1,
+      "buy_favorable_1tick": 0.1,
+      "buy_adverse_1tick": -0.1,
+      "sell_favorable_1tick": 0.1,
+      "sell_adverse_1tick": -0.1,
+      "expected_linear_formula_profit": 0.1
+    },
+    {
+      "volume": 0.05,
+      "buy_favorable_1tick": 0.05,
+      "buy_adverse_1tick": -0.05,
+      "sell_favorable_1tick": 0.05,
+      "sell_adverse_1tick": -0.05,
+      "expected_linear_formula_profit": 0.05
+    },
+    {
+      "volume": 0.01,
+      "buy_favorable_1tick": 0.01,
+      "buy_adverse_1tick": -0.01,
+      "sell_favorable_1tick": 0.01,
+      "sell_adverse_1tick": -0.01,
+      "expected_linear_formula_profit": 0.01
+    }
+  ],
+  "multi_tick_calculations": [
+    {
+      "ticks": 1,
+      "price_diff": 0.01,
+      "calculated_profit": 1.0,
+      "expected_profit": 1.0
+    },
+    {
+      "ticks": 2,
+      "price_diff": 0.02,
+      "calculated_profit": 2.0,
+      "expected_profit": 2.0
+    },
+    {
+      "ticks": 5,
+      "price_diff": 0.05,
+      "calculated_profit": 5.0,
+      "expected_profit": 5.0
+    },
+    {
+      "ticks": 10,
+      "price_diff": 0.1,
+      "calculated_profit": 10.0,
+      "expected_profit": 10.0
+    },
+    {
+      "ticks": 50,
+      "price_diff": 0.5,
+      "calculated_profit": 50.0,
+      "expected_profit": 50.0
+    },
+    {
+      "ticks": 100,
+      "price_diff": 1.0,
+      "calculated_profit": 100.0,
+      "expected_profit": 100.0
+    }
+  ]
+}

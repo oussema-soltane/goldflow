@@ -1,0 +1,36 @@
+{
+  "pipeline_timestamp_utc": "2026-10-20T16:12:18.864497+00:00",
+  "symbol": "XAUUSD",
+  "requested_timeframes": [
+    "H1",
+    "M15"
+  ],
+  "requested_bars": 100,
+  "timestamp_mode": "server_wall_clock",
+  "server_timezone": "Europe/Athens",
+  "timestamp_mode_verified": false,
+  "diagnostic_evidence": {},
+  "overall_status": "FAILED",
+  "timeframe_results": {
+    "H1": {
+      "status": "SUCCESS",
+      "bars_requested": 100,
+      "raw_bars_received": 100,
+      "clean_bars_saved": 100,
+      "start_time_utc": "2026-02-02T08:00:00+00:00",
+      "end_time_utc": "2026-02-03T08:45:00+00:00",
+      "raw_sha256": null,
+      "timestamp_mode": "server_wall_clock",
+      "server_timezone": "Europe/Athens",
+      "timestamp_mode_verified": false
+    },
+    "M15": {
+      "status": "FAILED",
+      "reason": "Simulated MT5 feed failure for M15",
+      "bars_requested": 100
+    }
+  },
+  "errors": [
+    "Failed to ingest XAUUSD M15: Simulated MT5 feed failure for M15"
+  ]
+}

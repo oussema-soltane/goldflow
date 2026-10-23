@@ -1,0 +1,490 @@
+{
+  "report_title": "GoldFlow Phase 4.1 \u2014 SMC v1 Robustness and Cost Sensitivity Analysis",
+  "generated_at_utc": "2026-10-20T16:14:57.237544+00:00",
+  "instrument": "XAUUSD",
+  "timeframes": [
+    "H4"
+  ],
+  "predeclared_scenarios": [
+    "baseline",
+    "2x_spread",
+    "3x_spread",
+    "2x_slippage",
+    "2x_all_costs",
+    "with_commission",
+    "worst_case"
+  ],
+  "execution_spec_audit_status": "MATCHED_CAPTURED_DEFAULTS_UNVERIFIED_PROVENANCE",
+  "readiness_status": "READY_WITH_WARNINGS",
+  "base_config": {
+    "initial_capital": 10000.0,
+    "risk_fraction": 0.01,
+    "contract_size_oz": 100.0,
+    "point_size": 0.01,
+    "fallback_spread_usd": 0.2,
+    "slippage_per_side_usd": 0.05,
+    "commission_per_lot_per_side": 0.0,
+    "min_lot": 0.01,
+    "lot_step": 0.01,
+    "max_lots": 100.0,
+    "max_concurrent_positions": 1,
+    "conservative_stop_first": true,
+    "max_holding_bars": null,
+    "spread_multiplier": 1.0,
+    "override_spread_usd": null
+  },
+  "results_by_timeframe": {
+    "H4": {
+      "timeframe": "H4",
+      "total_rows": 5000,
+      "data_start": "2023-07-27T17:00:00+00:00",
+      "data_end": "2026-10-20T09:00:00+00:00",
+      "source_verification_status": "declared_not_independently_verified",
+      "candidates_detected": 15,
+      "funnel": {
+        "total_bars": 5000,
+        "total_structure_breaks": 471,
+        "choch_breaks_evaluated": 213,
+        "choch_trend_aligned": 213,
+        "choch_with_preceding_sweep": 61,
+        "choch_with_order_block": 60,
+        "ob_retest_evaluated": 60,
+        "ob_retest_invalidated": 17,
+        "ob_retest_timed_out": 21,
+        "ob_retest_confirmed": 22,
+        "passed_premium_discount": 22,
+        "rejected_premium_discount": 0,
+        "valid_risk_and_rr": 15,
+        "rejected_risk_or_rr": 7,
+        "final_candidates": 15,
+        "next_bar_open_available": 15
+      },
+      "experiment_a_fixed_replay": [
+        {
+          "scenario": "baseline",
+          "spread_multiplier": 1.0,
+          "slippage_per_side_usd": 0.05,
+          "commission_per_lot_per_side_usd": 0.0,
+          "total_trades": 13,
+          "rule_exit_trades": 13,
+          "raw_gross_profit": 472.40500000000316,
+          "spread_cost": 8.969999999999999,
+          "slippage_cost": 14.700000000000001,
+          "commission": 0.0,
+          "total_transaction_costs": 23.67,
+          "net_profit": 448.73500000000297,
+          "return_pct": 4.4873500000000295,
+          "win_rate_pct": 30.76923076923077,
+          "profit_factor": 1.5403451099390755,
+          "expectancy_per_rule_exit": 34.51807692307715,
+          "average_R_multiple": 0.4638402049766622,
+          "max_drawdown_cash": 351.1299999999974,
+          "max_drawdown_pct": 3.3230571216985543
+        },
+        {
+          "scenario": "2x_spread",
+          "spread_multiplier": 2.0,
+          "slippage_per_side_usd": 0.05,
+          "commission_per_lot_per_side_usd": 0.0,
+          "total_trades": 13,
+          "rule_exit_trades": 13,
+          "raw_gross_profit": 472.40500000000316,
+          "spread_cost": 17.939999999999998,
+          "slippage_cost": 14.700000000000001,
+          "commission": 0.0,
+          "total_transaction_costs": 32.64,
+          "net_profit": 439.76500000000306,
+          "return_pct": 4.397650000000031,
+          "win_rate_pct": 30.76923076923077,
+          "profit_factor": 1.5242849819382736,
+          "expectancy_per_rule_exit": 33.828076923077155,
+          "average_R_multiple": 0.45661107591284184,
+          "max_drawdown_cash": 354.029999999997,
+          "max_drawdown_pct": 3.3523107915848693
+        },
+        {
+          "scenario": "3x_spread",
+          "spread_multiplier": 3.0,
+          "slippage_per_side_usd": 0.05,
+          "commission_per_lot_per_side_usd": 0.0,
+          "total_trades": 13,
+          "rule_exit_trades": 13,
+          "raw_gross_profit": 472.40500000000316,
+          "spread_cost": 26.910000000000004,
+          "slippage_cost": 14.700000000000001,
+          "commission": 0.0,
+          "total_transaction_costs": 41.61000000000001,
+          "net_profit": 430.7950000000031,
+          "return_pct": 4.307950000000031,
+          "win_rate_pct": 30.76923076923077,
+          "profit_factor": 1.5085407026159272,
+          "expectancy_per_rule_exit": 33.13807692307716,
+          "average_R_multiple": 0.4493819468490216,
+          "max_drawdown_cash": 356.9299999999985,
+          "max_drawdown_pct": 3.3815960568731005
+        },
+        {
+          "scenario": "2x_slippage",
+          "spread_multiplier": 1.0,
+          "slippage_per_side_usd": 0.1,
+          "commission_per_lot_per_side_usd": 0.0,
+          "total_trades": 13,
+          "rule_exit_trades": 13,
+          "raw_gross_profit": 472.40500000000316,
+          "spread_cost": 8.969999999999999,
+          "slippage_cost": 29.400000000000002,
+          "commission": 0.0,
+          "total_transaction_costs": 38.370000000000005,
+          "net_profit": 434.03500000000304,
+          "return_pct": 4.34035000000003,
+          "win_rate_pct": 30.76923076923077,
+          "profit_factor": 1.5139184901013596,
+          "expectancy_per_rule_exit": 33.38730769230793,
+          "average_R_multiple": 0.4521744362574533,
+          "max_drawdown_cash": 357.3299999999981,
+          "max_drawdown_pct": 3.384311580562424
+        },
+        {
+          "scenario": "2x_all_costs",
+          "spread_multiplier": 2.0,
+          "slippage_per_side_usd": 0.1,
+          "commission_per_lot_per_side_usd": 0.0,
+          "total_trades": 13,
+          "rule_exit_trades": 13,
+          "raw_gross_profit": 472.40500000000316,
+          "spread_cost": 17.939999999999998,
+          "slippage_cost": 29.400000000000002,
+          "commission": 0.0,
+          "total_transaction_costs": 47.34,
+          "net_profit": 425.0650000000032,
+          "return_pct": 4.250650000000031,
+          "win_rate_pct": 30.76923076923077,
+          "profit_factor": 1.4983819718838356,
+          "expectancy_per_rule_exit": 32.69730769230793,
+          "average_R_multiple": 0.4449453071936331,
+          "max_drawdown_cash": 360.22999999999774,
+          "max_drawdown_pct": 3.4136206524854744
+        },
+        {
+          "scenario": "with_commission",
+          "spread_multiplier": 1.0,
+          "slippage_per_side_usd": 0.05,
+          "commission_per_lot_per_side_usd": 1.0,
+          "total_trades": 13,
+          "rule_exit_trades": 13,
+          "raw_gross_profit": 472.40500000000316,
+          "spread_cost": 8.969999999999999,
+          "slippage_cost": 14.700000000000001,
+          "commission": 3.0600000000000005,
+          "total_transaction_costs": 26.730000000000004,
+          "net_profit": 445.6750000000031,
+          "return_pct": 4.456750000000031,
+          "win_rate_pct": 30.76923076923077,
+          "profit_factor": 1.5348442300307275,
+          "expectancy_per_rule_exit": 34.282692307692535,
+          "average_R_multiple": 0.461399508449403,
+          "max_drawdown_cash": 352.36999999999716,
+          "max_drawdown_pct": 3.335328958733122
+        },
+        {
+          "scenario": "worst_case",
+          "spread_multiplier": 3.0,
+          "slippage_per_side_usd": 0.2,
+          "commission_per_lot_per_side_usd": 2.0,
+          "total_trades": 13,
+          "rule_exit_trades": 13,
+          "raw_gross_profit": 472.40500000000316,
+          "spread_cost": 26.910000000000004,
+          "slippage_cost": 58.800000000000004,
+          "commission": 6.120000000000001,
+          "total_transaction_costs": 91.83000000000001,
+          "net_profit": 380.57500000000306,
+          "return_pct": 3.805750000000031,
+          "win_rate_pct": 30.76923076923077,
+          "profit_factor": 1.4251949589971669,
+          "expectancy_per_rule_exit": 29.275000000000226,
+          "average_R_multiple": 0.4095032476368766,
+          "max_drawdown_cash": 378.0099999999984,
+          "max_drawdown_pct": 3.59068252034546
+        }
+      ],
+      "experiment_b_resimulation": [
+        {
+          "scenario": "baseline",
+          "spread_multiplier": 1.0,
+          "slippage_per_side_usd": 0.05,
+          "commission_per_lot_per_side_usd": 0.0,
+          "candidate_count": 15,
+          "rule_exit_trades": 13,
+          "end_of_data_exits": 0,
+          "skipped_candidates": 2,
+          "wins": 4,
+          "losses": 9,
+          "win_rate_pct": 30.76923076923077,
+          "raw_gross_profit": 472.40500000000304,
+          "spread_cost": 8.97,
+          "slippage_cost": 14.700000000021191,
+          "commission": 0.0,
+          "total_transaction_costs": 23.670000000021194,
+          "net_profit": 448.7349999999806,
+          "return_pct": 4.487349999999801,
+          "profit_factor": 1.5403451099390375,
+          "expectancy_per_rule_exit": 34.51807692307553,
+          "average_R_multiple": 0.46384020497664563,
+          "max_drawdown_cash": 751.760000000002,
+          "max_drawdown_pct": 7.206088020942683,
+          "max_realized_drawdown_cash": 351.130000000021,
+          "end_of_data_pnl": 0,
+          "divergences_from_baseline": []
+        },
+        {
+          "scenario": "2x_spread",
+          "spread_multiplier": 2.0,
+          "slippage_per_side_usd": 0.05,
+          "commission_per_lot_per_side_usd": 0.0,
+          "candidate_count": 15,
+          "rule_exit_trades": 13,
+          "end_of_data_exits": 0,
+          "skipped_candidates": 2,
+          "wins": 4,
+          "losses": 9,
+          "win_rate_pct": 30.76923076923077,
+          "raw_gross_profit": 479.47500000000895,
+          "spread_cost": 17.94,
+          "slippage_cost": 14.700000000021191,
+          "commission": 0.0,
+          "total_transaction_costs": 32.64000000002119,
+          "net_profit": 446.83499999999003,
+          "return_pct": 4.468349999999899,
+          "profit_factor": 1.5371645989613154,
+          "expectancy_per_rule_exit": 34.37192307692214,
+          "average_R_multiple": 0.46090876753697213,
+          "max_drawdown_cash": 751.0600000000031,
+          "max_drawdown_pct": 7.1999992330840135,
+          "max_realized_drawdown_cash": 352.3300000000163,
+          "end_of_data_pnl": 0,
+          "divergences_from_baseline": []
+        },
+        {
+          "scenario": "3x_spread",
+          "spread_multiplier": 3.0,
+          "slippage_per_side_usd": 0.05,
+          "commission_per_lot_per_side_usd": 0.0,
+          "candidate_count": 15,
+          "rule_exit_trades": 13,
+          "end_of_data_exits": 0,
+          "skipped_candidates": 2,
+          "wins": 4,
+          "losses": 9,
+          "win_rate_pct": 30.76923076923077,
+          "raw_gross_profit": 486.54500000000655,
+          "spread_cost": 26.910000000000004,
+          "slippage_cost": 14.700000000021191,
+          "commission": 0.0,
+          "total_transaction_costs": 41.610000000021195,
+          "net_profit": 444.93499999998494,
+          "return_pct": 4.449349999999841,
+          "profit_factor": 1.533994623268738,
+          "expectancy_per_rule_exit": 34.22576923076811,
+          "average_R_multiple": 0.4579923554510054,
+          "max_drawdown_cash": 750.3600000000006,
+          "max_drawdown_pct": 7.193909394477154,
+          "max_realized_drawdown_cash": 353.53000000001884,
+          "end_of_data_pnl": 0,
+          "divergences_from_baseline": []
+        },
+        {
+          "scenario": "2x_slippage",
+          "spread_multiplier": 1.0,
+          "slippage_per_side_usd": 0.1,
+          "commission_per_lot_per_side_usd": 0.0,
+          "candidate_count": 15,
+          "rule_exit_trades": 13,
+          "end_of_data_exits": 0,
+          "skipped_candidates": 2,
+          "wins": 4,
+          "losses": 9,
+          "win_rate_pct": 30.76923076923077,
+          "raw_gross_profit": 493.32500000000323,
+          "spread_cost": 8.8,
+          "slippage_cost": 28.599999999993088,
+          "commission": 0.0,
+          "total_transaction_costs": 37.399999999993085,
+          "net_profit": 455.9250000000102,
+          "return_pct": 4.5592500000001035,
+          "profit_factor": 1.554201563202761,
+          "expectancy_per_rule_exit": 35.07115384615463,
+          "average_R_multiple": 0.45817898575894606,
+          "max_drawdown_cash": 752.1600000000017,
+          "max_drawdown_pct": 7.201865958889162,
+          "max_realized_drawdown_cash": 354.2100000000064,
+          "end_of_data_pnl": 0,
+          "divergences_from_baseline": [
+            {
+              "setup_id": "SMC_H4_0001",
+              "diffs": [
+                "lots: 0.07 -> 0.06"
+              ]
+            },
+            {
+              "setup_id": "SMC_H4_0002",
+              "diffs": [
+                "lots: 0.46 -> 0.44"
+              ]
+            },
+            {
+              "setup_id": "SMC_H4_0008",
+              "diffs": [
+                "lots: 0.34 -> 0.33"
+              ]
+            }
+          ]
+        },
+        {
+          "scenario": "2x_all_costs",
+          "spread_multiplier": 2.0,
+          "slippage_per_side_usd": 0.1,
+          "commission_per_lot_per_side_usd": 0.0,
+          "candidate_count": 15,
+          "rule_exit_trades": 13,
+          "end_of_data_exits": 0,
+          "skipped_candidates": 2,
+          "wins": 4,
+          "losses": 9,
+          "win_rate_pct": 30.76923076923077,
+          "raw_gross_profit": 500.2250000000091,
+          "spread_cost": 17.6,
+          "slippage_cost": 28.599999999993088,
+          "commission": 0.0,
+          "total_transaction_costs": 46.19999999999309,
+          "net_profit": 454.025000000016,
+          "return_pct": 4.540250000000157,
+          "profit_factor": 1.550967781081273,
+          "expectancy_per_rule_exit": 34.92500000000123,
+          "average_R_multiple": 0.4552759396371164,
+          "max_drawdown_cash": 751.460000000001,
+          "max_drawdown_pct": 7.195783611316986,
+          "max_realized_drawdown_cash": 355.4100000000017,
+          "end_of_data_pnl": 0,
+          "divergences_from_baseline": [
+            {
+              "setup_id": "SMC_H4_0001",
+              "diffs": [
+                "lots: 0.07 -> 0.06"
+              ]
+            },
+            {
+              "setup_id": "SMC_H4_0002",
+              "diffs": [
+                "lots: 0.46 -> 0.44"
+              ]
+            },
+            {
+              "setup_id": "SMC_H4_0008",
+              "diffs": [
+                "lots: 0.34 -> 0.33"
+              ]
+            }
+          ]
+        },
+        {
+          "scenario": "with_commission",
+          "spread_multiplier": 1.0,
+          "slippage_per_side_usd": 0.05,
+          "commission_per_lot_per_side_usd": 1.0,
+          "candidate_count": 15,
+          "rule_exit_trades": 13,
+          "end_of_data_exits": 0,
+          "skipped_candidates": 2,
+          "wins": 4,
+          "losses": 9,
+          "win_rate_pct": 30.76923076923077,
+          "raw_gross_profit": 472.40500000000304,
+          "spread_cost": 8.97,
+          "slippage_cost": 14.700000000021191,
+          "commission": 3.06,
+          "total_transaction_costs": 26.730000000021192,
+          "net_profit": 445.67499999997926,
+          "return_pct": 4.456749999999787,
+          "profit_factor": 1.5348442300306897,
+          "expectancy_per_rule_exit": 34.282692307690915,
+          "average_R_multiple": 0.4625960112499713,
+          "max_drawdown_cash": 751.8400000000038,
+          "max_drawdown_pct": 7.207835971496175,
+          "max_realized_drawdown_cash": 352.3700000000208,
+          "end_of_data_pnl": 0,
+          "divergences_from_baseline": []
+        },
+        {
+          "scenario": "worst_case",
+          "spread_multiplier": 3.0,
+          "slippage_per_side_usd": 0.2,
+          "commission_per_lot_per_side_usd": 2.0,
+          "candidate_count": 15,
+          "rule_exit_trades": 13,
+          "end_of_data_exits": 0,
+          "skipped_candidates": 2,
+          "wins": 4,
+          "losses": 9,
+          "win_rate_pct": 30.76923076923077,
+          "raw_gross_profit": 529.6950000000063,
+          "spread_cost": 25.020000000000003,
+          "slippage_cost": 53.999999999979536,
+          "commission": 5.640000000000001,
+          "total_transaction_costs": 84.65999999997953,
+          "net_profit": 445.0350000000253,
+          "return_pct": 4.450350000000247,
+          "profit_factor": 1.5356446487892244,
+          "expectancy_per_rule_exit": 34.233461538463594,
+          "average_R_multiple": 0.4389472372942612,
+          "max_drawdown_cash": 711.6799999999985,
+          "max_drawdown_pct": 6.842333477227943,
+          "max_realized_drawdown_cash": 359.1099999999751,
+          "end_of_data_pnl": 0,
+          "divergences_from_baseline": [
+            {
+              "setup_id": "SMC_H4_0001",
+              "diffs": [
+                "lots: 0.07 -> 0.06"
+              ]
+            },
+            {
+              "setup_id": "SMC_H4_0002",
+              "diffs": [
+                "lots: 0.46 -> 0.40"
+              ]
+            },
+            {
+              "setup_id": "SMC_H4_0003",
+              "diffs": [
+                "lots: 0.18 -> 0.17"
+              ]
+            },
+            {
+              "setup_id": "SMC_H4_0008",
+              "diffs": [
+                "lots: 0.34 -> 0.31"
+              ]
+            },
+            {
+              "setup_id": "SMC_H4_0011",
+              "diffs": [
+                "lots: 0.20 -> 0.19"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "evaluation_warnings": [
+    "Scenarios are predeclared before running; NOT used for strategy optimization.",
+    "Experiment A isolates transaction friction on a fixed trade ledger, guaranteeing monotonic cost scaling.",
+    "Experiment B accounts for execution feedback (lot sizing quantization, fill price shifts, entry eligibility).",
+    "Data provenance is UNVERIFIED_PROVENANCE. Full-history in-sample results."
+  ],
+  "artifact_paths": {
+    "metrics_json": "reports\\smc_phase4_robustness_metrics.json",
+    "report_md": "reports\\PHASE4_ROBUSTNESS_ANALYSIS.md"
+  }
+}

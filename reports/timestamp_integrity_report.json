@@ -1,0 +1,63 @@
+{
+  "report_type": "GoldFlow Phase 3B \u2014 Independent Timestamp Integrity Review",
+  "review_date_utc": "2026-10-14",
+  "overall_status": "BLOCKED",
+  "strategy_backtesting_status": "BLOCKED",
+  "review_scope": "Uploaded ZIP source code, sidecars, reports, and regression tests; no live MT5 connection was available to this review.",
+  "findings": [
+    {
+      "id": "FIXED_OFFSET_IS_UNSAFE",
+      "severity": "BLOCKER",
+      "finding": "The uploaded loader hard-coded a -3 hour shift for every historical bar. That does not handle seasonal offset changes and can corrupt historical timestamps.",
+      "resolution": "Removed the hard-coded shift. Added explicit posix_utc and DST-aware server_wall_clock modes."
+    },
+    {
+      "id": "MT5_TIMESTAMP_SEMANTICS_REQUIRE_FEED_SPECIFIC_VERIFICATION",
+      "severity": "BLOCKER",
+      "finding": "The report's observed +3 hour discrepancy conflicts with the official MT5 API timestamp documentation. The discrepancy must be reproduced and explained before selecting a non-default conversion mode.",
+      "resolution": "Default mode follows the documented POSIX UTC convention; server-wall-clock conversion is explicit and configurable."
+    },
+    {
+      "id": "PREVIOUS_REGRESSION_TESTS_ASSUMED_THE_ANSWER",
+      "severity": "HIGH",
+      "finding": "Tests subtracted three hours again in a corrected-data fixture and did not verify the loader against a feed-independent source representation.",
+      "resolution": "Replaced timestamp tests with independent deterministic conversion tests, DST edge-case tests, metadata tests, and quarantine checks."
+    },
+    {
+      "id": "CURRENT_DATASET_QUARANTINED",
+      "severity": "BLOCKER",
+      "finding": "Current CSVs do not preserve original MT5 epoch integers and reflect a fixed offset correction. Historical DST integrity cannot be established from these files.",
+      "resolution": "Sidecars explicitly mark the datasets as blocked legacy fixed-offset artifacts; CSV contents were preserved."
+    },
+    {
+      "id": "PROVENANCE_DECLARED_NOT_VERIFIED",
+      "severity": "BLOCKER",
+      "finding": "The source string and hash do not independently prove the dataset came from MT5 or that the timestamps are authentic.",
+      "resolution": "Sidecars now distinguish declared source from independent verification."
+    },
+    {
+      "id": "STREAMLIT_METADATA_PROPAGATION",
+      "severity": "HIGH",
+      "finding": "The Market Analysis page previously saved processed data without passing source_metadata, which could drop provenance/timestamp fields from sidecars.",
+      "resolution": "The UI now passes source_metadata=meta and includes timestamp mode controls and an unverified-data warning."
+    }
+  ],
+  "live_mt5_retrieval_performed_by_this_review": false,
+  "data_files_modified": false,
+  "next_action": "Run a fresh feed-specific timestamp diagnostic and re-download all timeframes using the verified timestamp mode.",
+  "automated_validation": {
+    "compileall_src_scripts": "PASS",
+    "pytest_tests": {
+      "passed": 146,
+      "failed": 0,
+      "skipped": 0,
+      "status": "PASS"
+    },
+    "live_mt5_retrieval_performed_by_this_review": false,
+    "research_readiness": "BLOCKED as expected for quarantined legacy datasets",
+    "python_compilation": "PASS"
+  },
+  "market_csv_contents_modified": false,
+  "metadata_sidecars_modified": true,
+  "raw_timestamp_epoch_preserved_in_bundled_legacy_csvs": false
+}

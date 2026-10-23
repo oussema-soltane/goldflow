@@ -1,0 +1,37 @@
+{
+  "pipeline_timestamp_utc": "2026-10-22T09:39:05.107198+00:00",
+  "symbol": "XAUUSD",
+  "requested_timeframes": [
+    "M15"
+  ],
+  "requested_bars": 5000,
+  "timestamp_mode": "server_wall_clock",
+  "server_timezone": "Europe/Athens",
+  "timestamp_mode_verified": true,
+  "diagnostic_evidence": {
+    "diagnostic_report_file": "reports\\mt5_timestamp_diagnostic.json",
+    "recommendation": "server_wall_clock",
+    "recommendation_confidence": "candidate_matches_clock_within_tolerance",
+    "server_timezone_candidate": "Europe/Athens",
+    "server_wall_clock_age_seconds": null,
+    "reference_utc_midpoint": "2026-10-21T10:57:33.166558+00:00",
+    "diagnostic_run_finished_utc": "2026-10-21T10:57:33.172769+00:00",
+    "verified_at_utc": "2026-10-22T09:39:04.618026+00:00"
+  },
+  "overall_status": "SUCCESS",
+  "timeframe_results": {
+    "M15": {
+      "status": "SUCCESS",
+      "bars_requested": 5000,
+      "raw_bars_received": 5000,
+      "clean_bars_saved": 5000,
+      "start_time_utc": "2026-08-04T12:00:00+00:00",
+      "end_time_utc": "2026-10-22T09:15:00+00:00",
+      "raw_sha256": "b893bc507daec515d36ff51cb988e4f6e33df23f3ccddd6924794b64fbe7b075",
+      "timestamp_mode": "server_wall_clock",
+      "server_timezone": "Europe/Athens",
+      "timestamp_mode_verified": true
+    }
+  },
+  "errors": []
+}

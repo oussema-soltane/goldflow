@@ -1,0 +1,25 @@
+{
+  "symbol": "XAUUSD",
+  "sanitized_symbol": "XAUUSD",
+  "timeframe": "H1",
+  "processed_file": "XAUUSD_H1_clean.csv",
+  "raw_source_file": "XAUUSD_H1_raw.csv",
+  "raw_file_sha256": "e339513daabd0a1becd16c2b205fd714e6fa83205b7142b1ade969558dfad725",
+  "raw_row_count": 1500,
+  "processed_row_count": 1500,
+  "duplicates_removed": 0,
+  "invalid_ohlc_removed": 0,
+  "processed_date_utc": "2026-10-14T10:14:33.457405+00:00",
+  "timezone_convention": "UTC (UTC-aware pd.Timestamp)",
+  "source": "unknown",
+  "is_synthetic": null,
+  "retrieval_date_utc": null,
+  "incomplete_bar_excluded": null,
+  "start_time": "2026-07-10T08:00:00+00:00",
+  "end_time": "2026-10-14T12:00:00+00:00",
+  "audit_operations": [
+    "Standardized 'time' column to datetime64[ns, UTC].",
+    "Sorted chronologically in ascending order.",
+    "Coerced data types: float64 for prices, int64 for volumes and spreads."
+  ]
+}

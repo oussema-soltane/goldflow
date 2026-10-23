@@ -1,0 +1,38 @@
+{
+  "run_started_utc": "2026-10-21T10:57:33.160348+00:00",
+  "run_finished_utc": "2026-10-21T10:57:33.172769+00:00",
+  "reference_utc_midpoint": "2026-10-21T10:57:33.166558+00:00",
+  "symbol": "XAUUSD",
+  "tick_raw_epoch_seconds": 1792591054,
+  "tick_raw_epoch_milliseconds": 1792591054143,
+  "tick_interpreted_as_posix_utc": "2026-10-21T13:57:34+00:00",
+  "posix_candidate_age_seconds": -10800.833,
+  "tolerance_seconds": 120.0,
+  "server_timezone_candidate": "Europe/Athens",
+  "warning": "Verify Windows time synchronization first. A stale tick, closed market, or incorrect machine clock makes this diagnostic inconclusive.",
+  "tick_interpreted_as_server_wall_clock_utc": "2026-10-21T10:57:34+00:00",
+  "server_wall_clock_candidate_age_seconds": -0.833,
+  "candidate_correction_seconds": -10800,
+  "recommendation": "server_wall_clock",
+  "recommendation_confidence": "candidate_matches_clock_within_tolerance",
+  "sample_m5_bars": [
+    {
+      "raw_epoch_seconds": 1792590300,
+      "posix_utc_candidate": "2026-10-21T13:45:00+00:00",
+      "server_wall_clock_utc_candidate": "2026-10-21T10:45:00+00:00",
+      "correction_seconds": -10800
+    },
+    {
+      "raw_epoch_seconds": 1792590600,
+      "posix_utc_candidate": "2026-10-21T13:50:00+00:00",
+      "server_wall_clock_utc_candidate": "2026-10-21T10:50:00+00:00",
+      "correction_seconds": -10800
+    },
+    {
+      "raw_epoch_seconds": 1792590900,
+      "posix_utc_candidate": "2026-10-21T13:55:00+00:00",
+      "server_wall_clock_utc_candidate": "2026-10-21T10:55:00+00:00",
+      "correction_seconds": -10800
+    }
+  ]
+}

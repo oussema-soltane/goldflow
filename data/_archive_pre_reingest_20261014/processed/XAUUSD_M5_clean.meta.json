@@ -1,0 +1,25 @@
+{
+  "symbol": "XAUUSD",
+  "sanitized_symbol": "XAUUSD",
+  "timeframe": "M5",
+  "processed_file": "XAUUSD_M5_clean.csv",
+  "raw_source_file": "XAUUSD_M5_raw.csv",
+  "raw_file_sha256": "e0410eaa1b78e9aa10a49d549ed849786c6cd08057eb76d420e81b91c74c3497",
+  "raw_row_count": 10000,
+  "processed_row_count": 10000,
+  "duplicates_removed": 0,
+  "invalid_ohlc_removed": 0,
+  "processed_date_utc": "2026-10-14T09:22:10.310983+00:00",
+  "timezone_convention": "UTC (UTC-aware pd.Timestamp)",
+  "source": "MetaTrader 5 API",
+  "is_synthetic": null,
+  "retrieval_date_utc": "2026-10-14T09:22:09.772753+00:00",
+  "incomplete_bar_excluded": true,
+  "start_time": "2026-08-21T13:30:00+00:00",
+  "end_time": "2026-10-14T12:15:00+00:00",
+  "audit_operations": [
+    "Standardized 'time' column to datetime64[ns, UTC].",
+    "Sorted chronologically in ascending order.",
+    "Coerced data types: float64 for prices, int64 for volumes and spreads."
+  ]
+}

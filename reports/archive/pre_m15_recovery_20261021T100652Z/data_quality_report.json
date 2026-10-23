@@ -1,0 +1,133 @@
+{
+  "symbol": "XAUUSD",
+  "timeframe": "M15",
+  "total_rows": 1500,
+  "start_date": "2026-09-28 11:30:00 UTC",
+  "end_date": "2026-10-21 12:15:00 UTC",
+  "is_chronological": true,
+  "duplicate_timestamps_count": 0,
+  "duplicate_timestamps": [],
+  "missing_values_by_column": {
+    "time": 0,
+    "open": 0,
+    "high": 0,
+    "low": 0,
+    "close": 0,
+    "tick_volume": 0,
+    "spread": 0,
+    "real_volume": 0,
+    "time_raw_epoch": 0,
+    "timestamp_correction_applied_seconds": 0
+  },
+  "invalid_ohlc_count": 0,
+  "invalid_ohlc_indices": [],
+  "total_gaps_count": 17,
+  "weekend_gaps_count": 3,
+  "abnormal_gaps_count": 14,
+  "abnormal_gaps": [
+    {
+      "row_index": 46,
+      "start_time": "2026-09-28 22:45:00+00:00",
+      "end_time": "2026-09-29 01:00:00+00:00",
+      "duration_minutes": 135.0,
+      "description": "Missing ~9 bars during active market hours"
+    },
+    {
+      "row_index": 134,
+      "start_time": "2026-09-29 22:45:00+00:00",
+      "end_time": "2026-09-30 01:00:00+00:00",
+      "duration_minutes": 135.0,
+      "description": "Missing ~9 bars during active market hours"
+    },
+    {
+      "row_index": 222,
+      "start_time": "2026-09-30 22:45:00+00:00",
+      "end_time": "2026-10-01 01:00:00+00:00",
+      "duration_minutes": 135.0,
+      "description": "Missing ~9 bars during active market hours"
+    },
+    {
+      "row_index": 310,
+      "start_time": "2026-10-01 22:45:00+00:00",
+      "end_time": "2026-10-02 01:00:00+00:00",
+      "duration_minutes": 135.0,
+      "description": "Missing ~9 bars during active market hours"
+    },
+    {
+      "row_index": 486,
+      "start_time": "2026-10-05 22:45:00+00:00",
+      "end_time": "2026-10-06 01:00:00+00:00",
+      "duration_minutes": 135.0,
+      "description": "Missing ~9 bars during active market hours"
+    },
+    {
+      "row_index": 574,
+      "start_time": "2026-10-06 22:45:00+00:00",
+      "end_time": "2026-10-07 01:00:00+00:00",
+      "duration_minutes": 135.0,
+      "description": "Missing ~9 bars during active market hours"
+    },
+    {
+      "row_index": 662,
+      "start_time": "2026-10-07 22:45:00+00:00",
+      "end_time": "2026-10-08 01:00:00+00:00",
+      "duration_minutes": 135.0,
+      "description": "Missing ~9 bars during active market hours"
+    },
+    {
+      "row_index": 750,
+      "start_time": "2026-10-08 22:45:00+00:00",
+      "end_time": "2026-10-09 01:00:00+00:00",
+      "duration_minutes": 135.0,
+      "description": "Missing ~9 bars during active market hours"
+    },
+    {
+      "row_index": 926,
+      "start_time": "2026-10-12 22:45:00+00:00",
+      "end_time": "2026-10-13 01:00:00+00:00",
+      "duration_minutes": 135.0,
+      "description": "Missing ~9 bars during active market hours"
+    },
+    {
+      "row_index": 1014,
+      "start_time": "2026-10-13 22:45:00+00:00",
+      "end_time": "2026-10-14 01:00:00+00:00",
+      "duration_minutes": 135.0,
+      "description": "Missing ~9 bars during active market hours"
+    },
+    {
+      "row_index": 1102,
+      "start_time": "2026-10-14 22:45:00+00:00",
+      "end_time": "2026-10-15 01:00:00+00:00",
+      "duration_minutes": 135.0,
+      "description": "Missing ~9 bars during active market hours"
+    },
+    {
+      "row_index": 1190,
+      "start_time": "2026-10-15 22:45:00+00:00",
+      "end_time": "2026-10-16 01:00:00+00:00",
+      "duration_minutes": 135.0,
+      "description": "Missing ~9 bars during active market hours"
+    },
+    {
+      "row_index": 1366,
+      "start_time": "2026-10-19 22:45:00+00:00",
+      "end_time": "2026-10-20 01:00:00+00:00",
+      "duration_minutes": 135.0,
+      "description": "Missing ~9 bars during active market hours"
+    },
+    {
+      "row_index": 1454,
+      "start_time": "2026-10-20 22:45:00+00:00",
+      "end_time": "2026-10-21 01:00:00+00:00",
+      "duration_minutes": 135.0,
+      "description": "Missing ~9 bars during active market hours"
+    }
+  ],
+  "incomplete_candle_detected": false,
+  "status": "PASSED_WITH_WARNINGS",
+  "warnings": [
+    "Detected 14 abnormal intraday/weekday gap(s) exceeding normal M15 interval."
+  ],
+  "errors": []
+}

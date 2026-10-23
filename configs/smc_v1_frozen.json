@@ -1,0 +1,116 @@
+{
+  "_schema": "smc_v1_frozen_strategy",
+  "_description": "GoldFlow Pure-SMC Version 1 - Frozen Rule Set for Phase 4 primary evaluation.",
+  "_frozen_at_utc": "2026-10-20T16:00:00Z",
+  "_frozen_phase": "Phase 4 - SMC Strategy Validation and Robustness Testing",
+  "_strategy_name": "SMC v1",
+  "_instrument": "XAUUSD",
+  "strategy_rules": {
+    "setup_type": "Liquidity Sweep => Opposite CHoCH => Order-Block Retest/Rejection",
+    "long_sequence": "Sell-side pool swept => Bullish CHoCH from bearish prior trend => Bullish OB retest-rejection signals entry",
+    "short_sequence": "Buy-side pool swept => Bearish CHoCH from bullish prior trend => Bearish OB retest-rejection signals entry",
+    "swing_identification": {
+      "algorithm": "Strict fractal pivot: high at bar i strictly exceeds k bars on both sides; equal-high plateaus NOT pivots",
+      "swing_window_k": 2,
+      "confirmation_delay_bars": 2,
+      "availability": "bar i+k close"
+    },
+    "choch_definition": {
+      "type": "Close-based structure break opposite to established trend",
+      "bullish_choch": "Close strictly above latest confirmed swing-high when prior trend is BEARISH",
+      "bearish_choch": "Close strictly below latest confirmed swing-low when prior trend is BULLISH",
+      "wick_breaks_ignored": true
+    },
+    "sweep_identification": {
+      "buy_side_sweep": "high > pool_level AND close < pool_level same candle",
+      "sell_side_sweep": "low < pool_level AND close > pool_level same candle",
+      "min_penetration_price_units": 0.0,
+      "max_sweep_to_choch_bars": 20
+    },
+    "liquidity_pool": {
+      "buy_side_pool": "Two confirmed swing highs within 0.50 price units",
+      "sell_side_pool": "Two confirmed swing lows within 0.50 price units",
+      "equal_level_tolerance_price_units": 0.5,
+      "level": "arithmetic midpoint of first matched pair"
+    },
+    "order_block": {
+      "trigger": "Close-confirmed CHoCH",
+      "lookback_bars": 5,
+      "long_ob_origin": "Most recent bearish candle before bullish CHoCH",
+      "short_ob_origin": "Most recent bullish candle before bearish CHoCH",
+      "zone_basis": "wick",
+      "known_at": "Structure-break candle close"
+    },
+    "retest_conditions": {
+      "touch": "Candle range overlaps OB zone",
+      "rejection": "Long: close above ob.high. Short: close below ob.low",
+      "invalidation": "Long: close below ob.low. Short: close above ob.high",
+      "max_bars_choch_to_retest": 20,
+      "signal_bar": "Rejection-confirmation candle close"
+    },
+    "entry": {
+      "rule": "Next bar open after signal candle",
+      "long_fill": "bid_open + spread + slippage",
+      "short_fill": "bid_open - slippage",
+      "pre_triggered_stop_rejected": true
+    },
+    "stop_loss": {
+      "long": "sweep_price - 0.50",
+      "short": "sweep_price + 0.50",
+      "stop_buffer_price_units": 0.5
+    },
+    "take_profit": {
+      "primary": "Nearest unswept opposing liquidity pool",
+      "fallback": "fixed_rr * risk",
+      "fixed_rr_fallback": 2.0,
+      "minimum_reward_risk": 1.0
+    },
+    "setup_lifetime": {
+      "max_bars_choch_to_retest": 20,
+      "invalidation": "Close beyond OB far edge"
+    },
+    "risk_management": {
+      "risk_fraction": 0.01,
+      "initial_capital_usd": 10000.0,
+      "sizing_basis": "Realized equity at start of entry bar",
+      "lot_step": 0.01,
+      "min_lot": 0.01,
+      "max_lots": 100.0
+    },
+    "concurrency": {
+      "max_per_run": 1,
+      "policy": "First eligible signal per bar; subsequent skipped"
+    },
+    "execution_costs": {
+      "contract_size_oz": 100.0,
+      "point_size": 0.01,
+      "fallback_spread_usd": 0.2,
+      "slippage_per_side_usd": 0.05,
+      "commission_per_lot_per_side_usd": 0.0
+    },
+    "intrabar": {
+      "stop_first_on_collision": true,
+      "gap_through_stop": "fill at worse open quote",
+      "gap_into_target": "fill at target"
+    },
+    "end_of_data": {
+      "policy": "Force close at last close with spread/slippage",
+      "label": "END_OF_DATA",
+      "excluded_from_win_rate_and_pf": true
+    }
+  },
+  "engine_modules": {
+    "smc_engine": "src/smc/engine.py",
+    "setup_detector": "src/strategy/smc_setups.py",
+    "backtest_engine": "src/backtesting/engine.py",
+    "split_engine": "src/backtesting/split.py"
+  },
+  "scope_warnings": [
+    "Rules frozen for Phase 4. Do NOT change to improve in-sample results.",
+    "No ICT-specific rules included (no FVG, displacement, kill zones, MSS, CE, SMT).",
+    "Cash P&L uses empirically-reconciled linear contract formula verified by MT5 order_calc_profit.",
+    "Data provenance: UNVERIFIED_PROVENANCE - declared as MT5, not independently authenticated.",
+    "In-sample profitability is NOT evidence of a repeatable edge.",
+    "Do not optimize parameters on validation or holdout segments."
+  ]
+}
