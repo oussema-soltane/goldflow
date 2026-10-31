@@ -1,6 +1,6 @@
 {
   "overall_status": "MATCHED_CAPTURED_DEFAULTS_UNVERIFIED_PROVENANCE",
-  "data_dir": "C:\\Users\\ousse\\Downloads\\GoldFlow_Phase3D3_2_CalcMode_Guard\\GoldFlow_SMC_Primary_Updated\\data\\processed",
+  "data_dir": "data\\processed",
   "dataset_count": 4,
   "default_config_assumptions": {
     "point_size": 0.01,
@@ -289,7 +289,7 @@
         "Only documented linear contract-size profit modes are allowlisted; futures/tick-price, bond, collateral, unknown, and malformed modes are blocked from strict validation.",
         "The calculation-mode check validates formula compatibility, not the broker's overall correctness or the authenticity of historical OHLC provenance."
       ],
-      "sidecar_path": "C:/Users/ousse/Downloads/GoldFlow_Phase3D3_2_CalcMode_Guard/GoldFlow_SMC_Primary_Updated/data/processed/XAUUSD_H1_clean.meta.json"
+      "sidecar_path": "data/processed/XAUUSD_H1_clean.meta.json"
     },
     {
       "symbol": "XAUUSD",
@@ -556,7 +556,7 @@
         "Only documented linear contract-size profit modes are allowlisted; futures/tick-price, bond, collateral, unknown, and malformed modes are blocked from strict validation.",
         "The calculation-mode check validates formula compatibility, not the broker's overall correctness or the authenticity of historical OHLC provenance."
       ],
-      "sidecar_path": "C:/Users/ousse/Downloads/GoldFlow_Phase3D3_2_CalcMode_Guard/GoldFlow_SMC_Primary_Updated/data/processed/XAUUSD_H4_clean.meta.json"
+      "sidecar_path": "data/processed/XAUUSD_H4_clean.meta.json"
     },
     {
       "symbol": "XAUUSD",
@@ -823,7 +823,7 @@
         "Only documented linear contract-size profit modes are allowlisted; futures/tick-price, bond, collateral, unknown, and malformed modes are blocked from strict validation.",
         "The calculation-mode check validates formula compatibility, not the broker's overall correctness or the authenticity of historical OHLC provenance."
       ],
-      "sidecar_path": "C:/Users/ousse/Downloads/GoldFlow_Phase3D3_2_CalcMode_Guard/GoldFlow_SMC_Primary_Updated/data/processed/XAUUSD_M15_clean.meta.json"
+      "sidecar_path": "data/processed/XAUUSD_M15_clean.meta.json"
     },
     {
       "symbol": "XAUUSD",
@@ -1090,7 +1090,7 @@
         "Only documented linear contract-size profit modes are allowlisted; futures/tick-price, bond, collateral, unknown, and malformed modes are blocked from strict validation.",
         "The calculation-mode check validates formula compatibility, not the broker's overall correctness or the authenticity of historical OHLC provenance."
       ],
-      "sidecar_path": "C:/Users/ousse/Downloads/GoldFlow_Phase3D3_2_CalcMode_Guard/GoldFlow_SMC_Primary_Updated/data/processed/XAUUSD_M5_clean.meta.json"
+      "sidecar_path": "data/processed/XAUUSD_M5_clean.meta.json"
     }
   ],
   "cross_dataset_matching": {
@@ -1126,5 +1126,5 @@
   ],
   "errors": [],
   "provenance_caveat": "Matching instrument specifications and server labels do not independently authenticate that the OHLC history came from the named broker/feed.",
-  "generated_at_utc": "2026-10-22T09:39:19.289370+00:00"
+  "generated_at_utc": "2026-10-29T18:43:01.177754+00:00"
 }

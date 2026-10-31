@@ -106,16 +106,27 @@ def _direction(candidate: Any) -> str:
     return str(getattr(raw, "value", raw)).upper()
 
 
-def _spread_usd(row: pd.Series, config: BacktestConfig) -> tuple[float, str]:
-    """Convert the MT5 `spread` field from broker points to price units, or apply override/multiplier."""
+def _spread_usd_from_raw(
+    raw_spread: Any, has_spread: bool, config: BacktestConfig
+) -> tuple[float, str]:
+    """Convert an already-validated MT5 spread value without allocating a Series."""
     if config.override_spread_usd is not None:
         return float(config.override_spread_usd), "config_override"
     multiplier = float(config.spread_multiplier)
-    if "spread" in row.index:
-        raw = pd.to_numeric(pd.Series([row["spread"]]), errors="coerce").iloc[0]
-        if pd.notna(raw) and math.isfinite(float(raw)) and float(raw) > 0:
-            return float(raw) * config.point_size * multiplier, "bar_spread_points"
+    if has_spread:
+        try:
+            raw = float(raw_spread)
+        except (TypeError, ValueError, OverflowError):
+            raw = float("nan")
+        if math.isfinite(raw) and raw > 0:
+            return raw * config.point_size * multiplier, "bar_spread_points"
     return float(config.fallback_spread_usd) * multiplier, "fixed_fallback"
+
+
+def _spread_usd(row: pd.Series, config: BacktestConfig) -> tuple[float, str]:
+    """Convert the MT5 `spread` field from broker points to price units, or apply override/multiplier."""
+    has_spread = "spread" in row.index
+    return _spread_usd_from_raw(row.get("spread") if has_spread else None, has_spread, config)
 
 
 def _prepare_bars(df: pd.DataFrame) -> pd.DataFrame:
@@ -151,22 +162,21 @@ def _prepare_bars(df: pd.DataFrame) -> pd.DataFrame:
     return frame
 
 
-def _make_exit(
+def _make_exit_from_values(
     position: dict[str, Any],
-    frame: pd.DataFrame,
     index: int,
+    bid_open: float,
+    bid_high: float,
+    bid_low: float,
+    spread: float,
+    spread_source: str,
     config: BacktestConfig,
 ) -> Optional[dict[str, Any]]:
-    """Return a deterministic exit event for one position on the current bar."""
-    row = frame.iloc[index]
+    """Evaluate stop/target exits from scalar bar values (hot-loop implementation)."""
     side = position["side"]
     stop = position["stop_loss"]
     target = position["take_profit"]
     slip = config.slippage_per_side_usd
-    spread, spread_source = _spread_usd(row, config)
-    bid_open, bid_high, bid_low, bid_close = (
-        float(row["open"]), float(row["high"]), float(row["low"]), float(row["close"])
-    )
 
     # Existing stop/target orders are evaluated against this bar's opening quote
     # first. Gaps through a stop receive the worse opening fill, not the stop price.
@@ -212,26 +222,35 @@ def _make_exit(
     return {"exit_index": index, "exit_price": float(exit_price), "raw_exit_price": float(raw_exit), "exit_reason": reason, "exit_spread_usd": spread, "exit_spread_source": spread_source}
 
 
-def _make_time_exit(
+def _make_exit(
     position: dict[str, Any],
     frame: pd.DataFrame,
     index: int,
     config: BacktestConfig,
 ) -> Optional[dict[str, Any]]:
-    """Close at this bar's executable close once the holding-bar cap is reached.
+    """Compatibility wrapper used by focused engine tests and replay helpers."""
+    row = frame.iloc[index]
+    spread, spread_source = _spread_usd(row, config)
+    return _make_exit_from_values(
+        position, index, float(row["open"]), float(row["high"]), float(row["low"]),
+        spread, spread_source, config,
+    )
 
-    Stop/target exits are evaluated first by the caller. The entry bar counts as
-    held bar 1; for a time stop the long closes at bid close and the short at ask
-    close, with adverse slippage.
-    """
+
+def _make_time_exit_from_values(
+    position: dict[str, Any],
+    index: int,
+    close: float,
+    spread: float,
+    spread_source: str,
+    config: BacktestConfig,
+) -> Optional[dict[str, Any]]:
+    """Evaluate the time stop from scalar bar values (hot-loop implementation)."""
     if config.max_holding_bars is None:
         return None
     bars_held = index - int(position["entry_index"]) + 1
     if bars_held < config.max_holding_bars:
         return None
-    row = frame.iloc[index]
-    spread, spread_source = _spread_usd(row, config)
-    close = float(row["close"])
     if position["side"] == "LONG":
         raw_exit = close
         exit_price = close - config.slippage_per_side_usd
@@ -248,12 +267,29 @@ def _make_time_exit(
     }
 
 
+def _make_time_exit(
+    position: dict[str, Any],
+    frame: pd.DataFrame,
+    index: int,
+    config: BacktestConfig,
+) -> Optional[dict[str, Any]]:
+    """Compatibility wrapper for the scalar time-stop implementation."""
+    if config.max_holding_bars is None:
+        return None
+    row = frame.iloc[index]
+    spread, spread_source = _spread_usd(row, config)
+    return _make_time_exit_from_values(
+        position, index, float(row["close"]), spread, spread_source, config
+    )
+
+
 def _finalize_trade(
     position: dict[str, Any],
     exit_event: Mapping[str, Any],
     frame: pd.DataFrame,
     equity: float,
     config: BacktestConfig,
+    time_iso_values: Optional[Sequence[str]] = None,
 ) -> tuple[dict[str, Any], float]:
     exit_index = int(exit_event["exit_index"])
     exit_price = float(exit_event["exit_price"])
@@ -283,7 +319,11 @@ def _finalize_trade(
         "signal_index": position["signal_index"],
         "signal_time": position["signal_time"],
         "entry_index": position["entry_index"],
-        "entry_time": frame.iloc[position["entry_index"]]["time"].isoformat(),
+        "entry_time": (
+            time_iso_values[position["entry_index"]]
+            if time_iso_values is not None
+            else frame.iloc[position["entry_index"]]["time"].isoformat()
+        ),
         "entry_price": position["entry_price"],
         "entry_reference_open": position["entry_reference_open"],
         "entry_spread_usd": position["entry_spread_usd"],
@@ -299,7 +339,11 @@ def _finalize_trade(
         "total_transaction_costs": total_transaction_costs,
         "raw_gross_pnl": raw_gross_pnl,
         "exit_index": exit_index,
-        "exit_time": frame.iloc[exit_index]["time"].isoformat(),
+        "exit_time": (
+            time_iso_values[exit_index]
+            if time_iso_values is not None
+            else frame.iloc[exit_index]["time"].isoformat()
+        ),
         "exit_price": exit_price,
         "raw_exit_price": raw_exit_price,
         "exit_reason": exit_event["exit_reason"],
@@ -559,6 +603,16 @@ def run_event_backtest(
     """
     config = config or BacktestConfig()
     frame = _prepare_bars(df)
+    # Cache the immutable bar columns once. Repeated DataFrame.iloc row creation in
+    # a 100k+ bar event loop dominated runtime and made full-history reruns costly.
+    time_iso_values = [timestamp.isoformat() for timestamp in frame["time"]]
+    opens = frame["open"].to_numpy(dtype=float, copy=False)
+    highs = frame["high"].to_numpy(dtype=float, copy=False)
+    lows = frame["low"].to_numpy(dtype=float, copy=False)
+    closes = frame["close"].to_numpy(dtype=float, copy=False)
+    has_spread = "spread" in frame.columns
+    spreads = frame["spread"].to_numpy(dtype=float, copy=False) if has_spread else None
+
     candidates_list = list(candidates)
     normalized: list[dict[str, Any]] = []
     for ordinal, c in enumerate(candidates_list, start=1):
@@ -566,7 +620,10 @@ def run_event_backtest(
             signal_index = int(_value(c, "signal_index"))
         except (TypeError, ValueError):
             raise ValueError(f"Candidate {ordinal} has an invalid signal_index")
-        raw_time = _value(c, "signal_time", frame.iloc[signal_index]["time"] if 0 <= signal_index < len(frame) else None)
+        raw_time = _value(
+            c, "signal_time",
+            time_iso_values[signal_index] if 0 <= signal_index < len(frame) else None,
+        )
         signal_time = pd.Timestamp(raw_time).isoformat() if raw_time is not None else ""
         direction = _direction(c)
         candidate_id = str(_value(c, "setup_id", f"{timeframe}_{ordinal:04d}"))
@@ -619,7 +676,10 @@ def run_event_backtest(
     max_open_seen = 0
 
     for bar_index in range(len(frame)):
-        bar = frame.iloc[bar_index]
+        raw_spread = spreads[bar_index] if spreads is not None else None
+        current_spread, current_spread_source = _spread_usd_from_raw(
+            raw_spread, has_spread, config
+        )
         # Entries at this bar's open must not use P&L from exits that occur later
         # within the same bar. Position sizing is based on the realized balance
         # carried into the bar.
@@ -630,13 +690,21 @@ def run_event_backtest(
         active_at_open = list(active)
         survivors: list[dict[str, Any]] = []
         for position in active_at_open:
-            event = _make_exit(position, frame, bar_index, config)
+            event = _make_exit_from_values(
+                position, bar_index, opens[bar_index], highs[bar_index], lows[bar_index],
+                current_spread, current_spread_source, config,
+            )
             if event is None:
-                event = _make_time_exit(position, frame, bar_index, config)
+                event = _make_time_exit_from_values(
+                    position, bar_index, closes[bar_index], current_spread,
+                    current_spread_source, config,
+                )
             if event is None:
                 survivors.append(position)
             else:
-                trade, equity = _finalize_trade(position, event, frame, equity, config)
+                trade, equity = _finalize_trade(
+                    position, event, frame, equity, config, time_iso_values
+                )
                 trades.append(trade)
         active = survivors
 
@@ -653,9 +721,11 @@ def run_event_backtest(
                 trades.append(_skipped_trade(cand, cid, "max_concurrent_positions", signal_i, signal_time))
                 continue
 
-            row = frame.iloc[entry_i]
-            spread, spread_source = _spread_usd(row, config)
-            bid_open = float(row["open"])
+            entry_spread_raw = spreads[entry_i] if spreads is not None else None
+            spread, spread_source = _spread_usd_from_raw(
+                entry_spread_raw, has_spread, config
+            )
+            bid_open = float(opens[entry_i])
             direction = item["direction"]
             side = "LONG" if direction in {"BULLISH", "LONG"} else "SHORT"
             ask_open = bid_open + spread
@@ -710,13 +780,26 @@ def run_event_backtest(
         # A new position can be stopped or take profit on its entry bar. OHLC
         # cannot establish the path if both levels were touched; stop-first wins.
         for position in new_positions:
-            event = _make_exit(position, frame, position["entry_index"], config)
+            entry_bar_index = position["entry_index"]
+            entry_spread_raw = spreads[entry_bar_index] if spreads is not None else None
+            entry_spread, entry_spread_source = _spread_usd_from_raw(
+                entry_spread_raw, has_spread, config
+            )
+            event = _make_exit_from_values(
+                position, entry_bar_index, opens[entry_bar_index], highs[entry_bar_index],
+                lows[entry_bar_index], entry_spread, entry_spread_source, config,
+            )
             if event is None:
-                event = _make_time_exit(position, frame, position["entry_index"], config)
+                event = _make_time_exit_from_values(
+                    position, entry_bar_index, closes[entry_bar_index], entry_spread,
+                    entry_spread_source, config,
+                )
             if event is None:
                 active.append(position)
             else:
-                trade, equity = _finalize_trade(position, event, frame, equity, config)
+                trade, equity = _finalize_trade(
+                    position, event, frame, equity, config, time_iso_values
+                )
                 trades.append(trade)
 
         # Record close-to-close mark-to-market equity. Open positions are valued
@@ -724,18 +807,17 @@ def run_event_backtest(
         # and round-turn commission, so floating losses are represented in DD.
         unrealized_pnl = 0.0
         for position in active:
-            mark_spread, _mark_source = _spread_usd(bar, config)
             if position["side"] == "LONG":
-                liquidation_price = float(bar["close"]) - config.slippage_per_side_usd
+                liquidation_price = float(closes[bar_index]) - config.slippage_per_side_usd
                 sign = 1.0
             else:
-                liquidation_price = float(bar["close"]) + mark_spread + config.slippage_per_side_usd
+                liquidation_price = float(closes[bar_index]) + current_spread + config.slippage_per_side_usd
                 sign = -1.0
             gross_mark_pnl = (liquidation_price - position["entry_price"]) * sign * config.contract_size_oz * position["lots"]
             estimated_round_turn_commission = 2.0 * config.commission_per_lot_per_side * position["lots"]
             unrealized_pnl += gross_mark_pnl - estimated_round_turn_commission
         mark_to_market_curve.append({
-            "time": bar["time"].isoformat(),
+            "time": time_iso_values[bar_index],
             "equity": equity + unrealized_pnl,
             "realized_equity": equity,
             "unrealized_pnl": unrealized_pnl,
@@ -746,15 +828,28 @@ def run_event_backtest(
     # is realized at the sample boundary. This is an explicit end-of-data exit.
     if active:
         last_index = len(frame) - 1
-        last_row = frame.iloc[last_index]
-        spread, source = _spread_usd(last_row, config)
+        last_raw_spread = spreads[last_index] if spreads is not None else None
+        spread, source = _spread_usd_from_raw(last_raw_spread, has_spread, config)
         for position in active:
             if position["side"] == "LONG":
-                exit_price = float(last_row["close"]) - config.slippage_per_side_usd
+                # Raw exit is the close (bid price); slippage moves exit adversely downward.
+                raw_exit_price = float(closes[last_index])
+                exit_price = raw_exit_price - config.slippage_per_side_usd
             else:
-                exit_price = float(last_row["close"]) + spread + config.slippage_per_side_usd
-            event = {"exit_index": last_index, "exit_price": exit_price, "exit_reason": "END_OF_DATA", "exit_spread_usd": spread, "exit_spread_source": source}
-            trade, equity = _finalize_trade(position, event, frame, equity, config)
+                # Raw exit is close + spread (ask price); slippage moves exit adversely upward.
+                raw_exit_price = float(closes[last_index]) + spread
+                exit_price = raw_exit_price + config.slippage_per_side_usd
+            event = {
+                "exit_index": last_index,
+                "exit_price": exit_price,
+                "raw_exit_price": raw_exit_price,
+                "exit_reason": "END_OF_DATA",
+                "exit_spread_usd": spread,
+                "exit_spread_source": source,
+            }
+            trade, equity = _finalize_trade(
+                position, event, frame, equity, config, time_iso_values
+            )
             trades.append(trade)
 
     # Aggregate the realized cash equity by exit timestamp. The primary equity

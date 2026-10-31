@@ -1,6 +1,6 @@
 # GoldFlow — Phase 3B Research Data Readiness
 
-**Generated (UTC):** 2026-10-22T09:39:28.975046+00:00
+**Generated (UTC):** 2026-10-29T18:42:49.225322+00:00
 **Overall status:** READY_WITH_WARNINGS
 
 This is a data eligibility audit for descriptive research only. It is not a strategy backtest or evidence of profitability.

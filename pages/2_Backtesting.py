@@ -6,6 +6,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
+import numpy as np
 import pandas as pd
 import streamlit as st
 
@@ -16,6 +17,69 @@ if str(ROOT) not in sys.path:
 from scripts.run_smc_backtest import run_backtest_pipeline
 from src.backtesting.engine import BacktestConfig
 from src.research.execution_spec_audit import audit_processed_execution_specs
+from src.visualization.charts import (
+    create_equity_curve_chart,
+    create_pnl_distribution_chart,
+    create_trade_outcome_donut,
+    create_performance_by_session_chart,
+    create_monte_carlo_equity_fan_chart,
+)
+
+
+def compute_bootstrap_pf_ci(
+    pnls: Sequence[float],
+    n_boot: int = 1000,
+    ci: float = 0.95,
+    seed: int = 42,
+) -> tuple[float, float, float]:
+    """Calculate empirical bootstrap confidence interval for Profit Factor."""
+    arr = np.asarray(pnls, dtype=float)
+    if len(arr) == 0:
+        return 0.0, 0.0, 0.0
+    wins = arr[arr > 0].sum()
+    losses = abs(arr[arr <= 0].sum())
+    observed_pf = (wins / losses) if losses > 0 else (999.0 if wins > 0 else 0.0)
+
+    rng = np.random.default_rng(seed)
+    n = len(arr)
+    boot_indices = rng.integers(0, n, size=(n_boot, n))
+    boot_samples = arr[boot_indices]
+    boot_wins = np.where(boot_samples > 0, boot_samples, 0.0).sum(axis=1)
+    boot_losses = np.abs(np.where(boot_samples <= 0, boot_samples, 0.0)).sum(axis=1)
+
+    with np.errstate(divide="ignore", invalid="ignore"):
+        boot_pfs = np.where(boot_losses > 0, boot_wins / boot_losses, np.where(boot_wins > 0, 999.0, 1.0))
+
+    alpha = (1.0 - ci) / 2.0
+    lower = float(np.percentile(boot_pfs, alpha * 100))
+    upper = float(np.percentile(boot_pfs, (1.0 - alpha) * 100))
+    return float(observed_pf), lower, upper
+
+
+def analyze_consecutive_losses(pnls: Sequence[float]) -> dict:
+    """Analyze consecutive loss streaks in a trade sequence."""
+    arr = np.asarray(pnls, dtype=float)
+    if len(arr) == 0:
+        return {"max_streak": 0, "avg_streak": 0.0, "total_streaks": 0}
+    losses = (arr <= 0).astype(int)
+    streaks = []
+    current = 0
+    for val in losses:
+        if val == 1:
+            current += 1
+        else:
+            if current > 0:
+                streaks.append(current)
+                current = 0
+    if current > 0:
+        streaks.append(current)
+    if not streaks:
+        return {"max_streak": 0, "avg_streak": 0.0, "total_streaks": 0}
+    return {
+        "max_streak": max(streaks),
+        "avg_streak": float(np.mean(streaks)),
+        "total_streaks": len(streaks),
+    }
 
 st.set_page_config(page_title="GoldFlow — SMC Strategy Validation", page_icon="⚙️", layout="wide")
 st.title("⚙️ SMC v1 Strategy Validation & Research")
@@ -52,8 +116,9 @@ st.warning(
     "Never treat backtest figures as live or demo trading results."
 )
 
-tab_backtest, tab_oos, tab_robustness, tab_rules, tab_ict = st.tabs([
+tab_backtest, tab_candidates, tab_oos, tab_robustness, tab_rules, tab_ict = st.tabs([
     "📊 Interactive Backtest",
+    "🔬 M15 Candidate Research (C0/C1/C2)",
     "📅 Out-of-Sample Validation",
     "🛡️ Robustness & Cost Sensitivity",
     "📜 Frozen Strategy v1 Rules",
@@ -175,62 +240,283 @@ with tab_backtest:
                 "Net profit includes end-of-sample liquidation. Realized and mark-to-market drawdowns are tracked separately."
             )
 
-        # Equity Curve Visualizer
-        st.subheader("Equity Curve (Mark-to-Market vs Realized)")
-        chart_tf = st.selectbox("Select Timeframe for Equity Curve", list(payload.get("metrics_by_timeframe", {}).keys()))
-        if chart_tf:
-            tf_data = payload.get("metrics_by_timeframe", {}).get(chart_tf, {})
-            eq_curve = tf_data.get("equity_curve", [])
-            if eq_curve:
-                eq_df = pd.DataFrame(eq_curve)
-                eq_df["time"] = pd.to_datetime(eq_df["time"])
-                eq_df = eq_df.set_index("time")[["equity", "realized_equity"]]
-                st.line_chart(eq_df)
-            else:
-                st.info(f"No equity curve points available for {chart_tf}.")
+        # Executive Performance Overview Header
+        st.subheader("📈 Executive Performance & Portfolio Health")
+        chart_tf = st.selectbox("Select Timeframe for Detailed Analytics", list(payload.get("metrics_by_timeframe", {}).keys()))
+        tf_data = payload.get("metrics_by_timeframe", {}).get(chart_tf, {}) if chart_tf else {}
 
-        # Trade Ledger
+        # Load Trade Ledger for Detailed Metrics
         trades_path = Path(payload.get("artifact_paths", {}).get("trades_csv", "reports/smc_backtest_trades_full_history.csv"))
         if not trades_path.is_absolute():
             trades_path = ROOT / trades_path
+        
+        trade_df = pd.DataFrame()
         if trades_path.exists() and trades_path.is_file() and trades_path.stat().st_size > 0:
             try:
                 trade_df = pd.read_csv(trades_path)
-                st.subheader("Trade Ledger & Signal Audit Log")
-                c1, c2 = st.columns(2)
-                with c1:
-                    status_opts = sorted(trade_df["status"].dropna().unique().tolist()) if "status" in trade_df.columns else []
-                    status_sel = st.multiselect("Filter by Trade Status", status_opts, default=status_opts)
-                with c2:
-                    tf_opts = sorted(trade_df["timeframe"].dropna().unique().tolist()) if "timeframe" in trade_df.columns else []
-                    tf_sel = st.multiselect("Filter by Timeframe", tf_opts, default=tf_opts)
-                filtered = trade_df
-                if status_sel and "status" in filtered.columns:
-                    filtered = filtered[filtered["status"].isin(status_sel)]
-                if tf_sel and "timeframe" in filtered.columns:
-                    filtered = filtered[filtered["timeframe"].isin(tf_sel)]
-                st.dataframe(filtered, use_container_width=True, hide_index=True)
-                st.download_button(
-                    "Download Trade Log CSV",
-                    data=trade_df.to_csv(index=False).encode("utf-8"),
-                    file_name=trades_path.name,
-                    mime="text/csv"
+            except Exception:
+                trade_df = pd.DataFrame()
+
+        tf_trades = trade_df[(trade_df["timeframe"] == chart_tf) & (trade_df["status"] == "CLOSED")] if not trade_df.empty and "timeframe" in trade_df.columns else pd.DataFrame()
+
+        net_prof = tf_data.get("net_profit", 0.0)
+        ret_pct = tf_data.get("return_pct", 0.0)
+        wr_pct = tf_data.get("win_rate_pct")
+        pf_val = tf_data.get("profit_factor")
+        max_dd = tf_data.get("max_drawdown_cash", 0.0)
+        init_cap = float(payload.get("initial_capital", 10000.0))
+        max_dd_pct = (max_dd / init_cap * 100.0) if init_cap > 0 else 0.0
+        n_closed = tf_data.get("rule_exit_trades", 0) + tf_data.get("end_of_data_exits", 0)
+
+        # Derived statistics
+        if not tf_trades.empty and "net_pnl" in tf_trades.columns:
+            wins_sub = tf_trades[tf_trades["net_pnl"] > 0]
+            losses_sub = tf_trades[tf_trades["net_pnl"] <= 0]
+            avg_win = float(wins_sub["net_pnl"].mean()) if len(wins_sub) else 0.0
+            avg_loss = abs(float(losses_sub["net_pnl"].mean())) if len(losses_sub) else 0.0
+            payoff_b = (avg_win / avg_loss) if avg_loss > 0 else np.nan
+            exp_trade = float(tf_trades["net_pnl"].mean())
+            avg_bars = float(tf_trades["bars_held"].mean()) if "bars_held" in tf_trades.columns else 0.0
+        else:
+            avg_win = avg_loss = payoff_b = exp_trade = avg_bars = 0.0
+
+        m1, m2, m3, m4 = st.columns(4)
+        m1.metric("Net Realized P&L", f"${net_prof:,.2f}", delta=f"{ret_pct:+.2f}%")
+        m2.metric("Profit Factor", f"{pf_val:.2f}" if isinstance(pf_val, (int, float)) else "N/A")
+        m3.metric("Win Rate", f"{wr_pct:.1f}%" if wr_pct is not None else "N/A")
+        m4.metric("Max Drawdown (MTM)", f"${max_dd:,.2f}", delta=f"-{max_dd_pct:.2f}%", delta_color="inverse")
+
+        m5, m6, m7, m8 = st.columns(4)
+        m5.metric("Closed Trades", f"{n_closed:,}")
+        m6.metric("Payoff Ratio (B)", f"{payoff_b:.2f}" if pd.notna(payoff_b) and payoff_b > 0 else "N/A", help="Average Win / Average Loss")
+        m7.metric("Expectancy / Trade", f"${exp_trade:,.2f}")
+        m8.metric("Avg Holding Duration", f"{avg_bars:.1f} bars")
+
+        # Interactive Equity & Drawdown Chart
+        eq_curve = tf_data.get("equity_curve", [])
+        if eq_curve:
+            eq_df = pd.DataFrame(eq_curve)
+            fig_eq = create_equity_curve_chart(
+                eq_df,
+                initial_capital=init_cap,
+                height=460,
+            )
+            st.plotly_chart(fig_eq, use_container_width=True)
+        else:
+            st.info(f"No equity curve points available for {chart_tf}.")
+
+        # Dual Column Breakdown: P&L Distribution & Exit Donut
+        v_col1, v_col2 = st.columns(2)
+        with v_col1:
+            if not tf_trades.empty:
+                fig_pnl = create_pnl_distribution_chart(tf_trades, height=330)
+                st.plotly_chart(fig_pnl, use_container_width=True)
+            else:
+                st.info("P&L distribution will render when closed trade records exist.")
+
+        with v_col2:
+            if not tf_trades.empty:
+                fig_donut = create_trade_outcome_donut(tf_trades, height=330)
+                st.plotly_chart(fig_donut, use_container_width=True)
+            else:
+                st.info("Exit outcome donut will render when closed trade records exist.")
+
+        # Trading Session Distribution Bar Chart
+        if not tf_trades.empty:
+            fig_sess = create_performance_by_session_chart(tf_trades, height=340)
+            st.plotly_chart(fig_sess, use_container_width=True)
+
+            # Statistical Robustness & Non-Parametric Confidence Context
+            st.subheader("🎲 Statistical Robustness & Non-Parametric Confidence")
+            pnls_series = tf_trades["net_pnl"].dropna().to_numpy(dtype=float)
+            n_obs = len(pnls_series)
+
+            if n_obs < 30:
+                st.warning(
+                    f"⚠️ **Sample Size Critically Low (N = {n_obs} < 30):** "
+                    "Inadequate statistical power. Empirical performance metrics carry high variance, "
+                    "wide confidence intervals, and pronounced small-sample optimism bias."
                 )
-            except Exception as exc:
-                st.warning(f"Could not load trade log CSV: {exc}")
+            elif n_obs < 100:
+                st.info(
+                    f"🟡 **Moderate Sample Size (30 ≤ N = {n_obs} < 100):** "
+                    "Directional indications are observable, but confidence intervals remain broad. "
+                    "Pre-registered forward verification is required before live capital consideration."
+                )
+            else:
+                st.success(
+                    f"🟢 **Adequate Sample Size (N = {n_obs} ≥ 100):** "
+                    "Sample size supports standard non-parametric bootstrap resampling and empirical distribution analysis."
+                )
+
+            obs_pf, pf_lo, pf_hi = compute_bootstrap_pf_ci(pnls_series, n_boot=1000, ci=0.95)
+            streak_info = analyze_consecutive_losses(pnls_series)
+
+            s1, s2, s3, s4 = st.columns(4)
+            s1.metric("Observed Profit Factor", f"{obs_pf:.2f}" if obs_pf < 900 else "∞")
+            pf_ci_str = f"[{pf_lo:.2f}, {pf_hi:.2f}]" if pf_hi < 900 else f"[{pf_lo:.2f}, ∞]"
+            s2.metric("Bootstrap 95% CI (PF)", pf_ci_str, help="1,000 bootstrap resamples with replacement of the trade ledger PnL")
+            s3.metric("Max Consecutive Losses", f"{streak_info['max_streak']} trades")
+            s4.metric("Avg Loss Streak", f"{streak_info['avg_streak']:.1f} trades")
+
+            if pf_lo < 1.0 < obs_pf:
+                st.caption(
+                    "⚠️ **Statistical Significance Notice:** Although the observed Profit Factor is > 1.0, "
+                    f"the 95% bootstrap confidence interval includes values below 1.0 (lower bound = {pf_lo:.2f}). "
+                    "We cannot reject the null hypothesis of non-profitability at the α = 0.05 significance level."
+                )
+
+            # Monte Carlo Resampled Equity Simulation
+            fig_mc = create_monte_carlo_equity_fan_chart(
+                pnls=pnls_series,
+                initial_capital=init_cap,
+                n_sims=250,
+                dark_theme=True,
+                height=380,
+            )
+            st.plotly_chart(fig_mc, use_container_width=True)
+            st.caption(
+                "Monte Carlo fan chart displays 250 reshuffled/bootstrapped equity paths. "
+                "The shaded band encompasses the 10th-to-90th percentile envelope of possible sequence outcomes."
+            )
+
+        # Trade Ledger & Interactive Inspector
+        if not trade_df.empty:
+            st.subheader("📋 Trade Ledger & Diagnostic Inspector")
+            c1, c2 = st.columns(2)
+            with c1:
+                status_opts = sorted(trade_df["status"].dropna().unique().tolist()) if "status" in trade_df.columns else []
+                status_sel = st.multiselect("Filter by Trade Status", status_opts, default=status_opts)
+            with c2:
+                tf_opts = sorted(trade_df["timeframe"].dropna().unique().tolist()) if "timeframe" in trade_df.columns else []
+                tf_sel = st.multiselect("Filter by Timeframe", tf_opts, default=[chart_tf] if chart_tf in tf_opts else tf_opts)
+            
+            filtered = trade_df
+            if status_sel and "status" in filtered.columns:
+                filtered = filtered[filtered["status"].isin(status_sel)]
+            if tf_sel and "timeframe" in filtered.columns:
+                filtered = filtered[filtered["timeframe"].isin(tf_sel)]
+
+            display_cols = [c for c in [
+                "setup_id", "timeframe", "side", "entry_time", "entry_price", "exit_time",
+                "exit_price", "stop_loss", "take_profit", "lots", "gross_pnl", "total_transaction_costs",
+                "net_pnl", "R_multiple", "exit_reason", "bars_held"
+            ] if c in filtered.columns]
+
+            st.dataframe(filtered[display_cols], use_container_width=True, hide_index=True)
+            st.download_button(
+                "📥 Download Trade Log CSV",
+                data=trade_df.to_csv(index=False).encode("utf-8"),
+                file_name=trades_path.name,
+                mime="text/csv",
+            )
 
 
 # ==============================================================================
-# TAB 2: OUT-OF-SAMPLE VALIDATION
+# TAB 2: M15 CANDIDATE RESEARCH GATE (C0 / C1 / C2)
+# ==============================================================================
+with tab_candidates:
+    st.subheader("🔬 M15 Strategy Candidate Research & Promotion Gate")
+    st.markdown(
+        """
+        Following the Phase 4 SMC baseline research, Phase 6 investigated alternative structural hypothesis candidates on XAUUSD M15:
+        - **C0 (Control):** Canonical frozen SMC v1 baseline (`configs/smc_v1_frozen.json`). Opposing liquidity target with 2.0R fallback.
+        - **C1 (Session Filter):** Baseline restricted to London and New York trading sessions (07:00–21:00 UTC).
+        - **C2 (Target Rationalized):** Fixed risk-to-reward target (2.0R / 3.0R) replacing runaway opposing liquidity targets.
+        """
+    )
+
+    # Status summary cards
+    g1, g2, g3 = st.columns(3)
+    with g1:
+        st.info("🏛️ **C0: Frozen Baseline**\n\n- Role: Benchmark Control\n- Dev PF: 0.913 (40 trades)\n- Val PF: 1.353 (5 trades)\n- Status: **ACTIVE CONTROL BENCHMARK**")
+    with g2:
+        st.error("❌ **C1: Session Filter**\n\n- Role: Session Liquidity\n- Dev PF: 1.257 (29 trades)\n- Val PF: 0.699 (4 trades)\n- Status: **REJECTED (GATE CLOSED)**\n\nFailed validation; session-boundary overfitting.")
+    with g3:
+        st.warning("🔬 **C2: Target Rationalized**\n\n- Role: Fixed 2.0R / 3.0R Target\n- Dev PF: 1.082 (59 trades)\n- Val PF: 1.959 (6 trades)\n- Status: **EXPLORATORY RESEARCH**\n\nPromising but N=6 is underpowered; forward data needed.")
+
+    # Load candidate experiment data
+    cand_exp_path = ROOT / "reports" / "strategy" / "candidate_experiments_results.json"
+    phase6g_val_path = ROOT / "reports" / "strategy" / "phase6g_candidate_validation_results.json"
+
+    cand_exp_data = []
+    val_data = {}
+    if cand_exp_path.exists():
+        try:
+            cand_exp_data = json.loads(cand_exp_path.read_text(encoding="utf-8"))
+        except Exception:
+            cand_exp_data = []
+    if phase6g_val_path.exists():
+        try:
+            val_data = json.loads(phase6g_val_path.read_text(encoding="utf-8")).get("results", {})
+        except Exception:
+            val_data = {}
+
+    st.subheader("📊 Development vs. Validation Comparative Matrix (M15)")
+    m15_dev = {item["candidate_name"]: item for item in cand_exp_data if item.get("timeframe") == "M15"}
+
+    comp_rows = [
+        {
+            "Candidate": "C0: Frozen Baseline",
+            "Dev Trades": m15_dev.get("SMC_v1_frozen_baseline", {}).get("closed_trades", 40),
+            "Dev Net P&L": f"${m15_dev.get('SMC_v1_frozen_baseline', {}).get('net_pnl', -239.12):,.2f}",
+            "Dev Win Rate": f"{m15_dev.get('SMC_v1_frozen_baseline', {}).get('win_rate_pct', 20.0):.1f}%",
+            "Dev Profit Factor": f"{m15_dev.get('SMC_v1_frozen_baseline', {}).get('profit_factor', 0.913):.3f}",
+            "Val Trades": val_data.get("C0", {}).get("closed_trades", 5),
+            "Val Net P&L": f"${val_data.get('C0', {}).get('net_pnl', 97.61):,.2f}",
+            "Val Win Rate": f"{val_data.get('C0', {}).get('win_rate_pct', 40.0):.1f}%",
+            "Val Profit Factor": f"{val_data.get('C0', {}).get('profit_factor', 1.353):.3f}",
+            "Gate Decision": "Benchmark Retained",
+        },
+        {
+            "Candidate": "C1: Session Filter (07-21 UTC)",
+            "Dev Trades": m15_dev.get("SMC_v2_session_filtered", {}).get("closed_trades", 29),
+            "Dev Net P&L": f"${m15_dev.get('SMC_v2_session_filtered', {}).get('net_pnl', 479.48):,.2f}",
+            "Dev Win Rate": f"{m15_dev.get('SMC_v2_session_filtered', {}).get('win_rate_pct', 31.03):.1f}%",
+            "Dev Profit Factor": f"{m15_dev.get('SMC_v2_session_filtered', {}).get('profit_factor', 1.257):.3f}",
+            "Val Trades": val_data.get("C1", {}).get("closed_trades", 4),
+            "Val Net P&L": f"${val_data.get('C1', {}).get('net_pnl', -83.12):,.2f}",
+            "Val Win Rate": f"{val_data.get('C1', {}).get('win_rate_pct', 25.0):.1f}%",
+            "Val Profit Factor": f"{val_data.get('C1', {}).get('profit_factor', 0.699):.3f}",
+            "Gate Decision": "REJECTED (No Promotion)",
+        },
+        {
+            "Candidate": "C2: Target Rationalized (2.0R)",
+            "Dev Trades": m15_dev.get("SMC_v2_target_rationalized", {}).get("closed_trades", 59),
+            "Dev Net P&L": f"${m15_dev.get('SMC_v2_target_rationalized', {}).get('net_pnl', 282.81):,.2f}",
+            "Dev Win Rate": f"{m15_dev.get('SMC_v2_target_rationalized', {}).get('win_rate_pct', 33.9):.1f}%",
+            "Dev Profit Factor": f"{m15_dev.get('SMC_v2_target_rationalized', {}).get('profit_factor', 1.082):.3f}",
+            "Val Trades": val_data.get("C2", {}).get("closed_trades", 6),
+            "Val Net P&L": f"${val_data.get('C2', {}).get('net_pnl', 265.02):,.2f}",
+            "Val Win Rate": f"{val_data.get('C2', {}).get('win_rate_pct', 50.0):.1f}%",
+            "Val Profit Factor": f"{val_data.get('C2', {}).get('profit_factor', 1.959):.3f}",
+            "Gate Decision": "Exploratory Candidate (Hold)",
+        },
+    ]
+    st.dataframe(pd.DataFrame(comp_rows), use_container_width=True, hide_index=True)
+
+    st.markdown(
+        """
+        **Formal Scientific Findings:**
+        1. **C1 Failure (Session Filter):** While C1 improved backtest performance on the 5,000 development bars (+\\$479, PF 1.257), it collapsed to -\\$83.12 (PF 0.699) on the 509 validation bars. The session cutoff artificially excluded trades that happened to be losers in development, creating false alpha. **Promotion is permanently rejected.**
+        2. **C2 Viability (Target Rationalization):** Fixed risk-to-reward improved sample consistency by removing dependency on distant, rarely reached opposing liquidity pools. However, the validation window contained only 6 closed trades. A sample of 6 trades has high variance.
+        3. **Phase 6I Data Requirement:** All historical M15 data in the repository has been examined. C2 cannot be validated on existing data without selection bias. Formal evaluation requires ingesting new forward temporal data via the pre-registered vault protocol (`src/vault/evaluation_gate.py`).
+        """
+    )
+
+
+# ==============================================================================
+# TAB 3: OUT-OF-SAMPLE VALIDATION
 # ==============================================================================
 with tab_oos:
     st.subheader("Phase 4 Chronological Out-of-Sample Validation")
     st.markdown(
         """
-        The dataset is split chronologically into **60% Training**, **20% Validation**, and **20% Untouched Holdout**.
+        The dataset is split chronologically into **60% Training**, **20% Validation**, and **20% Historical Exploratory Segment (Previously Examined)**.
         - Signal detection uses historical context up to each segment's boundary to identify valid swings, sweeps, and order blocks.
         - Only candidates whose execution signal falls strictly within the segment are simulated.
         - Parameters are completely frozen (`configs/smc_v1_frozen.json`) and were **never optimized** against any segment.
+        - *Research Integrity Note (Phase 6D.1):* This historical segment was previously evaluated during development and is classified as **Historical Exploratory Evaluation**, NOT an untouched or forward holdout. Genuinely unexamined forward evaluation requires pre-registered vault gating.
         """
     )
     oos_metrics_path = ROOT / "reports" / "smc_phase4_validation_metrics.json"

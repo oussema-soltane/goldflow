@@ -18,6 +18,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import shutil
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -46,6 +47,166 @@ FATAL_SPEC_STATUSES = {
 }
 MATCHED_SPEC_STATUS = "MATCHED_CAPTURED_DEFAULTS_UNVERIFIED_PROVENANCE"
 
+# Frozen config schema version this code expects.
+EXPECTED_FROZEN_SCHEMA = "smc_v1_frozen_strategy"
+
+# Required frozen config sections and their required sub-fields.
+_FROZEN_REQUIRED_FIELDS: dict[str, list[str]] = {
+    "swing_identification": ["swing_window_k"],
+    "sweep_identification": ["min_penetration_price_units", "max_sweep_to_choch_bars"],
+    "liquidity_pool": ["equal_level_tolerance_price_units"],
+    "order_block": ["lookback_bars", "zone_basis"],
+    "retest_conditions": ["max_bars_choch_to_retest"],
+    "stop_loss": ["stop_buffer_price_units"],
+    "take_profit": ["fixed_rr_fallback"],
+    "risk_management": ["risk_fraction", "initial_capital_usd"],
+    "execution_costs": [
+        "contract_size_oz", "fallback_spread_usd",
+        "slippage_per_side_usd", "commission_per_lot_per_side_usd",
+    ],
+}
+
+
+def _load_and_validate_frozen_config(path: Path) -> dict[str, Any]:
+    """Load frozen config JSON and strictly validate schema.
+
+    Raises RuntimeError for missing/unknown/bad-type fields so a report
+    can never claim 'frozen SMC v1' while actually running defaults.
+    """
+    if not path.is_file():
+        raise FileNotFoundError(
+            f"Frozen config not found: {path}. "
+            f"This file must exist before Phase 4 validation can run."
+        )
+    with open(path, encoding="utf-8") as _f:
+        cfg = json.load(_f)
+
+    schema = cfg.get("_schema")
+    if schema != EXPECTED_FROZEN_SCHEMA:
+        raise RuntimeError(
+            f"Frozen config schema mismatch: expected {EXPECTED_FROZEN_SCHEMA!r}, "
+            f"got {schema!r}. Update EXPECTED_FROZEN_SCHEMA or fix the config file."
+        )
+
+    rules = cfg.get("strategy_rules", {})
+    if not rules:
+        raise RuntimeError(
+            "Frozen config is missing 'strategy_rules' section. "
+            "Cannot proceed without validated strategy parameters."
+        )
+
+    missing: list[str] = []
+    for section, fields in _FROZEN_REQUIRED_FIELDS.items():
+        sec = rules.get(section)
+        if sec is None:
+            missing.append(f"strategy_rules.{section} (entire section missing)")
+            continue
+        for field in fields:
+            if field not in sec:
+                missing.append(f"strategy_rules.{section}.{field}")
+
+    if missing:
+        raise RuntimeError(
+            f"Frozen config is missing required fields: {missing}. "
+            "All required fields must be present before Phase 4 validation."
+        )
+
+    return cfg
+
+
+def _frozen_config_sha256(path: Path) -> str:
+    """Compute SHA-256 of the frozen config file bytes."""
+    h = hashlib.sha256()
+    h.update(path.read_bytes())
+    return h.hexdigest()
+
+
+def _frozen_to_smc_config(frozen_cfg: dict[str, Any]) -> "SMCConfig":
+    """Map frozen config fields to an SMCConfig object.
+
+    This is the ONLY place SMCConfig is instantiated for Phase 4.
+    Values come exclusively from the frozen JSON, not Python defaults.
+    """
+    rules = frozen_cfg["strategy_rules"]
+    swing_k = int(rules["swing_identification"]["swing_window_k"])
+    tol = float(rules["liquidity_pool"]["equal_level_tolerance_price_units"])
+    min_pen = float(rules["sweep_identification"]["min_penetration_price_units"])
+    ob_lookback = int(rules["order_block"]["lookback_bars"])
+    ob_basis = str(rules["order_block"]["zone_basis"])
+
+    return SMCConfig(
+        swing_window=swing_k,
+        equal_level_tolerance=tol,
+        min_sweep_penetration=min_pen,
+        order_block_lookback=ob_lookback,
+        order_block_zone_basis=ob_basis,
+        track_order_block_lifecycle=True,
+    )
+
+
+def _frozen_to_setup_config(
+    frozen_cfg: dict[str, Any],
+) -> "SMCSetupConfig":
+    """Map frozen config fields to an SMCSetupConfig object."""
+    rules = frozen_cfg["strategy_rules"]
+    max_sweep_to_choch = int(rules["sweep_identification"]["max_sweep_to_choch_bars"])
+    max_choch_to_retest = int(rules["retest_conditions"]["max_bars_choch_to_retest"])
+    stop_buf = float(rules["stop_loss"]["stop_buffer_price_units"])
+    fixed_rr = float(rules["take_profit"]["fixed_rr_fallback"])
+
+    return SMCSetupConfig(
+        max_sweep_to_choch_bars=max_sweep_to_choch,
+        max_bars_choch_to_retest=max_choch_to_retest,
+        stop_buffer=stop_buf,
+        fixed_rr=fixed_rr,
+        use_opposing_liquidity_target=True,
+    )
+
+
+def _frozen_to_backtest_config(
+    frozen_cfg: dict[str, Any],
+    override: "Optional[BacktestConfig]" = None,
+) -> "BacktestConfig":
+    """Map execution cost fields from frozen config to a BacktestConfig.
+
+    If override is provided (e.g. from CLI args), it takes precedence and a
+    mismatch warning is emitted but execution is not blocked.
+    """
+    rules = frozen_cfg["strategy_rules"]
+    costs = rules["execution_costs"]
+    risk = rules["risk_management"]
+
+    frozen_bc = BacktestConfig(
+        initial_capital=float(risk["initial_capital_usd"]),
+        risk_fraction=float(risk["risk_fraction"]),
+        fallback_spread_usd=float(costs["fallback_spread_usd"]),
+        slippage_per_side_usd=float(costs["slippage_per_side_usd"]),
+        commission_per_lot_per_side=float(costs["commission_per_lot_per_side_usd"]),
+    )
+    if override is not None:
+        mismatches: list[str] = []
+        for field in ("initial_capital", "risk_fraction", "fallback_spread_usd",
+                      "slippage_per_side_usd", "commission_per_lot_per_side"):
+            fv = getattr(frozen_bc, field, None)
+            ov = getattr(override, field, None)
+            if fv is not None and ov is not None and abs(float(fv) - float(ov)) > 1e-9:
+                mismatches.append(
+                    f"  {field}: frozen={fv}, provided={ov}"
+                )
+        if mismatches:
+            print(
+                "[WARNING] BacktestConfig from CLI args differs from frozen config values:",
+                file=sys.stderr,
+            )
+            for m in mismatches:
+                print(m, file=sys.stderr)
+            print(
+                "  Using CLI-provided values. Report will note this discrepancy.",
+                file=sys.stderr,
+            )
+        return override
+    return frozen_bc
+
 
 def _file_sha256(path: Path) -> str:
     h = hashlib.sha256()
@@ -71,6 +232,8 @@ def _run_segment(
     segment_label: str,
     tf: str,
     config: BacktestConfig,
+    smc_config: Optional[SMCConfig] = None,
+    setup_config: Optional[SMCSetupConfig] = None,
 ) -> dict[str, Any]:
     """Run SMC detection+backtest on a single chronological segment.
 
@@ -81,11 +244,24 @@ def _run_segment(
 
     This preserves the forward-bias-free principle: detection uses no
     information beyond what was available at each bar's close.
+
+    Parameters
+    ----------
+    smc_config : SMCConfig, optional
+        Must be instantiated from the frozen JSON via _frozen_to_smc_config()
+        when running validation. Falls back to SMCConfig() if None.
+    setup_config : SMCSetupConfig, optional
+        Must be instantiated from the frozen JSON via _frozen_to_setup_config()
+        when running validation. Falls back to SMCSetupConfig() if None.
     """
+    if smc_config is None:
+        smc_config = SMCConfig()
+    if setup_config is None:
+        setup_config = SMCSetupConfig()
     # Use the full bars up through end of segment for analysis context
     analysis_df = full_df.iloc[:seg_end_idx + 1].copy().reset_index(drop=True)
-    analysis = analyze_smc(analysis_df, symbol="XAUUSD", timeframe=tf, config=SMCConfig())
-    candidates, funnel = detect_smc_setups_with_funnel(analysis_df, analysis, SMCSetupConfig())
+    analysis = analyze_smc(analysis_df, symbol="XAUUSD", timeframe=tf, config=smc_config)
+    candidates, funnel = detect_smc_setups_with_funnel(analysis_df, analysis, setup_config)
 
     # Filter to candidates whose signal falls within this segment
     candidates_in_segment = [
@@ -181,10 +357,11 @@ def run_phase4_validation(
     datasets = load_and_verify_inputs(data_dir, timeframes=timeframes)
 
     # --- Load frozen config ---
-    frozen_config: dict[str, Any] = {}
-    if FROZEN_CONFIG_PATH.exists():
-        with open(FROZEN_CONFIG_PATH, encoding="utf-8") as f:
-            frozen_config = json.load(f)
+    frozen_config = _load_and_validate_frozen_config(FROZEN_CONFIG_PATH)
+    frozen_sha = _frozen_config_sha256(FROZEN_CONFIG_PATH)
+    smc_config = _frozen_to_smc_config(frozen_config)
+    setup_config = _frozen_to_setup_config(frozen_config)
+    config = _frozen_to_backtest_config(frozen_config, override=config)
 
     generated_at = datetime.now(timezone.utc).isoformat()
     per_timeframe: dict[str, Any] = {}
@@ -223,16 +400,15 @@ def run_phase4_validation(
                 seg_info.label,
                 tf,
                 config,
+                smc_config=smc_config,
+                setup_config=setup_config,
             )
             # Tag trades with segment label
             for trade in seg_result["trades"]:
                 trade["segment"] = seg_info.label
                 trade["timeframe"] = tf
-                all_trades.extend([trade]) if trade not in all_trades else None
-            all_trades.extend(
-                t for t in seg_result["trades"]
-                if t not in all_trades  # de-dup guard
-            )
+                all_trades.append(trade)
+
             tf_result["segments"][seg_info.label] = {
                 k: v for k, v in seg_result.items() if k not in ("trades", "equity_curve", "realized_equity_curve")
             }
@@ -240,7 +416,7 @@ def run_phase4_validation(
 
         per_timeframe[tf] = tf_result
 
-    # De-dup trades list (due to loop extend quirk above)
+    # De-dup trades list
     seen_ids: set[str] = set()
     deduped_trades: list[dict[str, Any]] = []
     for t in all_trades:
@@ -256,7 +432,9 @@ def run_phase4_validation(
         "instrument": "XAUUSD",
         "timeframes": timeframes,
         "frozen_strategy_config_path": str(FROZEN_CONFIG_PATH.relative_to(ROOT)),
+        "frozen_strategy_config_sha256": frozen_sha,
         "frozen_strategy_version": frozen_config.get("_strategy_name", "SMC v1"),
+        "frozen_strategy_rules": frozen_config.get("strategy_rules", {}),
         "readiness_status": readiness["overall_status"],
         "execution_spec_audit_status": execution_spec_audit["overall_status"],
         "split_config": {
@@ -276,10 +454,23 @@ def run_phase4_validation(
         ],
     }
 
+    run_id = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
+    payload["run_id"] = run_id
+
     output_dir.mkdir(parents=True, exist_ok=True)
     metrics_path = output_dir / "smc_phase4_validation_metrics.json"
     trades_path = output_dir / "smc_phase4_validation_trades.csv"
     report_path = output_dir / "PHASE4_STRATEGY_VALIDATION.md"
+
+    # Archive previous outputs if they exist rather than silently overwriting
+    archive_dir = output_dir / "archive" / f"validation_pre_{run_id}"
+    archived_any = False
+    for p in (metrics_path, trades_path, report_path):
+        if p.is_file():
+            if not archived_any:
+                archive_dir.mkdir(parents=True, exist_ok=True)
+                archived_any = True
+            shutil.copy2(p, archive_dir / p.name)
 
     payload["artifact_paths"] = {
         "metrics_json": str(metrics_path.relative_to(ROOT)),

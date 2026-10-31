@@ -1,0 +1,1471 @@
+{
+  "report_title": "GoldFlow Phase 3E \u2014 H4/H1-Confirmed SMC Entry Experiment",
+  "generated_at_utc": "2026-10-28T17:45:45.064061+00:00",
+  "instrument": "XAUUSD",
+  "strategy_baseline": "SMC v1 frozen rule set",
+  "experimental_variant": "Require latest completed H4 and H1 structure trends to agree and match lower-timeframe candidate direction",
+  "entry_timeframes": [
+    "M15",
+    "M5"
+  ],
+  "context_timeframes": [
+    "H4",
+    "H1"
+  ],
+  "h4_confirmed_end_time": "2026-10-20T13:00:00+00:00",
+  "h1_confirmed_end_time": "2026-10-20T15:00:00+00:00",
+  "common_eval_end_time": "2026-10-20T13:00:00+00:00",
+  "data_boundary_enforcement": "Both baseline and MTF-confirmed variants are evaluated on identical trimmed windows (bars with time <= 2026-10-20T13:00:00+00:00). H4 confirmed end: 2026-10-20T13:00:00+00:00. H1 confirmed end: 2026-10-20T15:00:00+00:00. The StructureTrendTimeline.at() method returns None for any decision_time strictly after the h4_data_end_time / h1_data_end_time boundary, preventing stale-context carry-forward. All entry-frame bars beyond common_eval_end are excluded before candidate detection so neither variant can generate trades in the stale-context zone.",
+  "data_readiness_status": "READY_WITH_WARNINGS",
+  "data_readiness_warnings": [],
+  "execution_spec_audit_status": "MATCHED_CAPTURED_DEFAULTS_UNVERIFIED_PROVENANCE",
+  "execution_spec_audit": {
+    "overall_status": "MATCHED_CAPTURED_DEFAULTS_UNVERIFIED_PROVENANCE",
+    "data_dir": "data/processed",
+    "dataset_count": 4,
+    "default_config_assumptions": {
+      "point_size": 0.01,
+      "contract_size_oz": 100.0,
+      "min_lot": 0.01,
+      "lot_step": 0.01,
+      "max_lots": 100.0
+    },
+    "required_spec_fields": [
+      "point",
+      "trade_contract_size",
+      "volume_min",
+      "volume_step",
+      "volume_max",
+      "digits",
+      "trade_tick_size",
+      "trade_tick_value",
+      "trade_calc_mode",
+      "trade_calc_mode_name",
+      "trade_calc_mode_name_source",
+      "trade_calc_mode_constant_values"
+    ],
+    "datasets": [
+      {
+        "symbol": "XAUUSD",
+        "timeframe": "H1",
+        "sidecar_source": "MetaTrader 5 API",
+        "source_verification_status": "declared_not_independently_verified",
+        "provenance_independently_verified": false,
+        "execution_specification_status": "captured_complete",
+        "captured_symbol": "XAUUSD",
+        "captured_broker_server": "MetaQuotes-Demo",
+        "metadata_broker_server": "MetaQuotes-Demo",
+        "broker_server_match_verified": true,
+        "captured_at_utc": "2026-10-22T09:39:17.959313+00:00",
+        "status": "MATCHED_CAPTURED_DEFAULTS",
+        "missing_required_fields": [],
+        "wrong_type_fields": [],
+        "missing_currency_fields": [],
+        "currency_values": {
+          "currency_base": "XAU",
+          "currency_profit": "USD",
+          "account_currency": "USD"
+        },
+        "unsupported_currencies": {},
+        "trade_calc_mode": 4,
+        "trade_calc_mode_name": "SYMBOL_CALC_MODE_CFDLEVERAGE",
+        "trade_calc_mode_name_source": "MetaTrader5 module constants",
+        "trade_calc_mode_constant_values": {
+          "SYMBOL_CALC_MODE_CFD": 2,
+          "SYMBOL_CALC_MODE_CFDINDEX": 3,
+          "SYMBOL_CALC_MODE_CFDLEVERAGE": 4,
+          "SYMBOL_CALC_MODE_EXCH_BONDS": 37,
+          "SYMBOL_CALC_MODE_EXCH_BONDS_MOEX": 39,
+          "SYMBOL_CALC_MODE_EXCH_FUTURES": 33,
+          "SYMBOL_CALC_MODE_EXCH_OPTIONS": 34,
+          "SYMBOL_CALC_MODE_EXCH_OPTIONS_MARGIN": 36,
+          "SYMBOL_CALC_MODE_EXCH_STOCKS": 32,
+          "SYMBOL_CALC_MODE_EXCH_STOCKS_MOEX": 38,
+          "SYMBOL_CALC_MODE_FOREX": 0,
+          "SYMBOL_CALC_MODE_FOREX_NO_LEVERAGE": 5,
+          "SYMBOL_CALC_MODE_FUTURES": 1,
+          "SYMBOL_CALC_MODE_SERV_COLLATERAL": 64
+        },
+        "trade_calc_mode_code_matches_name": true,
+        "trade_calc_mode_status": "supported_linear_contract_size_formula",
+        "trade_calc_mode_allowlisted": true,
+        "tick_value_check": {
+          "status": "reconciled_via_order_calc_profit",
+          "captured_tick_value": 0.1,
+          "expected_contract_times_tick_size": 1.0,
+          "relative_error_pct": 90.0,
+          "tolerance_pct": 5.0,
+          "trade_calc_mode": 4,
+          "trade_calc_mode_name": "SYMBOL_CALC_MODE_CFDLEVERAGE",
+          "reconciliation_verified": true,
+          "inquired_order_calc_profit_1lot": 1.0,
+          "authoritative_calculation_method": "contract_size_linear_formula_verified_by_order_calc_profit",
+          "reconciliation_explanation": "MT5 symbol_info.trade_tick_value reports 0.1 (broker-configured table property), while MT5 order_calc_profit returns 1.0 USD per 0.01 tick for 1.0 lot, matching the contract formula (contract_size 100.0 * tick_size 0.01 = 1.0 USD/tick).",
+          "inquiry_evidence": [
+            {
+              "volume": 1.0,
+              "buy_favorable_1tick": 1.0,
+              "buy_adverse_1tick": -1.0,
+              "sell_favorable_1tick": 1.0,
+              "sell_adverse_1tick": -1.0,
+              "expected_linear_profit": 1.0
+            },
+            {
+              "volume": 0.5,
+              "buy_favorable_1tick": 0.5,
+              "buy_adverse_1tick": -0.5,
+              "sell_favorable_1tick": 0.5,
+              "sell_adverse_1tick": -0.5,
+              "expected_linear_profit": 0.5
+            },
+            {
+              "volume": 0.1,
+              "buy_favorable_1tick": 0.1,
+              "buy_adverse_1tick": -0.1,
+              "sell_favorable_1tick": 0.1,
+              "sell_adverse_1tick": -0.1,
+              "expected_linear_profit": 0.1
+            },
+            {
+              "volume": 0.05,
+              "buy_favorable_1tick": 0.05,
+              "buy_adverse_1tick": -0.05,
+              "sell_favorable_1tick": 0.05,
+              "sell_adverse_1tick": -0.05,
+              "expected_linear_profit": 0.05
+            },
+            {
+              "volume": 0.01,
+              "buy_favorable_1tick": 0.01,
+              "buy_adverse_1tick": -0.01,
+              "sell_favorable_1tick": 0.01,
+              "sell_adverse_1tick": -0.01,
+              "expected_linear_profit": 0.01
+            }
+          ]
+        },
+        "tick_value_status": "reconciled_via_order_calc_profit",
+        "reconciliation_verified": true,
+        "warnings": [
+          "TICK_VALUE_RECONCILED: symbol_info.trade_tick_value (0.1) differs from contract formula (1.0), but MT5 order_calc_profit empirically confirmed 1.00 USD/tick for 1.0 lot across BUY and SELL."
+        ],
+        "reconciled_discrepancies": [
+          "trade_tick_value (reported 0.1, reconciled to 1.0 via order_calc_profit)"
+        ],
+        "execution_specification": {
+          "status": "captured_complete",
+          "source": "MetaTrader5.symbol_info",
+          "symbol": "XAUUSD",
+          "captured_at_utc": "2026-10-22T09:39:17.959313+00:00",
+          "required_core_fields": [
+            "digits",
+            "point",
+            "trade_contract_size",
+            "volume_min",
+            "volume_step",
+            "volume_max",
+            "trade_tick_size",
+            "trade_tick_value",
+            "trade_calc_mode",
+            "trade_calc_mode_name",
+            "trade_calc_mode_name_source",
+            "trade_calc_mode_constant_values"
+          ],
+          "digits": 2,
+          "point": 0.01,
+          "trade_contract_size": 100.0,
+          "volume_min": 0.01,
+          "volume_step": 0.01,
+          "volume_max": 100.0,
+          "trade_tick_size": 0.01,
+          "trade_tick_value": 0.1,
+          "trade_tick_value_profit": 0.1,
+          "trade_tick_value_loss": 0.1,
+          "currency_base": "XAU",
+          "currency_profit": "USD",
+          "currency_margin": "USD",
+          "trade_calc_mode": 4,
+          "trade_stops_level": 0,
+          "trade_freeze_level": 0,
+          "spread": 36,
+          "spread_float": true,
+          "trade_calc_mode_constant_values": {
+            "SYMBOL_CALC_MODE_CFD": 2,
+            "SYMBOL_CALC_MODE_CFDINDEX": 3,
+            "SYMBOL_CALC_MODE_CFDLEVERAGE": 4,
+            "SYMBOL_CALC_MODE_EXCH_BONDS": 37,
+            "SYMBOL_CALC_MODE_EXCH_BONDS_MOEX": 39,
+            "SYMBOL_CALC_MODE_EXCH_FUTURES": 33,
+            "SYMBOL_CALC_MODE_EXCH_OPTIONS": 34,
+            "SYMBOL_CALC_MODE_EXCH_OPTIONS_MARGIN": 36,
+            "SYMBOL_CALC_MODE_EXCH_STOCKS": 32,
+            "SYMBOL_CALC_MODE_EXCH_STOCKS_MOEX": 38,
+            "SYMBOL_CALC_MODE_FOREX": 0,
+            "SYMBOL_CALC_MODE_FOREX_NO_LEVERAGE": 5,
+            "SYMBOL_CALC_MODE_FUTURES": 1,
+            "SYMBOL_CALC_MODE_SERV_COLLATERAL": 64
+          },
+          "trade_calc_mode_name": "SYMBOL_CALC_MODE_CFDLEVERAGE",
+          "trade_calc_mode_name_source": "MetaTrader5 module constants",
+          "tick_value_reconciliation": {
+            "reconciliation_status": "linear_contract_size_verified_by_terminal_api",
+            "authoritative_calculation_method": "contract_size_linear_formula_verified_by_order_calc_profit",
+            "contract_size": 100.0,
+            "tick_size": 0.01,
+            "reported_property_tick_value": 0.1,
+            "formula_expected_tick_value": 1.0,
+            "inquired_order_calc_profit_1lot": 1.0,
+            "discrepancy_detected": true,
+            "discrepancy_fields": [
+              "symbol_info.trade_tick_value"
+            ],
+            "inquiry_evidence": [
+              {
+                "volume": 1.0,
+                "buy_favorable_1tick": 1.0,
+                "buy_adverse_1tick": -1.0,
+                "sell_favorable_1tick": 1.0,
+                "sell_adverse_1tick": -1.0,
+                "expected_linear_profit": 1.0
+              },
+              {
+                "volume": 0.5,
+                "buy_favorable_1tick": 0.5,
+                "buy_adverse_1tick": -0.5,
+                "sell_favorable_1tick": 0.5,
+                "sell_adverse_1tick": -0.5,
+                "expected_linear_profit": 0.5
+              },
+              {
+                "volume": 0.1,
+                "buy_favorable_1tick": 0.1,
+                "buy_adverse_1tick": -0.1,
+                "sell_favorable_1tick": 0.1,
+                "sell_adverse_1tick": -0.1,
+                "expected_linear_profit": 0.1
+              },
+              {
+                "volume": 0.05,
+                "buy_favorable_1tick": 0.05,
+                "buy_adverse_1tick": -0.05,
+                "sell_favorable_1tick": 0.05,
+                "sell_adverse_1tick": -0.05,
+                "expected_linear_profit": 0.05
+              },
+              {
+                "volume": 0.01,
+                "buy_favorable_1tick": 0.01,
+                "buy_adverse_1tick": -0.01,
+                "sell_favorable_1tick": 0.01,
+                "sell_adverse_1tick": -0.01,
+                "expected_linear_profit": 0.01
+              }
+            ],
+            "reconciliation_explanation": "MT5 symbol_info.trade_tick_value reports 0.1 (broker-configured table property), while MT5 order_calc_profit returns 1.0 USD per 0.01 tick for 1.0 lot, matching the contract formula (contract_size 100.0 * tick_size 0.01 = 1.0 USD/tick).",
+            "conversion_limitations": "Live order_calc_profit inquiry applies to USD account currency and current broker margins; historical P&L requires profit currency = account currency = USD."
+          },
+          "account_currency": "USD",
+          "broker_server": "MetaQuotes-Demo",
+          "broker_company": "MetaQuotes Ltd."
+        },
+        "mismatches": [],
+        "comparisons": {
+          "point_size": {
+            "mt5_field": "point",
+            "configured_assumption": 0.01,
+            "captured_value": 0.01,
+            "result": "match"
+          },
+          "contract_size_oz": {
+            "mt5_field": "trade_contract_size",
+            "configured_assumption": 100.0,
+            "captured_value": 100.0,
+            "result": "match"
+          },
+          "min_lot": {
+            "mt5_field": "volume_min",
+            "configured_assumption": 0.01,
+            "captured_value": 0.01,
+            "result": "match"
+          },
+          "lot_step": {
+            "mt5_field": "volume_step",
+            "configured_assumption": 0.01,
+            "captured_value": 0.01,
+            "result": "match"
+          },
+          "max_lots": {
+            "mt5_field": "volume_max",
+            "configured_assumption": 100.0,
+            "captured_value": 100.0,
+            "result": "match"
+          }
+        },
+        "notes": [
+          "A captured symbol specification is still a metadata claim and does not independently authenticate data provenance.",
+          "The configuration values shown are BacktestConfig defaults; CLI/UI overrides must be audited using the corresponding configuration.",
+          "Missing values are not inferred from OHLC price precision.",
+          "Present-but-invalid numeric values are listed in wrong_type_fields; missing_required_fields also includes unusable numeric values for backward-compatible strict gating.",
+          "trade_calc_mode_name is resolved from the active MetaTrader5 package constants at capture time; the captured constant-value map is retained so the numeric code/name pair can be checked without guessing enum IDs.",
+          "Only documented linear contract-size profit modes are allowlisted; futures/tick-price, bond, collateral, unknown, and malformed modes are blocked from strict validation.",
+          "The calculation-mode check validates formula compatibility, not the broker's overall correctness or the authenticity of historical OHLC provenance."
+        ],
+        "sidecar_path": "data/processed/XAUUSD_H1_clean.meta.json"
+      },
+      {
+        "symbol": "XAUUSD",
+        "timeframe": "H4",
+        "sidecar_source": "MetaTrader 5 API",
+        "source_verification_status": "declared_not_independently_verified",
+        "provenance_independently_verified": false,
+        "execution_specification_status": "captured_complete",
+        "captured_symbol": "XAUUSD",
+        "captured_broker_server": "MetaQuotes-Demo",
+        "metadata_broker_server": "MetaQuotes-Demo",
+        "broker_server_match_verified": true,
+        "captured_at_utc": "2026-10-22T09:39:17.959313+00:00",
+        "status": "MATCHED_CAPTURED_DEFAULTS",
+        "missing_required_fields": [],
+        "wrong_type_fields": [],
+        "missing_currency_fields": [],
+        "currency_values": {
+          "currency_base": "XAU",
+          "currency_profit": "USD",
+          "account_currency": "USD"
+        },
+        "unsupported_currencies": {},
+        "trade_calc_mode": 4,
+        "trade_calc_mode_name": "SYMBOL_CALC_MODE_CFDLEVERAGE",
+        "trade_calc_mode_name_source": "MetaTrader5 module constants",
+        "trade_calc_mode_constant_values": {
+          "SYMBOL_CALC_MODE_CFD": 2,
+          "SYMBOL_CALC_MODE_CFDINDEX": 3,
+          "SYMBOL_CALC_MODE_CFDLEVERAGE": 4,
+          "SYMBOL_CALC_MODE_EXCH_BONDS": 37,
+          "SYMBOL_CALC_MODE_EXCH_BONDS_MOEX": 39,
+          "SYMBOL_CALC_MODE_EXCH_FUTURES": 33,
+          "SYMBOL_CALC_MODE_EXCH_OPTIONS": 34,
+          "SYMBOL_CALC_MODE_EXCH_OPTIONS_MARGIN": 36,
+          "SYMBOL_CALC_MODE_EXCH_STOCKS": 32,
+          "SYMBOL_CALC_MODE_EXCH_STOCKS_MOEX": 38,
+          "SYMBOL_CALC_MODE_FOREX": 0,
+          "SYMBOL_CALC_MODE_FOREX_NO_LEVERAGE": 5,
+          "SYMBOL_CALC_MODE_FUTURES": 1,
+          "SYMBOL_CALC_MODE_SERV_COLLATERAL": 64
+        },
+        "trade_calc_mode_code_matches_name": true,
+        "trade_calc_mode_status": "supported_linear_contract_size_formula",
+        "trade_calc_mode_allowlisted": true,
+        "tick_value_check": {
+          "status": "reconciled_via_order_calc_profit",
+          "captured_tick_value": 0.1,
+          "expected_contract_times_tick_size": 1.0,
+          "relative_error_pct": 90.0,
+          "tolerance_pct": 5.0,
+          "trade_calc_mode": 4,
+          "trade_calc_mode_name": "SYMBOL_CALC_MODE_CFDLEVERAGE",
+          "reconciliation_verified": true,
+          "inquired_order_calc_profit_1lot": 1.0,
+          "authoritative_calculation_method": "contract_size_linear_formula_verified_by_order_calc_profit",
+          "reconciliation_explanation": "MT5 symbol_info.trade_tick_value reports 0.1 (broker-configured table property), while MT5 order_calc_profit returns 1.0 USD per 0.01 tick for 1.0 lot, matching the contract formula (contract_size 100.0 * tick_size 0.01 = 1.0 USD/tick).",
+          "inquiry_evidence": [
+            {
+              "volume": 1.0,
+              "buy_favorable_1tick": 1.0,
+              "buy_adverse_1tick": -1.0,
+              "sell_favorable_1tick": 1.0,
+              "sell_adverse_1tick": -1.0,
+              "expected_linear_profit": 1.0
+            },
+            {
+              "volume": 0.5,
+              "buy_favorable_1tick": 0.5,
+              "buy_adverse_1tick": -0.5,
+              "sell_favorable_1tick": 0.5,
+              "sell_adverse_1tick": -0.5,
+              "expected_linear_profit": 0.5
+            },
+            {
+              "volume": 0.1,
+              "buy_favorable_1tick": 0.1,
+              "buy_adverse_1tick": -0.1,
+              "sell_favorable_1tick": 0.1,
+              "sell_adverse_1tick": -0.1,
+              "expected_linear_profit": 0.1
+            },
+            {
+              "volume": 0.05,
+              "buy_favorable_1tick": 0.05,
+              "buy_adverse_1tick": -0.05,
+              "sell_favorable_1tick": 0.05,
+              "sell_adverse_1tick": -0.05,
+              "expected_linear_profit": 0.05
+            },
+            {
+              "volume": 0.01,
+              "buy_favorable_1tick": 0.01,
+              "buy_adverse_1tick": -0.01,
+              "sell_favorable_1tick": 0.01,
+              "sell_adverse_1tick": -0.01,
+              "expected_linear_profit": 0.01
+            }
+          ]
+        },
+        "tick_value_status": "reconciled_via_order_calc_profit",
+        "reconciliation_verified": true,
+        "warnings": [
+          "TICK_VALUE_RECONCILED: symbol_info.trade_tick_value (0.1) differs from contract formula (1.0), but MT5 order_calc_profit empirically confirmed 1.00 USD/tick for 1.0 lot across BUY and SELL."
+        ],
+        "reconciled_discrepancies": [
+          "trade_tick_value (reported 0.1, reconciled to 1.0 via order_calc_profit)"
+        ],
+        "execution_specification": {
+          "status": "captured_complete",
+          "source": "MetaTrader5.symbol_info",
+          "symbol": "XAUUSD",
+          "captured_at_utc": "2026-10-22T09:39:17.959313+00:00",
+          "required_core_fields": [
+            "digits",
+            "point",
+            "trade_contract_size",
+            "volume_min",
+            "volume_step",
+            "volume_max",
+            "trade_tick_size",
+            "trade_tick_value",
+            "trade_calc_mode",
+            "trade_calc_mode_name",
+            "trade_calc_mode_name_source",
+            "trade_calc_mode_constant_values"
+          ],
+          "digits": 2,
+          "point": 0.01,
+          "trade_contract_size": 100.0,
+          "volume_min": 0.01,
+          "volume_step": 0.01,
+          "volume_max": 100.0,
+          "trade_tick_size": 0.01,
+          "trade_tick_value": 0.1,
+          "trade_tick_value_profit": 0.1,
+          "trade_tick_value_loss": 0.1,
+          "currency_base": "XAU",
+          "currency_profit": "USD",
+          "currency_margin": "USD",
+          "trade_calc_mode": 4,
+          "trade_stops_level": 0,
+          "trade_freeze_level": 0,
+          "spread": 36,
+          "spread_float": true,
+          "trade_calc_mode_constant_values": {
+            "SYMBOL_CALC_MODE_CFD": 2,
+            "SYMBOL_CALC_MODE_CFDINDEX": 3,
+            "SYMBOL_CALC_MODE_CFDLEVERAGE": 4,
+            "SYMBOL_CALC_MODE_EXCH_BONDS": 37,
+            "SYMBOL_CALC_MODE_EXCH_BONDS_MOEX": 39,
+            "SYMBOL_CALC_MODE_EXCH_FUTURES": 33,
+            "SYMBOL_CALC_MODE_EXCH_OPTIONS": 34,
+            "SYMBOL_CALC_MODE_EXCH_OPTIONS_MARGIN": 36,
+            "SYMBOL_CALC_MODE_EXCH_STOCKS": 32,
+            "SYMBOL_CALC_MODE_EXCH_STOCKS_MOEX": 38,
+            "SYMBOL_CALC_MODE_FOREX": 0,
+            "SYMBOL_CALC_MODE_FOREX_NO_LEVERAGE": 5,
+            "SYMBOL_CALC_MODE_FUTURES": 1,
+            "SYMBOL_CALC_MODE_SERV_COLLATERAL": 64
+          },
+          "trade_calc_mode_name": "SYMBOL_CALC_MODE_CFDLEVERAGE",
+          "trade_calc_mode_name_source": "MetaTrader5 module constants",
+          "tick_value_reconciliation": {
+            "reconciliation_status": "linear_contract_size_verified_by_terminal_api",
+            "authoritative_calculation_method": "contract_size_linear_formula_verified_by_order_calc_profit",
+            "contract_size": 100.0,
+            "tick_size": 0.01,
+            "reported_property_tick_value": 0.1,
+            "formula_expected_tick_value": 1.0,
+            "inquired_order_calc_profit_1lot": 1.0,
+            "discrepancy_detected": true,
+            "discrepancy_fields": [
+              "symbol_info.trade_tick_value"
+            ],
+            "inquiry_evidence": [
+              {
+                "volume": 1.0,
+                "buy_favorable_1tick": 1.0,
+                "buy_adverse_1tick": -1.0,
+                "sell_favorable_1tick": 1.0,
+                "sell_adverse_1tick": -1.0,
+                "expected_linear_profit": 1.0
+              },
+              {
+                "volume": 0.5,
+                "buy_favorable_1tick": 0.5,
+                "buy_adverse_1tick": -0.5,
+                "sell_favorable_1tick": 0.5,
+                "sell_adverse_1tick": -0.5,
+                "expected_linear_profit": 0.5
+              },
+              {
+                "volume": 0.1,
+                "buy_favorable_1tick": 0.1,
+                "buy_adverse_1tick": -0.1,
+                "sell_favorable_1tick": 0.1,
+                "sell_adverse_1tick": -0.1,
+                "expected_linear_profit": 0.1
+              },
+              {
+                "volume": 0.05,
+                "buy_favorable_1tick": 0.05,
+                "buy_adverse_1tick": -0.05,
+                "sell_favorable_1tick": 0.05,
+                "sell_adverse_1tick": -0.05,
+                "expected_linear_profit": 0.05
+              },
+              {
+                "volume": 0.01,
+                "buy_favorable_1tick": 0.01,
+                "buy_adverse_1tick": -0.01,
+                "sell_favorable_1tick": 0.01,
+                "sell_adverse_1tick": -0.01,
+                "expected_linear_profit": 0.01
+              }
+            ],
+            "reconciliation_explanation": "MT5 symbol_info.trade_tick_value reports 0.1 (broker-configured table property), while MT5 order_calc_profit returns 1.0 USD per 0.01 tick for 1.0 lot, matching the contract formula (contract_size 100.0 * tick_size 0.01 = 1.0 USD/tick).",
+            "conversion_limitations": "Live order_calc_profit inquiry applies to USD account currency and current broker margins; historical P&L requires profit currency = account currency = USD."
+          },
+          "account_currency": "USD",
+          "broker_server": "MetaQuotes-Demo",
+          "broker_company": "MetaQuotes Ltd."
+        },
+        "mismatches": [],
+        "comparisons": {
+          "point_size": {
+            "mt5_field": "point",
+            "configured_assumption": 0.01,
+            "captured_value": 0.01,
+            "result": "match"
+          },
+          "contract_size_oz": {
+            "mt5_field": "trade_contract_size",
+            "configured_assumption": 100.0,
+            "captured_value": 100.0,
+            "result": "match"
+          },
+          "min_lot": {
+            "mt5_field": "volume_min",
+            "configured_assumption": 0.01,
+            "captured_value": 0.01,
+            "result": "match"
+          },
+          "lot_step": {
+            "mt5_field": "volume_step",
+            "configured_assumption": 0.01,
+            "captured_value": 0.01,
+            "result": "match"
+          },
+          "max_lots": {
+            "mt5_field": "volume_max",
+            "configured_assumption": 100.0,
+            "captured_value": 100.0,
+            "result": "match"
+          }
+        },
+        "notes": [
+          "A captured symbol specification is still a metadata claim and does not independently authenticate data provenance.",
+          "The configuration values shown are BacktestConfig defaults; CLI/UI overrides must be audited using the corresponding configuration.",
+          "Missing values are not inferred from OHLC price precision.",
+          "Present-but-invalid numeric values are listed in wrong_type_fields; missing_required_fields also includes unusable numeric values for backward-compatible strict gating.",
+          "trade_calc_mode_name is resolved from the active MetaTrader5 package constants at capture time; the captured constant-value map is retained so the numeric code/name pair can be checked without guessing enum IDs.",
+          "Only documented linear contract-size profit modes are allowlisted; futures/tick-price, bond, collateral, unknown, and malformed modes are blocked from strict validation.",
+          "The calculation-mode check validates formula compatibility, not the broker's overall correctness or the authenticity of historical OHLC provenance."
+        ],
+        "sidecar_path": "data/processed/XAUUSD_H4_clean.meta.json"
+      },
+      {
+        "symbol": "XAUUSD",
+        "timeframe": "M15",
+        "sidecar_source": "MetaTrader 5 API",
+        "source_verification_status": "declared_not_independently_verified",
+        "provenance_independently_verified": false,
+        "execution_specification_status": "captured_complete",
+        "captured_symbol": "XAUUSD",
+        "captured_broker_server": "MetaQuotes-Demo",
+        "metadata_broker_server": "MetaQuotes-Demo",
+        "broker_server_match_verified": true,
+        "captured_at_utc": "2026-10-22T09:39:17.959313+00:00",
+        "status": "MATCHED_CAPTURED_DEFAULTS",
+        "missing_required_fields": [],
+        "wrong_type_fields": [],
+        "missing_currency_fields": [],
+        "currency_values": {
+          "currency_base": "XAU",
+          "currency_profit": "USD",
+          "account_currency": "USD"
+        },
+        "unsupported_currencies": {},
+        "trade_calc_mode": 4,
+        "trade_calc_mode_name": "SYMBOL_CALC_MODE_CFDLEVERAGE",
+        "trade_calc_mode_name_source": "MetaTrader5 module constants",
+        "trade_calc_mode_constant_values": {
+          "SYMBOL_CALC_MODE_CFD": 2,
+          "SYMBOL_CALC_MODE_CFDINDEX": 3,
+          "SYMBOL_CALC_MODE_CFDLEVERAGE": 4,
+          "SYMBOL_CALC_MODE_EXCH_BONDS": 37,
+          "SYMBOL_CALC_MODE_EXCH_BONDS_MOEX": 39,
+          "SYMBOL_CALC_MODE_EXCH_FUTURES": 33,
+          "SYMBOL_CALC_MODE_EXCH_OPTIONS": 34,
+          "SYMBOL_CALC_MODE_EXCH_OPTIONS_MARGIN": 36,
+          "SYMBOL_CALC_MODE_EXCH_STOCKS": 32,
+          "SYMBOL_CALC_MODE_EXCH_STOCKS_MOEX": 38,
+          "SYMBOL_CALC_MODE_FOREX": 0,
+          "SYMBOL_CALC_MODE_FOREX_NO_LEVERAGE": 5,
+          "SYMBOL_CALC_MODE_FUTURES": 1,
+          "SYMBOL_CALC_MODE_SERV_COLLATERAL": 64
+        },
+        "trade_calc_mode_code_matches_name": true,
+        "trade_calc_mode_status": "supported_linear_contract_size_formula",
+        "trade_calc_mode_allowlisted": true,
+        "tick_value_check": {
+          "status": "reconciled_via_order_calc_profit",
+          "captured_tick_value": 0.1,
+          "expected_contract_times_tick_size": 1.0,
+          "relative_error_pct": 90.0,
+          "tolerance_pct": 5.0,
+          "trade_calc_mode": 4,
+          "trade_calc_mode_name": "SYMBOL_CALC_MODE_CFDLEVERAGE",
+          "reconciliation_verified": true,
+          "inquired_order_calc_profit_1lot": 1.0,
+          "authoritative_calculation_method": "contract_size_linear_formula_verified_by_order_calc_profit",
+          "reconciliation_explanation": "MT5 symbol_info.trade_tick_value reports 0.1 (broker-configured table property), while MT5 order_calc_profit returns 1.0 USD per 0.01 tick for 1.0 lot, matching the contract formula (contract_size 100.0 * tick_size 0.01 = 1.0 USD/tick).",
+          "inquiry_evidence": [
+            {
+              "volume": 1.0,
+              "buy_favorable_1tick": 1.0,
+              "buy_adverse_1tick": -1.0,
+              "sell_favorable_1tick": 1.0,
+              "sell_adverse_1tick": -1.0,
+              "expected_linear_profit": 1.0
+            },
+            {
+              "volume": 0.5,
+              "buy_favorable_1tick": 0.5,
+              "buy_adverse_1tick": -0.5,
+              "sell_favorable_1tick": 0.5,
+              "sell_adverse_1tick": -0.5,
+              "expected_linear_profit": 0.5
+            },
+            {
+              "volume": 0.1,
+              "buy_favorable_1tick": 0.1,
+              "buy_adverse_1tick": -0.1,
+              "sell_favorable_1tick": 0.1,
+              "sell_adverse_1tick": -0.1,
+              "expected_linear_profit": 0.1
+            },
+            {
+              "volume": 0.05,
+              "buy_favorable_1tick": 0.05,
+              "buy_adverse_1tick": -0.05,
+              "sell_favorable_1tick": 0.05,
+              "sell_adverse_1tick": -0.05,
+              "expected_linear_profit": 0.05
+            },
+            {
+              "volume": 0.01,
+              "buy_favorable_1tick": 0.01,
+              "buy_adverse_1tick": -0.01,
+              "sell_favorable_1tick": 0.01,
+              "sell_adverse_1tick": -0.01,
+              "expected_linear_profit": 0.01
+            }
+          ]
+        },
+        "tick_value_status": "reconciled_via_order_calc_profit",
+        "reconciliation_verified": true,
+        "warnings": [
+          "TICK_VALUE_RECONCILED: symbol_info.trade_tick_value (0.1) differs from contract formula (1.0), but MT5 order_calc_profit empirically confirmed 1.00 USD/tick for 1.0 lot across BUY and SELL."
+        ],
+        "reconciled_discrepancies": [
+          "trade_tick_value (reported 0.1, reconciled to 1.0 via order_calc_profit)"
+        ],
+        "execution_specification": {
+          "status": "captured_complete",
+          "source": "MetaTrader5.symbol_info",
+          "symbol": "XAUUSD",
+          "captured_at_utc": "2026-10-22T09:39:17.959313+00:00",
+          "required_core_fields": [
+            "digits",
+            "point",
+            "trade_contract_size",
+            "volume_min",
+            "volume_step",
+            "volume_max",
+            "trade_tick_size",
+            "trade_tick_value",
+            "trade_calc_mode",
+            "trade_calc_mode_name",
+            "trade_calc_mode_name_source",
+            "trade_calc_mode_constant_values"
+          ],
+          "digits": 2,
+          "point": 0.01,
+          "trade_contract_size": 100.0,
+          "volume_min": 0.01,
+          "volume_step": 0.01,
+          "volume_max": 100.0,
+          "trade_tick_size": 0.01,
+          "trade_tick_value": 0.1,
+          "trade_tick_value_profit": 0.1,
+          "trade_tick_value_loss": 0.1,
+          "currency_base": "XAU",
+          "currency_profit": "USD",
+          "currency_margin": "USD",
+          "trade_calc_mode": 4,
+          "trade_stops_level": 0,
+          "trade_freeze_level": 0,
+          "spread": 36,
+          "spread_float": true,
+          "trade_calc_mode_constant_values": {
+            "SYMBOL_CALC_MODE_CFD": 2,
+            "SYMBOL_CALC_MODE_CFDINDEX": 3,
+            "SYMBOL_CALC_MODE_CFDLEVERAGE": 4,
+            "SYMBOL_CALC_MODE_EXCH_BONDS": 37,
+            "SYMBOL_CALC_MODE_EXCH_BONDS_MOEX": 39,
+            "SYMBOL_CALC_MODE_EXCH_FUTURES": 33,
+            "SYMBOL_CALC_MODE_EXCH_OPTIONS": 34,
+            "SYMBOL_CALC_MODE_EXCH_OPTIONS_MARGIN": 36,
+            "SYMBOL_CALC_MODE_EXCH_STOCKS": 32,
+            "SYMBOL_CALC_MODE_EXCH_STOCKS_MOEX": 38,
+            "SYMBOL_CALC_MODE_FOREX": 0,
+            "SYMBOL_CALC_MODE_FOREX_NO_LEVERAGE": 5,
+            "SYMBOL_CALC_MODE_FUTURES": 1,
+            "SYMBOL_CALC_MODE_SERV_COLLATERAL": 64
+          },
+          "trade_calc_mode_name": "SYMBOL_CALC_MODE_CFDLEVERAGE",
+          "trade_calc_mode_name_source": "MetaTrader5 module constants",
+          "tick_value_reconciliation": {
+            "reconciliation_status": "linear_contract_size_verified_by_terminal_api",
+            "authoritative_calculation_method": "contract_size_linear_formula_verified_by_order_calc_profit",
+            "contract_size": 100.0,
+            "tick_size": 0.01,
+            "reported_property_tick_value": 0.1,
+            "formula_expected_tick_value": 1.0,
+            "inquired_order_calc_profit_1lot": 1.0,
+            "discrepancy_detected": true,
+            "discrepancy_fields": [
+              "symbol_info.trade_tick_value"
+            ],
+            "inquiry_evidence": [
+              {
+                "volume": 1.0,
+                "buy_favorable_1tick": 1.0,
+                "buy_adverse_1tick": -1.0,
+                "sell_favorable_1tick": 1.0,
+                "sell_adverse_1tick": -1.0,
+                "expected_linear_profit": 1.0
+              },
+              {
+                "volume": 0.5,
+                "buy_favorable_1tick": 0.5,
+                "buy_adverse_1tick": -0.5,
+                "sell_favorable_1tick": 0.5,
+                "sell_adverse_1tick": -0.5,
+                "expected_linear_profit": 0.5
+              },
+              {
+                "volume": 0.1,
+                "buy_favorable_1tick": 0.1,
+                "buy_adverse_1tick": -0.1,
+                "sell_favorable_1tick": 0.1,
+                "sell_adverse_1tick": -0.1,
+                "expected_linear_profit": 0.1
+              },
+              {
+                "volume": 0.05,
+                "buy_favorable_1tick": 0.05,
+                "buy_adverse_1tick": -0.05,
+                "sell_favorable_1tick": 0.05,
+                "sell_adverse_1tick": -0.05,
+                "expected_linear_profit": 0.05
+              },
+              {
+                "volume": 0.01,
+                "buy_favorable_1tick": 0.01,
+                "buy_adverse_1tick": -0.01,
+                "sell_favorable_1tick": 0.01,
+                "sell_adverse_1tick": -0.01,
+                "expected_linear_profit": 0.01
+              }
+            ],
+            "reconciliation_explanation": "MT5 symbol_info.trade_tick_value reports 0.1 (broker-configured table property), while MT5 order_calc_profit returns 1.0 USD per 0.01 tick for 1.0 lot, matching the contract formula (contract_size 100.0 * tick_size 0.01 = 1.0 USD/tick).",
+            "conversion_limitations": "Live order_calc_profit inquiry applies to USD account currency and current broker margins; historical P&L requires profit currency = account currency = USD."
+          },
+          "account_currency": "USD",
+          "broker_server": "MetaQuotes-Demo",
+          "broker_company": "MetaQuotes Ltd."
+        },
+        "mismatches": [],
+        "comparisons": {
+          "point_size": {
+            "mt5_field": "point",
+            "configured_assumption": 0.01,
+            "captured_value": 0.01,
+            "result": "match"
+          },
+          "contract_size_oz": {
+            "mt5_field": "trade_contract_size",
+            "configured_assumption": 100.0,
+            "captured_value": 100.0,
+            "result": "match"
+          },
+          "min_lot": {
+            "mt5_field": "volume_min",
+            "configured_assumption": 0.01,
+            "captured_value": 0.01,
+            "result": "match"
+          },
+          "lot_step": {
+            "mt5_field": "volume_step",
+            "configured_assumption": 0.01,
+            "captured_value": 0.01,
+            "result": "match"
+          },
+          "max_lots": {
+            "mt5_field": "volume_max",
+            "configured_assumption": 100.0,
+            "captured_value": 100.0,
+            "result": "match"
+          }
+        },
+        "notes": [
+          "A captured symbol specification is still a metadata claim and does not independently authenticate data provenance.",
+          "The configuration values shown are BacktestConfig defaults; CLI/UI overrides must be audited using the corresponding configuration.",
+          "Missing values are not inferred from OHLC price precision.",
+          "Present-but-invalid numeric values are listed in wrong_type_fields; missing_required_fields also includes unusable numeric values for backward-compatible strict gating.",
+          "trade_calc_mode_name is resolved from the active MetaTrader5 package constants at capture time; the captured constant-value map is retained so the numeric code/name pair can be checked without guessing enum IDs.",
+          "Only documented linear contract-size profit modes are allowlisted; futures/tick-price, bond, collateral, unknown, and malformed modes are blocked from strict validation.",
+          "The calculation-mode check validates formula compatibility, not the broker's overall correctness or the authenticity of historical OHLC provenance."
+        ],
+        "sidecar_path": "data/processed/XAUUSD_M15_clean.meta.json"
+      },
+      {
+        "symbol": "XAUUSD",
+        "timeframe": "M5",
+        "sidecar_source": "MetaTrader 5 API",
+        "source_verification_status": "declared_not_independently_verified",
+        "provenance_independently_verified": false,
+        "execution_specification_status": "captured_complete",
+        "captured_symbol": "XAUUSD",
+        "captured_broker_server": "MetaQuotes-Demo",
+        "metadata_broker_server": "MetaQuotes-Demo",
+        "broker_server_match_verified": true,
+        "captured_at_utc": "2026-10-22T09:39:17.959313+00:00",
+        "status": "MATCHED_CAPTURED_DEFAULTS",
+        "missing_required_fields": [],
+        "wrong_type_fields": [],
+        "missing_currency_fields": [],
+        "currency_values": {
+          "currency_base": "XAU",
+          "currency_profit": "USD",
+          "account_currency": "USD"
+        },
+        "unsupported_currencies": {},
+        "trade_calc_mode": 4,
+        "trade_calc_mode_name": "SYMBOL_CALC_MODE_CFDLEVERAGE",
+        "trade_calc_mode_name_source": "MetaTrader5 module constants",
+        "trade_calc_mode_constant_values": {
+          "SYMBOL_CALC_MODE_CFD": 2,
+          "SYMBOL_CALC_MODE_CFDINDEX": 3,
+          "SYMBOL_CALC_MODE_CFDLEVERAGE": 4,
+          "SYMBOL_CALC_MODE_EXCH_BONDS": 37,
+          "SYMBOL_CALC_MODE_EXCH_BONDS_MOEX": 39,
+          "SYMBOL_CALC_MODE_EXCH_FUTURES": 33,
+          "SYMBOL_CALC_MODE_EXCH_OPTIONS": 34,
+          "SYMBOL_CALC_MODE_EXCH_OPTIONS_MARGIN": 36,
+          "SYMBOL_CALC_MODE_EXCH_STOCKS": 32,
+          "SYMBOL_CALC_MODE_EXCH_STOCKS_MOEX": 38,
+          "SYMBOL_CALC_MODE_FOREX": 0,
+          "SYMBOL_CALC_MODE_FOREX_NO_LEVERAGE": 5,
+          "SYMBOL_CALC_MODE_FUTURES": 1,
+          "SYMBOL_CALC_MODE_SERV_COLLATERAL": 64
+        },
+        "trade_calc_mode_code_matches_name": true,
+        "trade_calc_mode_status": "supported_linear_contract_size_formula",
+        "trade_calc_mode_allowlisted": true,
+        "tick_value_check": {
+          "status": "reconciled_via_order_calc_profit",
+          "captured_tick_value": 0.1,
+          "expected_contract_times_tick_size": 1.0,
+          "relative_error_pct": 90.0,
+          "tolerance_pct": 5.0,
+          "trade_calc_mode": 4,
+          "trade_calc_mode_name": "SYMBOL_CALC_MODE_CFDLEVERAGE",
+          "reconciliation_verified": true,
+          "inquired_order_calc_profit_1lot": 1.0,
+          "authoritative_calculation_method": "contract_size_linear_formula_verified_by_order_calc_profit",
+          "reconciliation_explanation": "MT5 symbol_info.trade_tick_value reports 0.1 (broker-configured table property), while MT5 order_calc_profit returns 1.0 USD per 0.01 tick for 1.0 lot, matching the contract formula (contract_size 100.0 * tick_size 0.01 = 1.0 USD/tick).",
+          "inquiry_evidence": [
+            {
+              "volume": 1.0,
+              "buy_favorable_1tick": 1.0,
+              "buy_adverse_1tick": -1.0,
+              "sell_favorable_1tick": 1.0,
+              "sell_adverse_1tick": -1.0,
+              "expected_linear_profit": 1.0
+            },
+            {
+              "volume": 0.5,
+              "buy_favorable_1tick": 0.5,
+              "buy_adverse_1tick": -0.5,
+              "sell_favorable_1tick": 0.5,
+              "sell_adverse_1tick": -0.5,
+              "expected_linear_profit": 0.5
+            },
+            {
+              "volume": 0.1,
+              "buy_favorable_1tick": 0.1,
+              "buy_adverse_1tick": -0.1,
+              "sell_favorable_1tick": 0.1,
+              "sell_adverse_1tick": -0.1,
+              "expected_linear_profit": 0.1
+            },
+            {
+              "volume": 0.05,
+              "buy_favorable_1tick": 0.05,
+              "buy_adverse_1tick": -0.05,
+              "sell_favorable_1tick": 0.05,
+              "sell_adverse_1tick": -0.05,
+              "expected_linear_profit": 0.05
+            },
+            {
+              "volume": 0.01,
+              "buy_favorable_1tick": 0.01,
+              "buy_adverse_1tick": -0.01,
+              "sell_favorable_1tick": 0.01,
+              "sell_adverse_1tick": -0.01,
+              "expected_linear_profit": 0.01
+            }
+          ]
+        },
+        "tick_value_status": "reconciled_via_order_calc_profit",
+        "reconciliation_verified": true,
+        "warnings": [
+          "TICK_VALUE_RECONCILED: symbol_info.trade_tick_value (0.1) differs from contract formula (1.0), but MT5 order_calc_profit empirically confirmed 1.00 USD/tick for 1.0 lot across BUY and SELL."
+        ],
+        "reconciled_discrepancies": [
+          "trade_tick_value (reported 0.1, reconciled to 1.0 via order_calc_profit)"
+        ],
+        "execution_specification": {
+          "status": "captured_complete",
+          "source": "MetaTrader5.symbol_info",
+          "symbol": "XAUUSD",
+          "captured_at_utc": "2026-10-22T09:39:17.959313+00:00",
+          "required_core_fields": [
+            "digits",
+            "point",
+            "trade_contract_size",
+            "volume_min",
+            "volume_step",
+            "volume_max",
+            "trade_tick_size",
+            "trade_tick_value",
+            "trade_calc_mode",
+            "trade_calc_mode_name",
+            "trade_calc_mode_name_source",
+            "trade_calc_mode_constant_values"
+          ],
+          "digits": 2,
+          "point": 0.01,
+          "trade_contract_size": 100.0,
+          "volume_min": 0.01,
+          "volume_step": 0.01,
+          "volume_max": 100.0,
+          "trade_tick_size": 0.01,
+          "trade_tick_value": 0.1,
+          "trade_tick_value_profit": 0.1,
+          "trade_tick_value_loss": 0.1,
+          "currency_base": "XAU",
+          "currency_profit": "USD",
+          "currency_margin": "USD",
+          "trade_calc_mode": 4,
+          "trade_stops_level": 0,
+          "trade_freeze_level": 0,
+          "spread": 36,
+          "spread_float": true,
+          "trade_calc_mode_constant_values": {
+            "SYMBOL_CALC_MODE_CFD": 2,
+            "SYMBOL_CALC_MODE_CFDINDEX": 3,
+            "SYMBOL_CALC_MODE_CFDLEVERAGE": 4,
+            "SYMBOL_CALC_MODE_EXCH_BONDS": 37,
+            "SYMBOL_CALC_MODE_EXCH_BONDS_MOEX": 39,
+            "SYMBOL_CALC_MODE_EXCH_FUTURES": 33,
+            "SYMBOL_CALC_MODE_EXCH_OPTIONS": 34,
+            "SYMBOL_CALC_MODE_EXCH_OPTIONS_MARGIN": 36,
+            "SYMBOL_CALC_MODE_EXCH_STOCKS": 32,
+            "SYMBOL_CALC_MODE_EXCH_STOCKS_MOEX": 38,
+            "SYMBOL_CALC_MODE_FOREX": 0,
+            "SYMBOL_CALC_MODE_FOREX_NO_LEVERAGE": 5,
+            "SYMBOL_CALC_MODE_FUTURES": 1,
+            "SYMBOL_CALC_MODE_SERV_COLLATERAL": 64
+          },
+          "trade_calc_mode_name": "SYMBOL_CALC_MODE_CFDLEVERAGE",
+          "trade_calc_mode_name_source": "MetaTrader5 module constants",
+          "tick_value_reconciliation": {
+            "reconciliation_status": "linear_contract_size_verified_by_terminal_api",
+            "authoritative_calculation_method": "contract_size_linear_formula_verified_by_order_calc_profit",
+            "contract_size": 100.0,
+            "tick_size": 0.01,
+            "reported_property_tick_value": 0.1,
+            "formula_expected_tick_value": 1.0,
+            "inquired_order_calc_profit_1lot": 1.0,
+            "discrepancy_detected": true,
+            "discrepancy_fields": [
+              "symbol_info.trade_tick_value"
+            ],
+            "inquiry_evidence": [
+              {
+                "volume": 1.0,
+                "buy_favorable_1tick": 1.0,
+                "buy_adverse_1tick": -1.0,
+                "sell_favorable_1tick": 1.0,
+                "sell_adverse_1tick": -1.0,
+                "expected_linear_profit": 1.0
+              },
+              {
+                "volume": 0.5,
+                "buy_favorable_1tick": 0.5,
+                "buy_adverse_1tick": -0.5,
+                "sell_favorable_1tick": 0.5,
+                "sell_adverse_1tick": -0.5,
+                "expected_linear_profit": 0.5
+              },
+              {
+                "volume": 0.1,
+                "buy_favorable_1tick": 0.1,
+                "buy_adverse_1tick": -0.1,
+                "sell_favorable_1tick": 0.1,
+                "sell_adverse_1tick": -0.1,
+                "expected_linear_profit": 0.1
+              },
+              {
+                "volume": 0.05,
+                "buy_favorable_1tick": 0.05,
+                "buy_adverse_1tick": -0.05,
+                "sell_favorable_1tick": 0.05,
+                "sell_adverse_1tick": -0.05,
+                "expected_linear_profit": 0.05
+              },
+              {
+                "volume": 0.01,
+                "buy_favorable_1tick": 0.01,
+                "buy_adverse_1tick": -0.01,
+                "sell_favorable_1tick": 0.01,
+                "sell_adverse_1tick": -0.01,
+                "expected_linear_profit": 0.01
+              }
+            ],
+            "reconciliation_explanation": "MT5 symbol_info.trade_tick_value reports 0.1 (broker-configured table property), while MT5 order_calc_profit returns 1.0 USD per 0.01 tick for 1.0 lot, matching the contract formula (contract_size 100.0 * tick_size 0.01 = 1.0 USD/tick).",
+            "conversion_limitations": "Live order_calc_profit inquiry applies to USD account currency and current broker margins; historical P&L requires profit currency = account currency = USD."
+          },
+          "account_currency": "USD",
+          "broker_server": "MetaQuotes-Demo",
+          "broker_company": "MetaQuotes Ltd."
+        },
+        "mismatches": [],
+        "comparisons": {
+          "point_size": {
+            "mt5_field": "point",
+            "configured_assumption": 0.01,
+            "captured_value": 0.01,
+            "result": "match"
+          },
+          "contract_size_oz": {
+            "mt5_field": "trade_contract_size",
+            "configured_assumption": 100.0,
+            "captured_value": 100.0,
+            "result": "match"
+          },
+          "min_lot": {
+            "mt5_field": "volume_min",
+            "configured_assumption": 0.01,
+            "captured_value": 0.01,
+            "result": "match"
+          },
+          "lot_step": {
+            "mt5_field": "volume_step",
+            "configured_assumption": 0.01,
+            "captured_value": 0.01,
+            "result": "match"
+          },
+          "max_lots": {
+            "mt5_field": "volume_max",
+            "configured_assumption": 100.0,
+            "captured_value": 100.0,
+            "result": "match"
+          }
+        },
+        "notes": [
+          "A captured symbol specification is still a metadata claim and does not independently authenticate data provenance.",
+          "The configuration values shown are BacktestConfig defaults; CLI/UI overrides must be audited using the corresponding configuration.",
+          "Missing values are not inferred from OHLC price precision.",
+          "Present-but-invalid numeric values are listed in wrong_type_fields; missing_required_fields also includes unusable numeric values for backward-compatible strict gating.",
+          "trade_calc_mode_name is resolved from the active MetaTrader5 package constants at capture time; the captured constant-value map is retained so the numeric code/name pair can be checked without guessing enum IDs.",
+          "Only documented linear contract-size profit modes are allowlisted; futures/tick-price, bond, collateral, unknown, and malformed modes are blocked from strict validation.",
+          "The calculation-mode check validates formula compatibility, not the broker's overall correctness or the authenticity of historical OHLC provenance."
+        ],
+        "sidecar_path": "data/processed/XAUUSD_M5_clean.meta.json"
+      }
+    ],
+    "cross_dataset_matching": {
+      "status": "consistent",
+      "mismatches": [],
+      "dataset_count": 4,
+      "essential_fields_checked": [
+        "digits",
+        "point",
+        "trade_contract_size",
+        "trade_tick_size",
+        "volume_min",
+        "volume_step",
+        "volume_max",
+        "trade_calc_mode",
+        "currency_base",
+        "currency_profit",
+        "account_currency"
+      ],
+      "permitted_varying_observational_fields": [
+        "captured_at_utc",
+        "spread",
+        "spread_float",
+        "trade_stops_level",
+        "trade_freeze_level"
+      ]
+    },
+    "warnings": [
+      "TICK_VALUE_RECONCILED: symbol_info.trade_tick_value (0.1) differs from contract formula (1.0), but MT5 order_calc_profit empirically confirmed 1.00 USD/tick for 1.0 lot across BUY and SELL."
+    ],
+    "reconciled_discrepancies": [
+      "trade_tick_value (reported 0.1, reconciled to 1.0 via order_calc_profit)"
+    ],
+    "errors": [],
+    "provenance_caveat": "Matching instrument specifications and server labels do not independently authenticate that the OHLC history came from the named broker/feed."
+  },
+  "frozen_config_path": "configs/smc_v1_frozen.json",
+  "frozen_config_sha256": "1091fb06b24491925510e642052305ba99e397e5f602c2ca2bdbd32094e7174a",
+  "smc_config": {
+    "swing_window": 2,
+    "equal_level_tolerance": 0.5,
+    "min_sweep_penetration": 0.0,
+    "order_block_lookback": 5,
+    "order_block_zone_basis": "wick",
+    "track_order_block_lifecycle": true
+  },
+  "setup_config": {
+    "max_sweep_to_choch_bars": 20,
+    "max_bars_choch_to_retest": 20,
+    "stop_buffer": 0.5,
+    "fixed_rr": 2.0,
+    "minimum_reward_risk": 1.0,
+    "use_opposing_liquidity_target": true,
+    "require_premium_discount": false
+  },
+  "backtest_config": {
+    "initial_capital": 10000.0,
+    "risk_fraction": 0.01,
+    "contract_size_oz": 100.0,
+    "point_size": 0.01,
+    "fallback_spread_usd": 0.2,
+    "slippage_per_side_usd": 0.05,
+    "commission_per_lot_per_side": 0.0,
+    "min_lot": 0.01,
+    "lot_step": 0.01,
+    "max_lots": 100.0,
+    "max_concurrent_positions": 1,
+    "conservative_stop_first": true,
+    "max_holding_bars": null,
+    "spread_multiplier": 1.0,
+    "override_spread_usd": null
+  },
+  "per_timeframe": {
+    "M15": {
+      "data_rows_total": 5000,
+      "data_rows_valid_window": 4839,
+      "data_start_time": "2026-08-04T12:00:00+00:00",
+      "data_end_time": "2026-10-22T09:15:00+00:00",
+      "valid_eval_end_time": "2026-10-20T13:00:00+00:00",
+      "h4_confirmed_end_time": "2026-10-20T13:00:00+00:00",
+      "h1_confirmed_end_time": "2026-10-20T15:00:00+00:00",
+      "common_eval_end_time": "2026-10-20T13:00:00+00:00",
+      "eval_window_note": "Both baseline and MTF-confirmed variants are evaluated on the identical trimmed window (bars with time <= 2026-10-20T13:00:00+00:00). The entry frame had 5000 total bars; 4839 bars fall within the valid higher-timeframe data boundary.",
+      "source_declared": "MetaTrader 5 API",
+      "source_verification_status": "declared_not_independently_verified",
+      "candidate_funnel": {
+        "total_bars": 4839,
+        "total_structure_breaks": 449,
+        "choch_breaks_evaluated": 225,
+        "choch_trend_aligned": 225,
+        "choch_with_preceding_sweep": 128,
+        "choch_with_order_block": 125,
+        "ob_retest_evaluated": 125,
+        "ob_retest_invalidated": 22,
+        "ob_retest_timed_out": 27,
+        "ob_retest_confirmed": 76,
+        "passed_premium_discount": 76,
+        "rejected_premium_discount": 0,
+        "valid_risk_and_rr": 49,
+        "rejected_risk_or_rr": 27,
+        "final_candidates": 49,
+        "next_bar_open_available": 49
+      },
+      "mtf_filter_funnel": {
+        "input_candidates": 49,
+        "accepted_candidates": 8,
+        "rejected_candidates": 41,
+        "rejection_reasons": {
+          "candidate_direction_mismatch": 15,
+          "higher_timeframe_conflict": 26
+        },
+        "policy": "Latest completed H4 and H1 structure directions must agree with each other and the setup direction.",
+        "availability_rule": "Higher-timeframe structure breaks become available at source candle open time plus the source timeframe duration; availability must be <= lower-timeframe next-bar entry time.",
+        "data_boundary_h4": "2026-10-20T13:00:00+00:00",
+        "data_boundary_h1": "2026-10-20T15:00:00+00:00",
+        "data_boundary_note": "Candidates with entry times strictly after h4_data_end_time or h1_data_end_time are rejected because no new confirmed higher-timeframe context is available after those boundaries. This prevents stale-context carry-forward beyond the dataset end."
+      },
+      "baseline": {
+        "candidate_count": 49,
+        "closed_trades": 36,
+        "rule_exit_trades": 36,
+        "end_of_data_exits": 0,
+        "time_stop_exits": 0,
+        "end_of_data_pnl": 0,
+        "net_profit_from_rule_exits": -884.0150000000895,
+        "skipped_candidates": 13,
+        "skipped_by_reason": {
+          "max_concurrent_positions": 13
+        },
+        "wins": 6,
+        "losses": 30,
+        "breakeven": 0,
+        "win_rate_pct": 16.666666666666664,
+        "win_rate_all_liquidations_pct": 16.666666666666664,
+        "initial_capital": 10000.0,
+        "final_equity": 9115.98499999991,
+        "net_profit": -884.0150000000904,
+        "return_pct": -8.840150000000902,
+        "profit_factor": 0.6661259560003571,
+        "profit_factor_all_liquidations": 0.6661259560003571,
+        "expectancy_per_rule_exit": -24.555972222224707,
+        "average_R_multiple": -0.2794401321286473,
+        "max_drawdown_cash": 1505.3400000000402,
+        "max_drawdown_pct": 14.17280800653447,
+        "max_realized_drawdown_cash": 1032.6800000000294,
+        "max_realized_drawdown_pct": 10.271329684041634,
+        "drawdown_basis": "Close-to-close mark-to-market equity; open positions are hypothetically liquidated at the executable close quote with modeled slippage and round-turn commission. OHLC cannot reveal intrabar equity minima.",
+        "total_commission": 0.0,
+        "total_spread_cost": 33.59,
+        "total_slippage_cost": 33.50000000012187,
+        "total_transaction_costs": 67.09000000012188,
+        "total_raw_gross_profit": -816.9249999999676,
+        "stop_gap_exits": 1,
+        "stop_first_collisions": 0,
+        "losses_beyond_risk_budget": 0,
+        "mean_bars_held_rule_exits": 39.583333333333336,
+        "max_concurrent_positions_configured": 1,
+        "note": "Net profit and final equity include end-of-data liquidation P&L. Win rate, profit factor, expectancy, and average R exclude END_OF_DATA exits; TIME_STOP exits are rule exits. Max drawdown is close-to-close mark-to-market; realized-only drawdown is separately reported.",
+        "max_open_positions_observed": 1,
+        "max_holding_bars_configured": null
+      },
+      "mtf_confirmed": {
+        "candidate_count": 8,
+        "closed_trades": 8,
+        "rule_exit_trades": 8,
+        "end_of_data_exits": 0,
+        "time_stop_exits": 0,
+        "end_of_data_pnl": 0,
+        "net_profit_from_rule_exits": 5.440000000009647,
+        "skipped_candidates": 0,
+        "skipped_by_reason": {},
+        "wins": 3,
+        "losses": 5,
+        "breakeven": 0,
+        "win_rate_pct": 37.5,
+        "win_rate_all_liquidations_pct": 37.5,
+        "initial_capital": 10000.0,
+        "final_equity": 10005.44000000001,
+        "net_profit": 5.440000000009604,
+        "return_pct": 0.054400000000098814,
+        "profit_factor": 1.012261365429282,
+        "profit_factor_all_liquidations": 1.012261365429282,
+        "expectancy_per_rule_exit": 0.6800000000012041,
+        "average_R_multiple": -0.044171183314952206,
+        "max_drawdown_cash": 293.1000000000131,
+        "max_drawdown_pct": 2.854485515750434,
+        "max_realized_drawdown_cash": 266.71000000001004,
+        "max_realized_drawdown_pct": 2.5974746909102455,
+        "drawdown_basis": "Close-to-close mark-to-market equity; open positions are hypothetically liquidated at the executable close quote with modeled slippage and round-turn commission. OHLC cannot reveal intrabar equity minima.",
+        "total_commission": 0.0,
+        "total_spread_cost": 9.55,
+        "total_slippage_cost": 6.6500000000241934,
+        "total_transaction_costs": 16.200000000024193,
+        "total_raw_gross_profit": 21.640000000033837,
+        "stop_gap_exits": 0,
+        "stop_first_collisions": 0,
+        "losses_beyond_risk_budget": 0,
+        "mean_bars_held_rule_exits": 9.5,
+        "max_concurrent_positions_configured": 1,
+        "note": "Net profit and final equity include end-of-data liquidation P&L. Win rate, profit factor, expectancy, and average R exclude END_OF_DATA exits; TIME_STOP exits are rule exits. Max drawdown is close-to-close mark-to-market; realized-only drawdown is separately reported.",
+        "max_open_positions_observed": 1,
+        "max_holding_bars_configured": null
+      }
+    },
+    "M5": {
+      "data_rows_total": 99999,
+      "data_rows_valid_window": 99965,
+      "data_start_time": "2025-05-13T22:15:00+00:00",
+      "data_end_time": "2026-10-20T15:50:00+00:00",
+      "valid_eval_end_time": "2026-10-20T13:00:00+00:00",
+      "h4_confirmed_end_time": "2026-10-20T13:00:00+00:00",
+      "h1_confirmed_end_time": "2026-10-20T15:00:00+00:00",
+      "common_eval_end_time": "2026-10-20T13:00:00+00:00",
+      "eval_window_note": "Both baseline and MTF-confirmed variants are evaluated on the identical trimmed window (bars with time <= 2026-10-20T13:00:00+00:00). The entry frame had 99999 total bars; 99965 bars fall within the valid higher-timeframe data boundary.",
+      "source_declared": "MetaTrader 5 API",
+      "source_verification_status": "declared_not_independently_verified",
+      "candidate_funnel": {
+        "total_bars": 99965,
+        "total_structure_breaks": 9524,
+        "choch_breaks_evaluated": 4688,
+        "choch_trend_aligned": 4688,
+        "choch_with_preceding_sweep": 3524,
+        "choch_with_order_block": 3427,
+        "ob_retest_evaluated": 3427,
+        "ob_retest_invalidated": 680,
+        "ob_retest_timed_out": 918,
+        "ob_retest_confirmed": 1829,
+        "passed_premium_discount": 1829,
+        "rejected_premium_discount": 0,
+        "valid_risk_and_rr": 1015,
+        "rejected_risk_or_rr": 814,
+        "final_candidates": 1015,
+        "next_bar_open_available": 1015
+      },
+      "mtf_filter_funnel": {
+        "input_candidates": 1015,
+        "accepted_candidates": 298,
+        "rejected_candidates": 717,
+        "rejection_reasons": {
+          "candidate_direction_mismatch": 320,
+          "higher_timeframe_conflict": 397
+        },
+        "policy": "Latest completed H4 and H1 structure directions must agree with each other and the setup direction.",
+        "availability_rule": "Higher-timeframe structure breaks become available at source candle open time plus the source timeframe duration; availability must be <= lower-timeframe next-bar entry time.",
+        "data_boundary_h4": "2026-10-20T13:00:00+00:00",
+        "data_boundary_h1": "2026-10-20T15:00:00+00:00",
+        "data_boundary_note": "Candidates with entry times strictly after h4_data_end_time or h1_data_end_time are rejected because no new confirmed higher-timeframe context is available after those boundaries. This prevents stale-context carry-forward beyond the dataset end."
+      },
+      "baseline": {
+        "candidate_count": 1015,
+        "closed_trades": 842,
+        "rule_exit_trades": 841,
+        "end_of_data_exits": 1,
+        "time_stop_exits": 0,
+        "end_of_data_pnl": 292.3200000000015,
+        "net_profit_from_rule_exits": -5149.725000005092,
+        "skipped_candidates": 173,
+        "skipped_by_reason": {
+          "invalid_stop_or_target_after_fill_costs": 2,
+          "max_concurrent_positions": 168,
+          "risk_budget_below_min_lot": 3
+        },
+        "wins": 233,
+        "losses": 608,
+        "breakeven": 0,
+        "win_rate_pct": 27.705112960760996,
+        "win_rate_all_liquidations_pct": 27.790973871733964,
+        "initial_capital": 10000.0,
+        "final_equity": 5142.594999994911,
+        "net_profit": -4857.405000005089,
+        "return_pct": -48.574050000050896,
+        "profit_factor": 0.8734813884868176,
+        "profit_factor_all_liquidations": 0.8806631157669145,
+        "expectancy_per_rule_exit": -6.123335315107124,
+        "average_R_multiple": -0.07582705801164258,
+        "max_drawdown_cash": 6392.875000004925,
+        "max_drawdown_pct": 59.28017640676041,
+        "max_realized_drawdown_cash": 6392.4400000047835,
+        "max_realized_drawdown_pct": 59.27614271663737,
+        "drawdown_basis": "Close-to-close mark-to-market equity; open positions are hypothetically liquidated at the executable close quote with modeled slippage and round-turn commission. OHLC cannot reveal intrabar equity minima.",
+        "total_commission": 0.0,
+        "total_spread_cost": 1870.71,
+        "total_slippage_cost": 1397.9500000050857,
+        "total_transaction_costs": 3268.6600000050857,
+        "total_raw_gross_profit": -1588.7450000000042,
+        "stop_gap_exits": 3,
+        "stop_first_collisions": 4,
+        "losses_beyond_risk_budget": 3,
+        "mean_bars_held_rule_exits": 21.790725326991677,
+        "max_concurrent_positions_configured": 1,
+        "note": "Net profit and final equity include end-of-data liquidation P&L. Win rate, profit factor, expectancy, and average R exclude END_OF_DATA exits; TIME_STOP exits are rule exits. Max drawdown is close-to-close mark-to-market; realized-only drawdown is separately reported.",
+        "max_open_positions_observed": 1,
+        "max_holding_bars_configured": null
+      },
+      "mtf_confirmed": {
+        "candidate_count": 298,
+        "closed_trades": 283,
+        "rule_exit_trades": 282,
+        "end_of_data_exits": 1,
+        "time_stop_exits": 0,
+        "end_of_data_pnl": 12.68999999999869,
+        "net_profit_from_rule_exits": -1336.8500000020742,
+        "skipped_candidates": 15,
+        "skipped_by_reason": {
+          "invalid_stop_or_target_after_fill_costs": 1,
+          "max_concurrent_positions": 14
+        },
+        "wins": 82,
+        "losses": 200,
+        "breakeven": 0,
+        "win_rate_pct": 29.078014184397162,
+        "win_rate_all_liquidations_pct": 29.328621908127207,
+        "initial_capital": 10000.0,
+        "final_equity": 8675.839999997914,
+        "net_profit": -1324.1600000020862,
+        "return_pct": -13.24160000002086,
+        "profit_factor": 0.936499107467633,
+        "profit_factor_all_liquidations": 0.9371018873802891,
+        "expectancy_per_rule_exit": -4.740602836886787,
+        "average_R_multiple": -0.035336961477923506,
+        "max_drawdown_cash": 3502.645000000666,
+        "max_drawdown_pct": 29.044490336948396,
+        "max_realized_drawdown_cash": 3223.0550000007133,
+        "max_realized_drawdown_pct": 27.32603266775345,
+        "drawdown_basis": "Close-to-close mark-to-market equity; open positions are hypothetically liquidated at the executable close quote with modeled slippage and round-turn commission. OHLC cannot reveal intrabar equity minima.",
+        "total_commission": 0.0,
+        "total_spread_cost": 773.45,
+        "total_slippage_cost": 598.400000002177,
+        "total_transaction_costs": 1371.850000002177,
+        "total_raw_gross_profit": 47.69000000010129,
+        "stop_gap_exits": 2,
+        "stop_first_collisions": 1,
+        "losses_beyond_risk_budget": 2,
+        "mean_bars_held_rule_exits": 18.9468085106383,
+        "max_concurrent_positions_configured": 1,
+        "note": "Net profit and final equity include end-of-data liquidation P&L. Win rate, profit factor, expectancy, and average R exclude END_OF_DATA exits; TIME_STOP exits are rule exits. Max drawdown is close-to-close mark-to-market; realized-only drawdown is separately reported.",
+        "max_open_positions_observed": 1,
+        "max_holding_bars_configured": null
+      }
+    }
+  },
+  "interpretation_limitations": [
+    "This is an exploratory full-history comparison. The bundled records have already been examined during earlier phases; this is not an untouched out-of-sample result.",
+    "Sidecars declare MT5 provenance but the broker/source history is not independently authenticated.",
+    "Candidate count and observed win rate can fall sharply after higher-timeframe filtering; small samples do not support strong statistical conclusions.",
+    "The context filter uses the latest structure-break state known at entry, not a full discretionary market-structure interpretation.",
+    "OHLC event simulation cannot reconstruct tick-level intrabar path or guarantee future live execution."
+  ],
+  "artifact_paths": {
+    "metrics_json": "reports/smc_mtf_metrics.json",
+    "trades_csv": "reports/smc_mtf_trades.csv",
+    "equity_curves_csv": "reports/smc_mtf_equity_curves.csv",
+    "candidate_context_audit_csv": "reports/smc_mtf_candidate_context_audit.csv",
+    "powerbi_summary_csv": "reports/smc_mtf_powerbi_summary.csv",
+    "markdown_report": "reports/PHASE3E_SMC_MULTI_TIMEFRAME_EXPERIMENT.md"
+  }
+}

@@ -48,7 +48,7 @@ goldflow/
 │   ├── test_ict_engine.py      # Integrated market structure engine tests
 │   ├── test_ict_adversarial.py # Adversarial temporal invariance & anti-look-ahead tests (Phase 2.1)
 │   └── test_ui_and_integration.py  # Chart overlay, table consistency & disk load tests (Phase 2.1)
-├── requirements.txt            # Pinned Python dependencies
+├── requirements.txt            # Runtime dependencies
 ├── README.md                   # Documentation and operating guide
 └── .gitignore                  # Git ignore rules
 ```
@@ -149,6 +149,18 @@ The Market Analysis page defaults to **SMC (Primary)**. Use the sidebar's **Prim
 
 SMC v1 currently detects confirmed swings, close-based BOS/CHoCH, equal-high/low liquidity pools, wick-and-reclaim liquidity sweeps, structure-break-confirmed order blocks, and current premium/discount context. The primary research setup hypothesis is Sweep → opposite CHoCH → OB Retest/Rejection; it emits candidates only and does not place trades or claim profitability. The existing ICT analysis engine remains available separately. **This archive does not contain a complete standalone ICT entry/exit strategy or validated ICT backtest**; preserve the intended ICT rules explicitly before implementing/comparing that strategy. The currently bundled historical data passes the configured readiness gate with warnings; its source authentication remains a limitation, and its backtest results are exploratory only.
 
+## Phase 3E — Multi-Timeframe SMC Experiment
+
+The separate Phase 3E runner compares frozen **SMC v1** candidates with a research variant that requires the latest completed H4 and H1 structure directions to agree and match each M15/M5 candidate. Higher-timeframe events become available only at the source candle close; candidates are checked at the intended next-bar entry time.
+
+Run the complete experiment and regenerate the research/BI exports:
+
+```powershell
+py -3.13 scripts/run_smc_mtf_backtest.py --output-dir reports/phase3e --require-matched-execution-spec
+```
+
+The outputs include a Markdown report, comparison JSON, trade ledger, equity curves, candidate-context audit, and `smc_mtf_powerbi_summary.csv`. The summary uses `analysis_key` to link with detail tables. The Streamlit BI page reads these artifacts, and `docs/POWER_BI_DESKTOP_GUIDE.md` explains how to import them into Power BI Desktop. The MTF variant remains an **exploratory hypothesis**: the current M15 filtered sample is only 11 trades and M5 remains loss-making. It is not an untouched out-of-sample result, and it must not be promoted on the basis of a single historical comparison.
+
 ## Phase 3D — Frozen-Rule Holdout and Cost Stress Validation
 
 After the event-driven backtest, run a chronological holdout assessment with fixed SMC rules and 1.0x / 1.5x / 2.0x transaction-cost scenarios:
@@ -225,6 +237,7 @@ GoldFlow adheres to strict data science best practices:
 - [ ] **ICT Continued Research**: Keep ICT available as a separate framework and evaluate it independently rather than silently combining its conditions with SMC.
 - [x] **Phase 3D engine implementation**: Event-driven OHLC simulation with next-bar-open fills, spread/slippage/commission, stop-first collisions, sizing, concurrency, trade logs, and performance metrics. See `docs/PHASE3D_BACKTEST_ENGINE.md`.
 - [x] **Phase 3D validation tooling**: Frozen-rule chronological holdout and 1.0x/1.5x/2.0x execution-cost stress runner; outputs separate rule exits and end-of-data mark-outs. This is not an untouched out-of-sample test.
+- [x] **Phase 3E exploratory MTF experiment**: Separate H4/H1 completed-structure filter for M15/M5 SMC candidates, explicit close-time availability, per-candidate decision audit, and comparable event-driven backtests. This is exploratory evidence only, not proof of a strategy edge. See `docs/PHASE3E_SMC_MULTI_TIMEFRAME.md`.
 - [x] **Phase 3D.2 position lifecycle diagnostics**: Optional time-stop handling and frozen-entry-rule lifecycle sensitivity runner; time exits, end-of-data liquidations, P&L, and drawdown are reported separately. This is not an optimization or out-of-sample validation.
 - [x] **Phase 3D.3 execution-specification guardrails**: MT5 symbol-spec capture utility, broker/symbol mismatch detection, execution assumptions embedded in backtest output, a strict config-match gate, and an explicit allowlist for documented linear contract-size calculation modes. See `docs/PHASE3D3_EXECUTION_VALIDATION.md`.
 - [ ] **Phase 3D validation follow-up**: Run the capture utility on the user's intended MT5 terminal; verify the live `trade_calc_mode` against the allowlist; reconcile broker/config mismatches; test with tick/deal-level execution; and collect a genuinely untouched forward period after rules are frozen.
@@ -236,4 +249,4 @@ GoldFlow adheres to strict data science best practices:
 
 ### Phase 3D.3.2.1 — Dynamic MT5 calculation-mode resolution
 
-The execution-spec capture now resolves symbolic calculation-mode names from the active MetaTrader5 package and preserves the code/name mapping for audit. It does not hard-code enum IDs. Audit sidecar paths are serialized with stable POSIX separators across Windows/POSIX. Missing/ambiguous mappings and unsupported calculation formulas block strict execution. The latest suite is **328 passed**; compilation passes, readiness is `READY_WITH_WARNINGS`, and the bundled data correctly remains `ASSUMPTIONS_ONLY` until live terminal specifications are captured. See `reports/PHASE3D3_2_CALC_MODE_GUARD.md`, `reports/PHASE3D3_2_2_PATH_NORMALIZATION.md`, and `docs/ANTIGRAVITY_REVIEW_PHASE3D3_2_2.md`.
+Historical implementation note (Phase 3D.3.2.1): execution-spec capture resolves symbolic calculation-mode names from the active MetaTrader5 package, preserves the code/name mapping for audit, and serializes sidecar paths with stable POSIX separators. The test count and readiness details in the original milestone reports refer to that point in the project history; run the current validation commands for up-to-date results. See `reports/PHASE3D3_2_CALC_MODE_GUARD.md`, `reports/PHASE3D3_2_2_PATH_NORMALIZATION.md`, and `docs/ANTIGRAVITY_REVIEW_PHASE3D3_2_2.md`.

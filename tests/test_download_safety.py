@@ -246,6 +246,7 @@ class TestDownloaderPipelineExitCodes:
                 server_timezone="Europe/Athens",
                 timestamp_mode_verified=False,
                 acquisition_summary_path=isolated_summary,
+                allow_shrink=True,
             )
 
             assert code == 2

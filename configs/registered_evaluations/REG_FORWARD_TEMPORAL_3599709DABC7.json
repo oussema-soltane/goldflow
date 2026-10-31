@@ -1,0 +1,19 @@
+{
+  "evaluation_type": "FORWARD_TEMPORAL",
+  "frozen_config_sha256": "1091fb06b24491925510e642052305ba99e397e5f602c2ca2bdbd32094e7174a",
+  "git_commit": "ad9807f8405811d65148d73d72139243f3d6a77f",
+  "notes": "",
+  "protocol_version": "1.0",
+  "registered_at_utc": "2026-10-30T12:08:29.604110+00:00",
+  "registered_by": "ADVERSARIAL_TEST",
+  "registration_id": "REG_FORWARD_TEMPORAL_3599709DABC7",
+  "start_boundary_utc": "2026-10-28T14:00:00+00:00",
+  "status": "REGISTERED",
+  "strategy_name": "SMC_v1_frozen",
+  "target_datasets": [
+    {
+      "dataset_name": "forward_data.parquet",
+      "manifest_sha256": "b9328a3c7de374a2897a7ccc938c572e771b009b6fa8ed87d3bf271fbddce929"
+    }
+  ]
+}

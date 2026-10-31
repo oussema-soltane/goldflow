@@ -111,10 +111,24 @@ def validate_download_candidate(
     timeframe: str,
     requested_bars: int,
     symbol: str,
+    *,
+    existing_sidecar_path: Optional[Path] = None,
+    allow_shrink: bool = False,
 ) -> None:
     """
     Comprehensive validation gate for a newly downloaded candidate dataset.
     Raises ValueError with explicit reason if any check fails.
+
+    Parameters
+    ----------
+    existing_sidecar_path : Path or None
+        If provided, load the existing canonical dataset's sidecar metadata and
+        compare row counts and coverage. A candidate that would shrink or
+        truncate the existing dataset is rejected unless allow_shrink=True.
+    allow_shrink : bool, default False
+        When True, allow a candidate with fewer rows or reduced coverage than
+        the existing dataset. Must be set explicitly and intentionally; never
+        default to True in production code paths.
     """
     # 1. Row count verification
     raw_count = len(df_raw)
@@ -193,6 +207,58 @@ def validate_download_candidate(
     # 7. Completed bar check
     if meta.get("incomplete_bar_excluded") is not True:
         raise ValueError(f"Metadata for {symbol} {timeframe} does not declare incomplete_bar_excluded=True.")
+
+    # 8. Timestamp mode verification block: unverified mode cannot promote to canonical paths.
+    #    This prevents a mis-interpreted timestamp dataset from silently replacing verified data.
+    if meta.get("timestamp_mode") == "server_wall_clock" and not meta.get("timestamp_mode_verified", False):
+        raise ValueError(
+            f"Candidate for {symbol} {timeframe} uses 'server_wall_clock' timestamp mode but "
+            f"timestamp_mode_verified is False. Run the live timestamp diagnostic first and "
+            f"confirm with --confirm-timestamp-mode-verified before promoting to canonical paths."
+        )
+
+    # 9. Coverage comparison against existing canonical dataset (if available).
+    if existing_sidecar_path is not None and Path(existing_sidecar_path).is_file():
+        try:
+            with open(existing_sidecar_path, "r", encoding="utf-8") as _f:
+                existing_meta = json.load(_f)
+        except Exception as exc:
+            raise ValueError(
+                f"Failed to read existing canonical sidecar {existing_sidecar_path}: {exc}"
+            ) from exc
+
+        existing_rows = existing_meta.get("processed_row_count") or existing_meta.get("raw_row_count")
+        candidate_rows = len(df_clean)
+
+        if existing_rows is not None and candidate_rows < existing_rows and not allow_shrink:
+            raise ValueError(
+                f"Candidate for {symbol} {timeframe} would SHRINK the existing dataset: "
+                f"candidate={candidate_rows:,} rows < existing={existing_rows:,} rows. "
+                f"Pass allow_shrink=True (with explicit audit reason) to override, or use "
+                f"a merge/upsert approach rather than replacement."
+            )
+
+        # Coverage start/end comparison
+        existing_start_str = existing_meta.get("start_time")
+        existing_end_str = existing_meta.get("end_time")
+        if existing_start_str and len(df_clean) > 0:
+            try:
+                existing_start = pd.Timestamp(existing_start_str)
+                if existing_start.tzinfo is None:
+                    existing_start = existing_start.tz_localize("UTC")
+                candidate_start = df_clean["time"].iloc[0]
+                # Reject if candidate begins AFTER existing start (losing old history)
+                if candidate_start > existing_start and not allow_shrink:
+                    raise ValueError(
+                        f"Candidate for {symbol} {timeframe} starts at {candidate_start} "
+                        f"which is AFTER the existing dataset start {existing_start}. "
+                        f"This would lose historical coverage. Use allow_shrink=True "
+                        f"(with explicit audit reason and backup) to proceed."
+                    )
+            except ValueError:
+                raise
+            except Exception:
+                pass  # If we can't parse, don't block — log and continue
 
 
 def transactionally_stage_and_promote(
@@ -304,7 +370,12 @@ def transactionally_stage_and_promote(
         raise
 
     # 4. Atomic promotion with rollback protection
+    # Phase 6D.1 FIX: Track newly_created files separately from backed-up files.
+    # Previously, newly created targets (that did not exist before this transaction)
+    # were not tracked and would be left behind if a later promotion step failed.
     backups: Dict[Path, Path] = {}
+    newly_created: List[Path] = []  # Targets that did NOT exist before this transaction
+    promoted_staging: List[Path] = []  # Staging files consumed by successful os.replace()
     try:
         # Create temporary backups of any existing files
         for target in [raw_target, clean_target, meta_target]:
@@ -312,11 +383,19 @@ def transactionally_stage_and_promote(
                 bak = target.with_suffix(f"{target.suffix}.bak.{tmp_token}")
                 shutil.copy2(target, bak)
                 backups[target] = bak
+            else:
+                # Track newly created targets so rollback can remove them
+                newly_created.append(target)
 
-        # Atomically replace target files
+        # Atomically replace target files one by one
         os.replace(staging_raw, raw_target)
+        promoted_staging.append(staging_raw)
+
         os.replace(staging_clean, clean_target)
+        promoted_staging.append(staging_clean)
+
         os.replace(staging_meta, meta_target)
+        promoted_staging.append(staging_meta)
 
         # On success, remove temporary backups
         for bak in backups.values():
@@ -329,15 +408,27 @@ def transactionally_stage_and_promote(
         return raw_target, clean_target, meta_target
 
     except Exception as exc:
-        # Rollback from backups
+        # Rollback from backups — restore previously existing files
         for target, bak in backups.items():
             if bak.exists():
                 try:
                     os.replace(bak, target)
                 except Exception:
                     pass
+
+        # Phase 6D.1 FIX: Remove newly created targets (files that did not exist
+        # before this transaction and were created by partially completed promotions).
+        # Never delete files that existed before this run.
+        for new_path in newly_created:
+            if new_path.exists():
+                try:
+                    new_path.unlink()
+                except OSError:
+                    pass
+
+        # Remove any unconsumed staging files
         for p in [staging_raw, staging_clean, staging_meta]:
-            if p.exists():
+            if p not in promoted_staging and p.exists():
                 try:
                     p.unlink()
                 except OSError:
@@ -357,6 +448,7 @@ def run_pipeline(
     timestamp_mode_verified: bool = False,
     acquisition_summary_path: Optional[Path] = None,
     allow_headless: bool = False,
+    allow_shrink: bool = False,
 ) -> int:
     """
     Run data download pipeline. Returns integer process exit code:
@@ -393,7 +485,14 @@ def run_pipeline(
     if use_synthetic:
         chosen_symbol = symbol or "XAUUSD"
         print(f"\n[INFO] Running in SYNTHETIC MODE for demonstration/testing.")
+        print("[INFO] Synthetic data is RESEARCH-INELIGIBLE and routed to data/synthetic/ paths.")
+        print("[INFO] Canonical data/raw/ and data/processed/ will NOT be modified.")
         print(f"Target Symbol: {chosen_symbol} | Timeframes: {timeframes} | Bars: {bars}")
+
+        # CANONICAL DATA PROTECTION: synthetic reports go to their own directory.
+        synthetic_report_dir = Path("reports/synthetic")
+        synthetic_report_dir.mkdir(parents=True, exist_ok=True)
+        run_id = dt.datetime.now(dt.timezone.utc).strftime("%Y%m%d_%H%M%S")
 
         reports = []
         timeframe_results: Dict[str, Any] = {}
@@ -403,13 +502,15 @@ def run_pipeline(
             print(f"\n--> Generating synthetic {chosen_symbol} ({tf})...")
             try:
                 df_raw, meta = generate_synthetic_gold_data(symbol=chosen_symbol, timeframe=tf, n_bars=bars)
-                raw_path = save_raw_data(df_raw, chosen_symbol, tf)
-                print(f"    Raw CSV saved: {raw_path}")
+                # CANONICAL DATA PROTECTION: route to data/synthetic/raw/ not data/raw/
+                raw_path = save_raw_data(df_raw, chosen_symbol, tf, synthetic=True)
+                print(f"    Synthetic raw CSV: {raw_path}")
 
                 report = validate_market_data(df_raw, symbol=chosen_symbol, timeframe=tf)
                 reports.append(report)
 
                 df_clean, audit = clean_market_data(df_raw, symbol=chosen_symbol, timeframe=tf)
+                # CANONICAL DATA PROTECTION: route to data/synthetic/processed/ not data/processed/
                 clean_path, meta_path = save_processed_data(
                     df_clean,
                     chosen_symbol,
@@ -417,15 +518,27 @@ def run_pipeline(
                     raw_source_path=raw_path,
                     audit_log=audit,
                     source_metadata=meta,
+                    synthetic=True,
                 )
-                print(f"    Cleaned CSV saved: {clean_path} ({len(df_clean):,} bars)")
-                print(f"    Provenance sidecar: {meta_path}")
+                print(f"    Synthetic clean CSV: {clean_path} ({len(df_clean):,} bars)")
+                print(f"    Synthetic sidecar: {meta_path}")
+
+                # Per-TF quality report in reports/synthetic/ (never overwrites canonical reports)
+                tf_json = synthetic_report_dir / f"data_quality_{tf}_{run_id}.json"
+                tf_md = synthetic_report_dir / f"data_quality_{tf}_{run_id}.md"
+                report.save_json(str(tf_json))
+                report.save_markdown(str(tf_md))
+                print(f"    Quality report (SYNTHETIC): {tf_json}")
+
                 timeframe_results[tf] = {
                     "status": "SUCCESS",
+                    "is_synthetic": True,
+                    "research_eligible": False,
                     "bars_retrieved": len(df_clean),
                     "bars_requested": bars,
                     "clean_path": str(clean_path),
                     "meta_path": str(meta_path),
+                    "quality_report_json": str(tf_json),
                 }
             except Exception as exc:
                 err_msg = f"Failed synthetic generation for {tf}: {exc}"
@@ -433,17 +546,13 @@ def run_pipeline(
                 errors.append(err_msg)
                 timeframe_results[tf] = {
                     "status": "FAILED",
+                    "is_synthetic": True,
                     "reason": str(exc),
                     "bars_requested": bars,
                 }
 
         if reports:
-            primary_report = next((r for r in reports if r.timeframe == "M15"), reports[-1])
-            json_path = primary_report.save_json("reports/data_quality_report.json")
-            md_path = primary_report.save_markdown("reports/data_quality_report.md")
-            print(f"\n[SUCCESS] Reports written:")
-            print(f"  - JSON: {json_path}")
-            print(f"  - Markdown: {md_path}")
+            print(f"\n[INFO] Synthetic quality reports written to {synthetic_report_dir}/ (NOT global reports).")
 
         summary = {
             "pipeline_timestamp_utc": dt.datetime.now(dt.timezone.utc).isoformat(),
@@ -556,7 +665,9 @@ def run_pipeline(
                 # Clean candidate dataset
                 df_clean, audit = clean_market_data(df_raw, symbol=chosen_symbol, timeframe=tf)
 
-                # Candidate integrity validation
+                # Candidate integrity validation — compare against existing canonical dataset
+                safe_sym = sanitize_symbol_for_filename(chosen_symbol)
+                existing_sidecar = Path("data/processed") / f"{safe_sym}_{tf}_clean.meta.json"
                 validate_download_candidate(
                     df_raw=df_raw,
                     df_clean=df_clean,
@@ -564,6 +675,8 @@ def run_pipeline(
                     timeframe=tf,
                     requested_bars=bars,
                     symbol=chosen_symbol,
+                    existing_sidecar_path=existing_sidecar if existing_sidecar.is_file() else None,
+                    allow_shrink=allow_shrink,
                 )
 
                 # Transactional staging and promotion
@@ -603,14 +716,40 @@ def run_pipeline(
                     "bars_requested": bars,
                 }
 
-        # Write reports
+        # Write per-timeframe quality reports (preserve existing global report)
         if reports:
             print("\n[4/4] Generating Quality Reports...")
-            primary_report = next((r for r in reports if r.timeframe == "M15"), reports[-1])
-            json_path = primary_report.save_json("reports/data_quality_report.json")
-            md_path = primary_report.save_markdown("reports/data_quality_report.md")
-            print(f"  - Machine-readable report: {json_path}")
-            print(f"  - Markdown report: {md_path}")
+            run_id = dt.datetime.now(dt.timezone.utc).strftime("%Y%m%d_%H%M%S")
+            report_index: Dict[str, Any] = {
+                "generated_at_utc": dt.datetime.now(dt.timezone.utc).isoformat(),
+                "run_id": run_id,
+                "symbol": chosen_symbol,
+                "timeframe_results": {},
+                "note": (
+                    "Per-timeframe quality reports. Each covers exactly one timeframe; "
+                    "this index aggregates them. It is NOT a full 4-TF audit unless all "
+                    "four timeframes ran successfully in this pipeline invocation."
+                ),
+            }
+            for r in reports:
+                tf_label = r.timeframe
+                tf_json_path = f"reports/data_quality_{tf_label}_{run_id}.json"
+                tf_md_path = f"reports/data_quality_{tf_label}_{run_id}.md"
+                r.save_json(tf_json_path)
+                r.save_markdown(tf_md_path)
+                print(f"  - [{tf_label}] JSON: {tf_json_path}")
+                print(f"  - [{tf_label}] MD:   {tf_md_path}")
+                report_index["timeframe_results"][tf_label] = {
+                    "json": tf_json_path,
+                    "md": tf_md_path,
+                    "status": r.status,
+                }
+            # Write aggregate index (not a full-audit replacement)
+            index_path = Path("reports/data_quality_index.json")
+            index_path.parent.mkdir(parents=True, exist_ok=True)
+            with open(index_path, "w", encoding="utf-8") as _f:
+                json.dump(report_index, _f, indent=2)
+            print(f"  - Aggregate index: {index_path}")
 
         # Write comprehensive acquisition summary
         summary = {
@@ -673,6 +812,11 @@ if __name__ == "__main__":
         action="store_true",
         help="Connect to MT5 terminal directly via IPC even if desktop process is not detected.",
     )
+    parser.add_argument(
+        "--allow-shrink",
+        action="store_true",
+        help="Allow candidate dataset to have fewer rows or reduced coverage than existing dataset (requires explicit override).",
+    )
 
     args = parser.parse_args()
     tf_list = [t.strip().upper() for t in args.timeframes.split(",") if t.strip()]
@@ -688,5 +832,6 @@ if __name__ == "__main__":
         server_timezone=args.server_timezone,
         timestamp_mode_verified=args.confirm_timestamp_mode_verified,
         allow_headless=args.allow_headless,
+        allow_shrink=args.allow_shrink,
     )
     sys.exit(exit_code)

@@ -1,0 +1,30 @@
+{
+  "symbol": "XAUUSD",
+  "timeframe": "M15",
+  "total_rows": 50,
+  "start_date": "2026-10-28 08:45:00 UTC",
+  "end_date": "2026-10-28 21:00:00 UTC",
+  "is_chronological": true,
+  "duplicate_timestamps_count": 0,
+  "duplicate_timestamps": [],
+  "missing_values_by_column": {
+    "time": 0,
+    "open": 0,
+    "high": 0,
+    "low": 0,
+    "close": 0,
+    "tick_volume": 0,
+    "spread": 0,
+    "real_volume": 0
+  },
+  "invalid_ohlc_count": 0,
+  "invalid_ohlc_indices": [],
+  "total_gaps_count": 0,
+  "weekend_gaps_count": 0,
+  "abnormal_gaps_count": 0,
+  "abnormal_gaps": [],
+  "incomplete_candle_detected": false,
+  "status": "PASSED",
+  "warnings": [],
+  "errors": []
+}

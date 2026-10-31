@@ -5,7 +5,7 @@
 - **Timeframe:** `H1`
 - **Total Bars Analyzed:** 100
 - **Date Range:** 2026-02-02 08:00:00 UTC to 2026-02-03 08:45:00 UTC
-- **Generated At:** 2026-10-22 11:23:03 UTC
+- **Generated At:** 2026-10-23 11:02:42 UTC
 
 ## 1. Summary of Integrity Checks
 
