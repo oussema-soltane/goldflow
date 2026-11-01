@@ -13,7 +13,7 @@
 | Parameter | Current Value / State |
 | :--- | :--- |
 | **Active Working Directory** | `c:\Users\ousse\Downloads\GoldFlow_Ultimate_Updated\GoldFlow_SMC_Primary_Updated` |
-| **Canonical Git HEAD** | `1a529e2638832a4b6fcf88c388f68270fc6108a5` |
+| **Canonical Git HEAD** | `918dfa976b9ceee6c175dcf0241940989f2a74c4` |
 | **Git Object Format** | `sha1` |
 | **Python Runtime** | Python 3.11+ x64 (Windows) |
 | **Test Suite Baseline** | **656 passed**, 0 failed, 40 test suites |
@@ -59,6 +59,16 @@
 - **Decision:** Resolved Plotly quadratic tuple concatenation ($O(K^2)$) by batching shapes and annotations in Python lists and passing them via bulk layout updates. Implemented visible-window temporal clamping $[t_{start}, t_{end}]$ to eliminate off-screen shape overload. Restored authentic 5,000-row `data/raw/XAUUSD_M15_raw.csv` with CRLF line endings, recovering exact 256-bit hash parity with `data/processed/XAUUSD_M15_clean.meta.json`. Centralized statistical functions with zero-division safety guards.
 - **Rationale:** Prevents browser lockup and Streamlit rendering freezes while maintaining 100% full visual SMC fidelity and cryptographic provenance.
 - **Status:** Implemented & Formally Verified (656 passing tests).
+
+### ADR-008: Institutional Market Analysis Chart Redesign & Visual Hierarchy
+- **Decision:** Completely re-engineered the Market Analysis chart visualization layer to resolve user-documented issues:
+  1. *Dynamic Price Framing:* Locked Y-axis range to visible OHLC candles (+8% padding) with `autorange=False` and proximity filtering, completely eliminating the $2,800–$5,500 vertical compression failure.
+  2. *Overlay Relevance Architecture:* Introduced 4 distinct presets (`clean`, `smc_analysis`, `full_research`, `custom`). The default institutional view caps nearest demand/supply order blocks and filters distant off-screen historical zones.
+  3. *Non-Overlapping Structure Badges:* Replaced giant 2-line opaque text boxes with sleek 8px pill badges (`+BOS`, `-CHoCH`) offset by $\pm 9\text{px}$, moving deep diagnostics to interactive hovercards.
+  4. *Continuous Timeflow:* Suppressed non-trading weekend voids (Friday 19:00 to Sunday 22:00 UTC) across all chart panels using Plotly `rangebreaks=[dict(bounds=["sat", "mon"])]`.
+  5. *Framework Separation & Purity:* SMC and ICT engines remain decoupled. Strategy trading rules, backtest execution metrics, and Research Vault remain 100% unchanged.
+- **Rationale:** Delivers academic-grade visual polish and immediate 5-second chart comprehension while strictly preserving data science integrity and underlying analytical calculations.
+- **Status:** Implemented & Formally Verified across H4, H1, M15, M5 proof artifacts.
 
 ---
 
