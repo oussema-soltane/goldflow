@@ -119,46 +119,52 @@ def create_candlestick_chart(
     max_zone_y = vis_high + price_margin
 
     # 3. Preset Application
-    # If preset is None, default to 'custom' to preserve full backward compatibility with explicit caller toggles.
-    p_norm = preset.lower() if preset is not None else "custom"
-    if p_norm == "clean":
-        show_order_blocks = False
-        show_breakers = False
-        show_fvgs = False
-        show_liquidity_pools = False
-        show_swings = False
-        show_structure_breaks = True
-        show_sweeps = False
-        show_dealing_range = False
+    if preset is not None:
+        p_norm = preset.lower()
+        if p_norm == "clean":
+            show_order_blocks = False
+            show_breakers = False
+            show_fvgs = False
+            show_liquidity_pools = False
+            show_swings = False
+            show_structure_breaks = True
+            show_sweeps = False
+            show_dealing_range = False
+            proximity_filter = True if proximity_filter is None else proximity_filter
+            only_active_zones = True if only_active_zones is None else only_active_zones
+        elif p_norm == "smc_analysis":
+            # Institutional Default: focused on actionable nearby structure
+            show_order_blocks = True
+            show_breakers = True
+            show_fvgs = True
+            show_liquidity_pools = True
+            show_swings = True
+            show_structure_breaks = True
+            show_sweeps = True
+            proximity_filter = True if proximity_filter is None else proximity_filter
+            only_active_zones = False if only_active_zones is None else only_active_zones
+            max_zones_per_type = 8 if max_zones_per_type is None else max_zones_per_type
+        elif p_norm == "full_research":
+            # Full Academic Research: all historical zones, all states
+            show_order_blocks = True
+            show_breakers = True
+            show_fvgs = True
+            show_liquidity_pools = True
+            show_swings = True
+            show_structure_breaks = True
+            show_sweeps = True
+            proximity_filter = False if proximity_filter is None else proximity_filter
+            only_active_zones = False if only_active_zones is None else only_active_zones
+            max_zones_per_type = None if max_zones_per_type is None else max_zones_per_type
+        else:  # Custom
+            proximity_filter = False if proximity_filter is None else proximity_filter
+            only_active_zones = False if only_active_zones is None else only_active_zones
+    else:
+        # Default when preset is None: preserve explicit caller toggles, while applying
+        # proximity filtering to ensure institutional chart framing and sub-second rendering.
         proximity_filter = True if proximity_filter is None else proximity_filter
-        only_active_zones = True if only_active_zones is None else only_active_zones
-    elif p_norm == "smc_analysis":
-        # Institutional Default: focused on actionable active structure
-        show_order_blocks = True
-        show_breakers = True
-        show_fvgs = True
-        show_liquidity_pools = True
-        show_swings = True
-        show_structure_breaks = True
-        show_sweeps = True
-        proximity_filter = True if proximity_filter is None else proximity_filter
-        only_active_zones = True if only_active_zones is None else only_active_zones
-        max_zones_per_type = 5 if max_zones_per_type is None else max_zones_per_type
-    elif p_norm == "full_research":
-        # Full Academic Research: all historical zones, all states
-        show_order_blocks = True
-        show_breakers = True
-        show_fvgs = True
-        show_liquidity_pools = True
-        show_swings = True
-        show_structure_breaks = True
-        show_sweeps = True
-        proximity_filter = False if proximity_filter is None else proximity_filter
         only_active_zones = False if only_active_zones is None else only_active_zones
-        max_zones_per_type = None if max_zones_per_type is None else max_zones_per_type
-    else:  # Custom
-        proximity_filter = False if proximity_filter is None else proximity_filter
-        only_active_zones = False if only_active_zones is None else only_active_zones
+        max_zones_per_type = 8 if max_zones_per_type is None else max_zones_per_type
 
     # Palette
     bg_color = "#0c0f17" if dark_theme else "#ffffff"
