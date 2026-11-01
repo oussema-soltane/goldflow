@@ -460,36 +460,81 @@ if df is not None and not df.empty and report is not None:
     elif meta and meta.get("source_verification_status") == "declared_not_independently_verified":
         st.warning("The source is declared by the ingestion pipeline, not independently verified. Preserve the retrieval report and inspect the raw timestamp epoch column.")
 
-    # Top KPI Metrics Strip
-    k1, k2, k3, k4, k5, k6 = st.columns(6)
-    last_close = df["close"].iloc[-1]
-    high_max = df["high"].max()
-    low_min = df["low"].min()
+    # Compute Nearest Order Blocks and Last Confirmed Structure Break for Top Information Strip
+    last_close = float(df["close"].iloc[-1])
+    high_max = float(df["high"].max())
+    low_min = float(df["low"].min())
     bars_total = len(df)
     
+    nearest_demand = None
+    nearest_supply = None
+    if smc_res and getattr(smc_res, "order_blocks", None):
+        active_bulls = [ob for ob in smc_res.order_blocks if ob.direction.value == "BULLISH" and ob.status.value == "ACTIVE" and ob.high <= last_close]
+        active_bears = [ob for ob in smc_res.order_blocks if ob.direction.value == "BEARISH" and ob.status.value == "ACTIVE" and ob.low >= last_close]
+        if active_bulls:
+            active_bulls.sort(key=lambda ob: last_close - ob.high)
+            nearest_demand = f"${active_bulls[0].high:.2f}"
+        if active_bears:
+            active_bears.sort(key=lambda ob: ob.low - last_close)
+            nearest_supply = f"${active_bears[0].low:.2f}"
+
+    last_break_str = "None"
+    if smc_res and getattr(smc_res, "structure_breaks", None) and smc_res.structure_breaks:
+        last_brk = smc_res.structure_breaks[-1]
+        brk_sign = "+" if last_brk.direction.value == "BULLISH" else "-"
+        last_break_str = f"{brk_sign}{last_brk.break_type.value} (${last_brk.broken_swing.price:.2f})"
+
+    # Top Institutional KPI Metrics Strip
+    k1, k2, k3, k4, k5, k6 = st.columns(6)
     k1.metric("Latest Price", f"${last_close:,.2f}")
-    k2.metric("Period High", f"${high_max:,.2f}")
-    k3.metric("Period Low", f"${low_min:,.2f}")
-    k4.metric("Audited Bars", f"{bars_total:,}")
     
     if active_res:
         trend_color = "🟢" if active_res.current_trend.value == "BULLISH" else ("🔴" if active_res.current_trend.value == "BEARISH" else "⚪")
-        k5.metric("Structure Trend", f"{trend_color} {active_res.current_trend.value}")
-        if smc_res and hasattr(smc_res, "current_zone"):
+        k2.metric("Structure Trend", f"{trend_color} {active_res.current_trend.value}")
+        if smc_res and hasattr(smc_res, "current_zone") and getattr(smc_res, "equilibrium", None) is not None:
             zone_color = "🔵" if smc_res.current_zone == "DISCOUNT" else ("🟠" if smc_res.current_zone == "PREMIUM" else "⚪")
-            k6.metric("Dealing Zone", f"{zone_color} {smc_res.current_zone}")
+            k3.metric("Dealing Zone", f"{zone_color} {smc_res.current_zone}", f"EQ: ${smc_res.equilibrium:.2f}")
         else:
-            k6.metric("CHoCH Count", f"{active_res.choch_count if hasattr(active_res, 'choch_count') else 0}")
+            k3.metric("CHoCH Count", f"{active_res.choch_count if hasattr(active_res, 'choch_count') else 0}")
     else:
         status_label = "🟢 PASSED" if report.status == "PASSED" else "🟡 WARNINGS"
-        k5.metric("Data Quality", status_label)
-        k6.metric("Integrity", "VERIFIED" if meta and meta.get("timestamp_integrity_status") == "verified" else "UNVERIFIED")
+        k2.metric("Data Quality", status_label)
+        k3.metric("Integrity", "VERIFIED" if meta and meta.get("timestamp_integrity_status") == "verified" else "UNVERIFIED")
+
+    k4.metric("Nearest Demand (OB)", nearest_demand or "None in range")
+    k5.metric("Nearest Supply (OB)", nearest_supply or "None in range")
+    k6.metric("Last Confirmed Break", last_break_str)
 
     # Interactive Chart Controls Toolbar
-    c_zoom, c_trade_toggle, c_dr_toggle, c_height = st.columns([2, 2, 2, 2])
+    c_preset, c_zoom, c_weekends, c_autoscale, c_height = st.columns([3, 2, 2, 2, 2])
+    with c_preset:
+        preset_display = st.selectbox(
+            "🎨 Chart Preset",
+            [
+                "🎯 SMC Analysis (Recommended)",
+                "⚡ Clean Price Action",
+                "🔬 Full SMC Research",
+                "⚙️ Custom Configuration",
+            ],
+            index=0,
+            help=(
+                "• SMC Analysis: Institutional view of active nearby order blocks, confirmed breaks, and key liquidity.\n"
+                "• Clean Price Action: Candlesticks, volume, and major breaks only.\n"
+                "• Full SMC Research: All historical zones, mitigated OBs, and full history.\n"
+                "• Custom: Manually toggle individual overlays."
+            ),
+        )
+        preset_slug_map = {
+            "🎯 SMC Analysis (Recommended)": "smc_analysis",
+            "⚡ Clean Price Action": "clean",
+            "🔬 Full SMC Research": "full_research",
+            "⚙️ Custom Configuration": "custom",
+        }
+        selected_preset = preset_slug_map[preset_display]
+
     with c_zoom:
         zoom_choice = st.selectbox(
-            "Visible Bars Window",
+            "🔍 Visible Window",
             ["Last 200 bars", "Last 500 bars", "Last 1,000 bars", "All Available Bars"],
             index=1,
             help="Zoom to recent candles for high-detail inspection without modifying canonical data on disk."
@@ -497,14 +542,37 @@ if df is not None and not df.empty and report is not None:
         zoom_map = {"Last 200 bars": 200, "Last 500 bars": 500, "Last 1,000 bars": 1000, "All Available Bars": None}
         selected_visible_bars = zoom_map[zoom_choice]
 
+    with c_weekends:
+        hide_weekends = st.checkbox("Hide Weekend Gaps", value=True, help="Suppress non-trading weekend periods for continuous chart/volume flow.")
+
+    with c_autoscale:
+        autoscale_y = st.checkbox("Focus Price Axis", value=True, help="Lock vertical axis to visible candles (+8% margin), preventing distant levels from compressing price.")
+
+    with c_height:
+        chart_height = st.slider("Chart Height", min_value=500, max_value=900, value=700, step=40)
+
+    # Secondary toggle row
+    c_trade_toggle, c_dr_toggle = st.columns([2, 2])
     with c_trade_toggle:
         show_trade_overlay = st.checkbox("Overlay Backtest Trades", value=True, help="Plot entry arrows, SL/TP lines, and exit points from the strategy trade ledger.")
-
     with c_dr_toggle:
         show_dr_overlay = st.checkbox("Show 50% Dealing Range", value=True, help="Display swing high/low boundary and 50% equilibrium level.")
 
-    with c_height:
-        chart_height = st.slider("Chart Height", min_value=500, max_value=900, value=680, step=40)
+    # Custom overlay controls drawer (when Custom Preset selected)
+    if selected_preset == "custom":
+        with st.expander("🔧 Custom Overlay Configuration", expanded=True):
+            oc1, oc2, oc3, oc4 = st.columns(4)
+            with oc1:
+                show_smc_breaks = st.checkbox("BOS & CHoCH Breaks", value=show_smc_breaks)
+                show_smc_swings = st.checkbox("Confirmed Swings", value=show_smc_swings)
+            with oc2:
+                show_smc_obs = st.checkbox("Order Blocks", value=show_smc_obs)
+                show_smc_breakers = st.checkbox("Breaker Blocks", value=show_smc_breakers)
+            with oc3:
+                show_smc_fvgs = st.checkbox("Fair Value Gaps (FVG)", value=show_smc_fvgs)
+                show_smc_pools = st.checkbox("Liquidity Pools", value=show_smc_pools)
+            with oc4:
+                show_smc_sweeps = st.checkbox("Liquidity Sweeps", value=show_smc_sweeps)
 
     # Load backtest trade ledger if available
     trades_to_overlay = None
@@ -547,6 +615,9 @@ if df is not None and not df.empty and report is not None:
         trades=trades_to_overlay,
         show_trades=show_trade_overlay,
         visible_bars=selected_visible_bars,
+        preset=selected_preset,
+        hide_weekends=hide_weekends,
+        autoscale_y_to_visible=autoscale_y,
     )
     st.plotly_chart(fig, use_container_width=True)
 
