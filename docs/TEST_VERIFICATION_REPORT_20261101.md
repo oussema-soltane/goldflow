@@ -1,9 +1,9 @@
 # GoldFlow — Comprehensive Test Verification Report
 **Date:** November 1, 2026  
 **Auditor:** Principal Software Architect & QA Engineer  
-**Git Baseline:** `918dfa9`  
-**Total Tests:** 656 passed, 0 failed, 0 skipped  
-**Execution Runtime:** 23.57 seconds  
+**Git Baseline:** `4e4a0ff`  
+**Total Tests:** 658 passed, 0 failed, 0 skipped  
+**Execution Runtime:** 20.71 seconds  
 
 ---
 
@@ -21,9 +21,9 @@
 | **Data Cleaning & Pipeline** | `test_cleaner.py`, `test_validator.py`, `test_loader.py` | 45 | **PASSED** | OHLC consistency, monotonic UTC timestamps, gap audits |
 | **Tick Ingestion & Decoder** | `test_phase6a_ingestion.py`, `test_phase6c_bi5_parsing.py`, `test_phase6i_calibration.py` | 52 | **PASSED** | Binary `.bi5` tick decoding, point-scale calibration |
 | **Security & Research Vault**| `test_phase6a_vault_holdout.py`, `test_phase6a1_secrets.py` | 36 | **PASSED** | Cryptographic hash registration, immutable audit ledger |
-| **UI & Chart Performance** | `test_ui_and_integration.py`, `test_ui_redesign.py`, `test_chart_performance_and_statistics.py` | 30 | **PASSED** | Preset application, sub-second render, visible clamping |
+| **UI & Chart Performance** | `test_ui_and_integration.py`, `test_ui_redesign.py` (10), `test_chart_performance_and_statistics.py` | 32 | **PASSED** | Preset application, sub-second render, visible clamping, autoscale toggles |
 | **Other Regression Suites** | Phase 4, 5, 6 validation suites | 270 | **PASSED** | Full regression safety across all historical milestones |
-| **TOTAL** | **40 Test Files** | **656** | **100% PASS** | **Zero Regressions** |
+| **TOTAL** | **40 Test Files** | **658** | **100% PASS** | **Zero Regressions** |
 
 ---
 
@@ -44,3 +44,8 @@
 ### 4. M15 Cryptographic SHA-256 Provenance Parity
 - **Target Assertion:** `assert actual_hash == recorded_hash` and `assert len(df_raw) == 5000` in `tests/test_chart_performance_and_statistics.py`.
 - **Status:** **PASSED**. Restored canonical 5,000-row `XAUUSD_M15_raw.csv` matches `b893bc507daec515d36ff51cb988e4f6e33df23f3ccddd6924794b64fbe7b075`.
+
+### 5. Full SMC Research Y-Axis Autoscale Toggle
+- **Target Assertion:** `assert fig_clamped.layout.yaxis.range is not None` and `assert fig_expanded.layout.yaxis.autorange is True` in `tests/test_ui_redesign.py`.
+- **Status:** **PASSED**. Allows users in `Full SMC Research` mode to inspect distant unmitigated order blocks ($2,800–$5,500) via UI toggle without losing price candle focus by default.
+

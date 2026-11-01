@@ -1,0 +1,66 @@
+{
+  "session": "GoldFlow Master Autonomous Engineering & Visualization Redesign Verification",
+  "timestamp_utc": "2026-11-01T21:30:23.063048+00:00",
+  "canonical_baseline_commit": "8eddb3c",
+  "audit_base_commit": "d91056f",
+  "git_branch": "main",
+  "python_environment": "Python 3.14.7 x64 Windows",
+  "test_suite": {
+    "total_tests": 658,
+    "passed": 658,
+    "failed": 0,
+    "pass_rate": "100.0%",
+    "execution_time_seconds": 20.71
+  },
+  "m15_provenance": {
+    "file": "data/raw/XAUUSD_M15_raw.csv",
+    "rows": 5000,
+    "sha256": "b893bc507daec515d36ff51cb988e4f6e33df23f3ccddd6924794b64fbe7b075",
+    "matches_metadata": true
+  },
+  "chart_architecture": {
+    "presets": [
+      "clean",
+      "smc_analysis",
+      "full_research",
+      "custom"
+    ],
+    "default_preset": "smc_analysis",
+    "autoscale_y_default": true,
+    "expand_research_y_toggle": true,
+    "hide_weekends_default": true,
+    "h1_500bar_render_time_ms": 136.5
+  },
+  "commission_reconciliation": {
+    "H4": {
+      "zero_net": 448.73,
+      "comm_net": 448.52,
+      "comm_diff": -0.21,
+      "pf": 1.54
+    },
+    "H1": {
+      "zero_net": -339.41,
+      "comm_net": -334.68,
+      "comm_diff": 4.72,
+      "pf": 0.917
+    },
+    "M15": {
+      "zero_net": -239.12,
+      "comm_net": -239.7,
+      "comm_diff": -0.58,
+      "pf": 0.922
+    },
+    "M5": {
+      "zero_net": -4955.63,
+      "comm_net": -4959.36,
+      "comm_diff": -3.74,
+      "pf": 0.873
+    }
+  },
+  "architectural_guarantees": {
+    "smc_calculation_engine_modified": false,
+    "ict_independent_layer_modified": false,
+    "trading_rules_modified": false,
+    "file_deletions": 0
+  }
+}

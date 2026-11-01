@@ -166,3 +166,50 @@ class TestUIRedesignComponents:
         assert fig.data[0].type == "bar"
         assert len(fig.data[0].x) == 5  # 5 standard session windows
 
+    def test_preset_full_research_y_autoscale_toggle(self, sample_bars: pd.DataFrame):
+        """Verify Full SMC Research y-axis toggle behaviour between visible clamping and full range."""
+        smc_res = analyze_smc(sample_bars, symbol="XAUUSD", timeframe="M15")
+
+        # 1. With autoscale_y_to_visible=True (default focus)
+        fig_clamped = create_candlestick_chart(
+            sample_bars,
+            smc_result=smc_res,
+            preset="full_research",
+            autoscale_y_to_visible=True,
+            visible_bars=50,
+        )
+        assert fig_clamped.layout.yaxis.range is not None
+        clamped_min, clamped_max = fig_clamped.layout.yaxis.range
+        vis_low = sample_bars.iloc[-50:]["low"].min()
+        vis_high = sample_bars.iloc[-50:]["high"].max()
+        assert clamped_min < vis_low
+        assert clamped_max > vis_high
+
+        # 2. With autoscale_y_to_visible=False (expand to distant historical zones)
+        fig_expanded = create_candlestick_chart(
+            sample_bars,
+            smc_result=smc_res,
+            preset="full_research",
+            autoscale_y_to_visible=False,
+            visible_bars=50,
+        )
+        assert fig_expanded.layout.yaxis.range is None
+        assert fig_expanded.layout.yaxis.autorange is True
+
+    def test_all_four_presets_generate_valid_figures(self, sample_bars: pd.DataFrame):
+        """Verify all four chart presets produce valid figures with compliant trace hierarchies."""
+        smc_res = analyze_smc(sample_bars, symbol="XAUUSD", timeframe="M15")
+        presets = ["clean", "smc_analysis", "full_research", "custom"]
+
+        for preset in presets:
+            fig = create_candlestick_chart(
+                sample_bars,
+                smc_result=smc_res,
+                preset=preset,
+                visible_bars=50,
+            )
+            assert fig is not None
+            assert len(fig.data) >= 1  # Candlestick trace present
+            assert fig.data[0].type == "candlestick"
+
+

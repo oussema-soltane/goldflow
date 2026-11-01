@@ -42,20 +42,26 @@ All backtests were executed from the raw source implementation using `scripts/ru
 
 ## 3. Discrepancy Reconciliation
 
-### 3.1 Commission Accounting Discrepancy
+### 3.1 Commission Accounting Discrepancy & M5 Reconciliation
 **The Question:** Earlier reports cited zero commission, while a later summary described commission of $0.07/lot/side, yet reported identical P&L figures (+448.73, -339.41, -239.12, -4955.63).
 
-**The Mathematical Evidence:**
+**The Mathematical Evidence & Complete Timeframe Audit:**
 1. In `src/backtesting/engine.py`, the default `BacktestConfig.commission_per_lot_per_side` is `0.0`.
-2. Running the simulator with `commission_per_lot_per_side = 0.0` yields:
-   - H4: +$448.73
-   - H1: -$339.41
-   - M15: -$239.12
-3. Running the simulator with `commission_per_lot_per_side = 0.07` yields:
-   - H4: +$448.52 (Total Commission: $0.21 across 13 trades)
-   - H1: -$334.68 (Total Commission: $0.70 across 61 trades)
-   - M15: -$239.70 (Total Commission: $0.58 across 40 trades)
-4. **Resolution:** The published historical numbers were generated under the zero-commission baseline (`commission_per_lot_per_side = 0.0`). The reference to $0.07 in textual commentary was an unapplied assumption that was not passed to the numerical execution script.
+2. Running the simulator with `commission_per_lot_per_side = 0.0` vs `0.07` across all four timeframes yields the following exact trade accounting:
+
+| Timeframe | Bars | Trades | Zero Comm Net P&L | Zero Comm PF | Comm ($0.07) Net P&L | Comm ($0.07) PF | Total Comm Paid | Delta |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **H4** | 5,000 | 13 | **+$448.73** | 1.540 | +$448.52 | 1.540 | $0.21 | -$0.21 |
+| **H1** | 10,000 | 61 | **-$339.41** | 0.917 | -$334.68 | 0.918 | $0.70 | +$4.72 |
+| **M15** | 5,000 | 40 | **-$239.12** | 0.922 | -$239.70 | 0.922 | $0.58 | -$0.58 |
+| **M5** | 100,000 | 842 | **-$4,955.63** | 0.873 | -$4,959.36 | 0.873 | $21.71 | -$3.74 |
+
+3. **Why H1 Net P&L is slightly less negative under commission (+4.72 delta):**
+   In `src/backtesting/engine.py`, lot sizing incorporates estimated round-trip commission into the denominator risk divisor:
+   $$\text{stop\_distance} = |\text{entry} - \text{sl}| + \text{slippage} + \text{commission\_estimate}$$
+   $$\text{lots} = \left\lfloor \frac{\text{risk\_cash}}{\text{stop\_distance} \times \text{contract\_size} \times \text{lot\_step}} \right\rfloor \times \text{lot\_step}$$
+   Non-zero commission marginally increases the risk divisor, rounding down lot sizes by one lot step on several high-risk losing trades. The reduced loss on those positions exceeded the total commission paid ($0.70), yielding a net +$4.72 difference.
+4. **Resolution:** The published baseline numbers (+448.73, -339.41, -239.12, -4955.63) were mathematically generated under `commission_per_lot_per_side = 0.0`. The reference to $0.07 was an unapplied specification assumption in the narrative.
 
 ### 3.2 Historical Bar Count Discrepancy
 **The Question:** Certain summary tables listed all timeframes as having "5,000 bars", while datasets on disk contain 10,000 bars for H1 and 100,000 bars for M5.
@@ -72,3 +78,4 @@ All backtests were executed from the raw source implementation using `scripts/ru
 1. **Higher Timeframe Stability (H4):** H4 is the only profitable timeframe (+4.49%, PF 1.540). The low trade frequency (13 trades over 3 years) reflects strong structural filtering where daily/weekly liquidity sweeps have high institutional follow-through.
 2. **Lower Timeframe Decay (M15, M5):** Strategy performance degrades monotonically as timeframe decreases (-2.39% on M15, -49.56% on M5). On M5, market noise and spread/slippage friction erode the theoretical edge, resulting in 533 losses against 309 wins.
 3. **Target Source Limitation:** Using opposing liquidity pools as fixed take-profit targets creates an asymmetric risk profile: distant unmitigated pools are frequently not reached before trailing structure reverses. This reinforces ADR-006 (rationalized fixed R:R targets for intraday execution).
+

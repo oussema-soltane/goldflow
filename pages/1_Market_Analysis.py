@@ -547,6 +547,13 @@ if df is not None and not df.empty and report is not None:
 
     with c_autoscale:
         autoscale_y = st.checkbox("Focus Price Axis", value=True, help="Lock vertical axis to visible candles (+8% margin), preventing distant levels from compressing price.")
+        expand_research_y = False
+        if selected_preset == "full_research":
+            expand_research_y = st.checkbox(
+                "🌐 Autoscale to Distant Zones",
+                value=False,
+                help="In Full SMC Research, expand the vertical scale to encompass all unmitigated historical levels ($2,800–$5,500).",
+            )
 
     with c_height:
         chart_height = st.slider("Chart Height", min_value=500, max_value=900, value=700, step=40)
@@ -617,7 +624,7 @@ if df is not None and not df.empty and report is not None:
         visible_bars=selected_visible_bars,
         preset=selected_preset,
         hide_weekends=hide_weekends,
-        autoscale_y_to_visible=autoscale_y,
+        autoscale_y_to_visible=(autoscale_y and not expand_research_y),
     )
     st.plotly_chart(fig, use_container_width=True)
 
