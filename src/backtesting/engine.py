@@ -905,3 +905,92 @@ def run_event_backtest(
         realized_equity_curve=realized_equity_curve,
         config=asdict(config),
     )
+
+
+def compute_bootstrap_pf_ci(
+    pnls: Sequence[float],
+    n_boot: int = 1000,
+    ci: float = 0.95,
+    seed: int = 42,
+) -> tuple[float, float, float]:
+    """Calculate empirical bootstrap confidence interval for Profit Factor.
+
+    Parameters
+    ----------
+    pnls : Sequence[float]
+        Sequence of trade net PnLs.
+    n_boot : int, default 1000
+        Number of bootstrap iterations.
+    ci : float, default 0.95
+        Confidence level (e.g. 0.95 for 95% CI).
+    seed : int, default 42
+        RNG seed for reproducibility.
+
+    Returns
+    -------
+    tuple[float, float, float]
+        (observed_profit_factor, ci_lower, ci_upper)
+    """
+    arr = np.asarray(pnls, dtype=float)
+    if len(arr) == 0:
+        return 0.0, 0.0, 0.0
+    wins = float(arr[arr > 0].sum())
+    losses = float(abs(arr[arr <= 0].sum()))
+    observed_pf = (wins / losses) if losses > 0 else (999.0 if wins > 0 else 0.0)
+
+    if wins == 0.0:
+        return 0.0, 0.0, 0.0
+    if losses == 0.0:
+        return 999.0, 999.0, 999.0
+
+    rng = np.random.default_rng(seed)
+    n = len(arr)
+    boot_indices = rng.integers(0, n, size=(n_boot, n))
+    boot_samples = arr[boot_indices]
+    boot_wins = np.where(boot_samples > 0, boot_samples, 0.0).sum(axis=1)
+    boot_losses = np.abs(np.where(boot_samples <= 0, boot_samples, 0.0)).sum(axis=1)
+
+    with np.errstate(divide="ignore", invalid="ignore"):
+        boot_pfs = np.where(boot_losses > 0, boot_wins / boot_losses, np.where(boot_wins > 0, 999.0, 0.0))
+
+    alpha = (1.0 - ci) / 2.0
+    lower = float(np.percentile(boot_pfs, alpha * 100))
+    upper = float(np.percentile(boot_pfs, (1.0 - alpha) * 100))
+    return float(observed_pf), lower, upper
+
+
+def analyze_consecutive_losses(pnls: Sequence[float]) -> dict[str, Any]:
+    """Analyze consecutive loss streaks in a trade sequence.
+
+    Parameters
+    ----------
+    pnls : Sequence[float]
+        Sequence of trade net PnLs in chronological execution order.
+
+    Returns
+    -------
+    dict[str, Any]
+        Dictionary with max_streak, avg_streak, and total_streaks.
+    """
+    arr = np.asarray(pnls, dtype=float)
+    if len(arr) == 0:
+        return {"max_streak": 0, "avg_streak": 0.0, "total_streaks": 0}
+    losses = (arr <= 0).astype(int)
+    streaks = []
+    current = 0
+    for val in losses:
+        if val == 1:
+            current += 1
+        else:
+            if current > 0:
+                streaks.append(current)
+                current = 0
+    if current > 0:
+        streaks.append(current)
+    if not streaks:
+        return {"max_streak": 0, "avg_streak": 0.0, "total_streaks": 0}
+    return {
+        "max_streak": int(max(streaks)),
+        "avg_streak": float(np.mean(streaks)),
+        "total_streaks": len(streaks),
+    }

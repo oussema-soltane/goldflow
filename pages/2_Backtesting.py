@@ -15,7 +15,11 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from scripts.run_smc_backtest import run_backtest_pipeline
-from src.backtesting.engine import BacktestConfig
+from src.backtesting.engine import (
+    BacktestConfig,
+    analyze_consecutive_losses,
+    compute_bootstrap_pf_ci,
+)
 from src.research.execution_spec_audit import audit_processed_execution_specs
 from src.visualization.charts import (
     create_equity_curve_chart,
@@ -24,63 +28,6 @@ from src.visualization.charts import (
     create_performance_by_session_chart,
     create_monte_carlo_equity_fan_chart,
 )
-
-
-def compute_bootstrap_pf_ci(
-    pnls: Sequence[float],
-    n_boot: int = 1000,
-    ci: float = 0.95,
-    seed: int = 42,
-) -> tuple[float, float, float]:
-    """Calculate empirical bootstrap confidence interval for Profit Factor."""
-    arr = np.asarray(pnls, dtype=float)
-    if len(arr) == 0:
-        return 0.0, 0.0, 0.0
-    wins = arr[arr > 0].sum()
-    losses = abs(arr[arr <= 0].sum())
-    observed_pf = (wins / losses) if losses > 0 else (999.0 if wins > 0 else 0.0)
-
-    rng = np.random.default_rng(seed)
-    n = len(arr)
-    boot_indices = rng.integers(0, n, size=(n_boot, n))
-    boot_samples = arr[boot_indices]
-    boot_wins = np.where(boot_samples > 0, boot_samples, 0.0).sum(axis=1)
-    boot_losses = np.abs(np.where(boot_samples <= 0, boot_samples, 0.0)).sum(axis=1)
-
-    with np.errstate(divide="ignore", invalid="ignore"):
-        boot_pfs = np.where(boot_losses > 0, boot_wins / boot_losses, np.where(boot_wins > 0, 999.0, 1.0))
-
-    alpha = (1.0 - ci) / 2.0
-    lower = float(np.percentile(boot_pfs, alpha * 100))
-    upper = float(np.percentile(boot_pfs, (1.0 - alpha) * 100))
-    return float(observed_pf), lower, upper
-
-
-def analyze_consecutive_losses(pnls: Sequence[float]) -> dict:
-    """Analyze consecutive loss streaks in a trade sequence."""
-    arr = np.asarray(pnls, dtype=float)
-    if len(arr) == 0:
-        return {"max_streak": 0, "avg_streak": 0.0, "total_streaks": 0}
-    losses = (arr <= 0).astype(int)
-    streaks = []
-    current = 0
-    for val in losses:
-        if val == 1:
-            current += 1
-        else:
-            if current > 0:
-                streaks.append(current)
-                current = 0
-    if current > 0:
-        streaks.append(current)
-    if not streaks:
-        return {"max_streak": 0, "avg_streak": 0.0, "total_streaks": 0}
-    return {
-        "max_streak": max(streaks),
-        "avg_streak": float(np.mean(streaks)),
-        "total_streaks": len(streaks),
-    }
-
 st.set_page_config(page_title="GoldFlow — SMC Strategy Validation", page_icon="⚙️", layout="wide")
 st.title("⚙️ SMC v1 Strategy Validation & Research")
 st.caption("Pure-SMC event-driven research simulator, chronological out-of-sample validation, and cost-sensitivity analysis.")

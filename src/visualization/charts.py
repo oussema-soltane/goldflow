@@ -28,7 +28,8 @@ single chart view — the caller passes either ``smc_result`` or ``ict_result``.
 
 from __future__ import annotations
 
-from typing import Any, List, Optional
+from typing import Any, List, Optional, Sequence
+import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
@@ -116,6 +117,11 @@ def create_candlestick_chart(
 
     if not pd.api.types.is_datetime64_any_dtype(df["time"]):
         df["time"] = pd.to_datetime(df["time"], utc=True)
+
+    chart_start = df["time"].iloc[0]
+    chart_end = df["time"].iloc[-1]
+    shapes: list[dict[str, Any]] = []
+    annotations: list[dict[str, Any]] = []
 
     # Theme colors
     bg_color = "#0c0f17" if dark_theme else "#ffffff"
@@ -205,36 +211,42 @@ def create_candlestick_chart(
 
         # 3.1 Order Blocks (Drawn as shaded zones)
         if show_order_blocks and hasattr(ict_result, "order_blocks") and ict_result.order_blocks:
+            ob_event_times = []
+            ob_event_prices = []
+            ob_event_texts = []
+            ob_event_hovers = []
             for ob in ict_result.order_blocks:
-                end_x = ob.mitigation_time if (ob.is_mitigated and ob.mitigation_time) else last_time
+                end_x = ob.mitigation_time if (ob.is_mitigated and ob.mitigation_time) else chart_end
+                if end_x < chart_start or ob.candle_time > chart_end:
+                    continue
                 ob_color = "rgba(59, 130, 246, 0.18)" if ob.ob_type.value == "BULLISH" else "rgba(239, 68, 68, 0.18)"
                 ob_border = "rgba(59, 130, 246, 0.6)" if ob.ob_type.value == "BULLISH" else "rgba(239, 68, 68, 0.6)"
-                fig.add_shape(
+                shapes.append(dict(
                     type="rect",
-                    x0=ob.candle_time,
+                    x0=max(ob.candle_time, chart_start),
                     y0=ob.low,
-                    x1=end_x,
+                    x1=min(end_x, chart_end),
                     y1=ob.high,
                     fillcolor=ob_color,
                     line=dict(color=ob_border, width=1, dash="dot"),
                     layer="below",
-                    row=1,
-                    col=1,
-                )
-
-            ob_event_times = [ob.confirmed_time or ob.candle_time for ob in ict_result.order_blocks]
-            ob_event_prices = [(ob.high + ob.low) / 2 for ob in ict_result.order_blocks]
-            ob_event_texts = [f"{ob.ob_type.value.title()} OB" for ob in ict_result.order_blocks]
-            ob_event_hovers = [
-                f"<b>{ob.ob_type.value} ORDER BLOCK</b><br>"
-                f"Origin candle: {ob.candle_time.strftime('%Y-%m-%d %H:%M UTC')}<br>"
-                f"Confirmed: {(ob.confirmed_time or ob.candle_time).strftime('%Y-%m-%d %H:%M UTC')}<br>"
-                f"Zone: {ob.low:.2f}–{ob.high:.2f}<br>"
-                f"Mitigated: {ob.is_mitigated}<br>Invalidated: {ob.is_invalidated}"
-                + (f"<br>Mitigation: {ob.mitigation_time.strftime('%Y-%m-%d %H:%M UTC')}" if ob.mitigation_time else "")
-                + (f"<br>Invalidation: {ob.invalidation_time.strftime('%Y-%m-%d %H:%M UTC')}" if ob.invalidation_time else "")
-                for ob in ict_result.order_blocks
-            ]
+                    xref="x",
+                    yref="y",
+                ))
+                ev_time = ob.confirmed_time or ob.candle_time
+                if chart_start <= ev_time <= chart_end:
+                    ob_event_times.append(ev_time)
+                    ob_event_prices.append((ob.high + ob.low) / 2)
+                    ob_event_texts.append(f"{ob.ob_type.value.title()} OB")
+                    ob_event_hovers.append(
+                        f"<b>{ob.ob_type.value} ORDER BLOCK</b><br>"
+                        f"Origin candle: {ob.candle_time.strftime('%Y-%m-%d %H:%M UTC')}<br>"
+                        f"Confirmed: {ev_time.strftime('%Y-%m-%d %H:%M UTC')}<br>"
+                        f"Zone: {ob.low:.2f}–{ob.high:.2f}<br>"
+                        f"Mitigated: {ob.is_mitigated}<br>Invalidated: {ob.is_invalidated}"
+                        + (f"<br>Mitigation: {ob.mitigation_time.strftime('%Y-%m-%d %H:%M UTC')}" if ob.mitigation_time else "")
+                        + (f"<br>Invalidation: {ob.invalidation_time.strftime('%Y-%m-%d %H:%M UTC')}" if ob.invalidation_time else "")
+                    )
             if ob_event_times:
                 fig.add_trace(
                     go.Scatter(
@@ -248,51 +260,51 @@ def create_candlestick_chart(
 
         # 3.2 Fair Value Gaps (FVG)
         if show_fvgs and hasattr(ict_result, "fvgs") and ict_result.fvgs:
+            fvg_event_times = []
+            fvg_event_prices = []
+            fvg_event_texts = []
+            fvg_event_hovers = []
             for fvg in ict_result.fvgs:
-                end_x = fvg.mitigation_time if fvg.mitigation_time else last_time
+                end_x = fvg.mitigation_time if fvg.mitigation_time else chart_end
+                if end_x < chart_start or fvg.creation_time > chart_end:
+                    continue
                 fvg_color = "rgba(8, 153, 129, 0.18)" if fvg.gap_type.value == "BULLISH" else "rgba(242, 54, 69, 0.18)"
                 fvg_border = "rgba(8, 153, 129, 0.5)" if fvg.gap_type.value == "BULLISH" else "rgba(242, 54, 69, 0.5)"
-                
-                # Gap Rectangle
-                fig.add_shape(
+                shapes.append(dict(
                     type="rect",
-                    x0=fvg.creation_time,
+                    x0=max(fvg.creation_time, chart_start),
                     y0=fvg.bottom_price,
-                    x1=end_x,
+                    x1=min(end_x, chart_end),
                     y1=fvg.top_price,
                     fillcolor=fvg_color,
                     line=dict(color=fvg_border, width=1),
                     layer="below",
-                    row=1,
-                    col=1,
-                )
-
-                # Consequent Encroachment (50% CE) Line
-                fig.add_shape(
+                    xref="x",
+                    yref="y",
+                ))
+                shapes.append(dict(
                     type="line",
-                    x0=fvg.creation_time,
+                    x0=max(fvg.creation_time, chart_start),
                     y0=fvg.consequent_encroachment,
-                    x1=end_x,
+                    x1=min(end_x, chart_end),
                     y1=fvg.consequent_encroachment,
                     line=dict(color=fvg_border, width=1, dash="dot"),
                     layer="below",
-                    row=1,
-                    col=1,
-                )
-
-            # Event markers make FVG creation/confirmation times discoverable on hover.
-            fvg_event_times = [f.creation_time for f in ict_result.fvgs]
-            fvg_event_prices = [(f.top_price + f.bottom_price) / 2 for f in ict_result.fvgs]
-            fvg_event_texts = [f"{f.gap_type.value.title()} FVG" for f in ict_result.fvgs]
-            fvg_event_hovers = [
-                f"<b>{f.gap_type.value} FVG</b><br>"
-                f"Confirmed: {f.creation_time.strftime('%Y-%m-%d %H:%M UTC')}<br>"
-                f"Zone: {f.bottom_price:.2f}–{f.top_price:.2f}<br>"
-                f"CE: {f.consequent_encroachment:.2f}<br>"
-                f"Size: {f.size:.2f}<br>Status: {f.status.value}"
-                + (f"<br>First mitigation: {f.mitigation_time.strftime('%Y-%m-%d %H:%M UTC')}" if f.mitigation_time else "")
-                for f in ict_result.fvgs
-            ]
+                    xref="x",
+                    yref="y",
+                ))
+                if chart_start <= fvg.creation_time <= chart_end:
+                    fvg_event_times.append(fvg.creation_time)
+                    fvg_event_prices.append((fvg.top_price + fvg.bottom_price) / 2)
+                    fvg_event_texts.append(f"{fvg.gap_type.value.title()} FVG")
+                    fvg_event_hovers.append(
+                        f"<b>{fvg.gap_type.value} FVG</b><br>"
+                        f"Confirmed: {fvg.creation_time.strftime('%Y-%m-%d %H:%M UTC')}<br>"
+                        f"Zone: {fvg.bottom_price:.2f}–{fvg.top_price:.2f}<br>"
+                        f"CE: {fvg.consequent_encroachment:.2f}<br>"
+                        f"Size: {fvg.size:.2f}<br>Status: {fvg.status.value}"
+                        + (f"<br>First mitigation: {fvg.mitigation_time.strftime('%Y-%m-%d %H:%M UTC')}" if fvg.mitigation_time else "")
+                    )
             if fvg_event_times:
                 fig.add_trace(
                     go.Scatter(
@@ -307,39 +319,38 @@ def create_candlestick_chart(
         # 3.3 Structure Breaks (BOS / CHoCH Lines)
         if show_structure_breaks and hasattr(ict_result, "structure_breaks") and ict_result.structure_breaks:
             for brk in ict_result.structure_breaks:
+                if brk.break_time < chart_start or brk.broken_swing.time > chart_end:
+                    continue
                 brk_color = bull_color if brk.direction.value == "BULLISH" else bear_color
                 dash_style = "dash" if brk.break_type.value == "BOS" else "longdash"
-                
-                # Horizontal line from broken swing time to break time
-                fig.add_shape(
+                shapes.append(dict(
                     type="line",
-                    x0=brk.broken_swing.time,
+                    x0=max(brk.broken_swing.time, chart_start),
                     y0=brk.broken_swing.price,
-                    x1=brk.break_time,
+                    x1=min(brk.break_time, chart_end),
                     y1=brk.broken_swing.price,
                     line=dict(color=brk_color, width=1.5, dash=dash_style),
-                    row=1,
-                    col=1,
-                )
-
-                # Text annotation at the break
-                label = (
-                    f"<b>{brk.break_type.value}</b><br>"
-                    f"{brk.break_time.strftime('%Y-%m-%d %H:%M UTC')}"
-                )
-                fig.add_annotation(
-                    x=brk.break_time,
-                    y=brk.broken_swing.price,
-                    text=label,
-                    showarrow=False,
-                    font=dict(size=10, color=brk_color),
-                    bgcolor=bg_color,
-                    bordercolor=brk_color,
-                    borderwidth=1,
-                    borderpad=2,
-                    row=1,
-                    col=1,
-                )
+                    xref="x",
+                    yref="y",
+                ))
+                if chart_start <= brk.break_time <= chart_end:
+                    label = (
+                        f"<b>{brk.break_type.value}</b><br>"
+                        f"{brk.break_time.strftime('%Y-%m-%d %H:%M UTC')}"
+                    )
+                    annotations.append(dict(
+                        x=brk.break_time,
+                        y=brk.broken_swing.price,
+                        text=label,
+                        showarrow=False,
+                        font=dict(size=10, color=brk_color),
+                        bgcolor=bg_color,
+                        bordercolor=brk_color,
+                        borderwidth=1,
+                        borderpad=2,
+                        xref="x",
+                        yref="y",
+                    ))
 
         # 3.4 Liquidity Sweeps
         if show_sweeps and hasattr(ict_result, "liquidity_sweeps") and ict_result.liquidity_sweeps:
@@ -433,8 +444,6 @@ def create_candlestick_chart(
 
     # 4. Independent SMC overlays (no ICT-specific FVG/displacement dependency).
     if smc_result is not None:
-        last_time = df["time"].iloc[-1]
-
         if show_order_blocks and getattr(smc_result, "order_blocks", None):
             ob_x, ob_y, ob_text, ob_hover = [], [], [], []
             for ob in smc_result.order_blocks:
@@ -443,26 +452,37 @@ def create_candlestick_chart(
                 elif ob.mitigation_time is not None:
                     end_x = ob.mitigation_time
                 else:
-                    end_x = last_time
+                    end_x = chart_end
+                if end_x < chart_start or ob.created_time > chart_end:
+                    continue
                 bullish = ob.direction.value == "BULLISH"
                 fill = "rgba(8, 153, 129, 0.16)" if bullish else "rgba(242, 54, 69, 0.16)"
                 edge = "rgba(8, 153, 129, 0.75)" if bullish else "rgba(242, 54, 69, 0.75)"
                 # Draw only from confirmation time, never backpaint the zone
                 # into candles before the structural break made the OB knowable.
-                fig.add_shape(
-                    type="rect", x0=ob.created_time, y0=ob.low, x1=end_x, y1=ob.high,
-                    fillcolor=fill, line=dict(color=edge, width=1, dash="dash"),
-                    layer="below", row=1, col=1,
-                )
-                ob_x.append(ob.created_time)
-                ob_y.append((ob.high + ob.low) / 2.0)
-                ob_text.append(f"SMC {ob.direction.value.title()} OB")
-                ob_hover.append(
-                    f"<b>SMC {ob.direction.value} ORDER BLOCK</b><br>"
-                    f"Origin candle: {ob.origin_time.strftime('%Y-%m-%d %H:%M UTC')}<br>"
-                    f"Known at break: {ob.created_time.strftime('%Y-%m-%d %H:%M UTC')}<br>"
-                    f"Zone: {ob.low:.2f}–{ob.high:.2f}<br>Status at dataset end: {ob.status.value}"
-                )
+                shapes.append(dict(
+                    type="rect",
+                    x0=max(ob.created_time, chart_start),
+                    y0=ob.low,
+                    x1=min(end_x, chart_end),
+                    y1=ob.high,
+                    fillcolor=fill,
+                    line=dict(color=edge, width=1, dash="dash"),
+                    layer="below",
+                    xref="x",
+                    yref="y",
+                ))
+                marker_time = max(ob.created_time, chart_start)
+                if chart_start <= marker_time <= chart_end:
+                    ob_x.append(marker_time)
+                    ob_y.append((ob.high + ob.low) / 2.0)
+                    ob_text.append(f"SMC {ob.direction.value.title()} OB")
+                    ob_hover.append(
+                        f"<b>SMC {ob.direction.value} ORDER BLOCK</b><br>"
+                        f"Origin candle: {ob.origin_time.strftime('%Y-%m-%d %H:%M UTC')}<br>"
+                        f"Known at break: {ob.created_time.strftime('%Y-%m-%d %H:%M UTC')}<br>"
+                        f"Zone: {ob.low:.2f}–{ob.high:.2f}<br>Status at dataset end: {ob.status.value}"
+                    )
             if ob_x:
                 fig.add_trace(go.Scatter(
                     x=ob_x, y=ob_y, mode="markers+text", name="SMC Order Blocks",
@@ -475,7 +495,9 @@ def create_candlestick_chart(
         if show_breakers and getattr(smc_result, "breaker_blocks", None):
             bb_x, bb_y, bb_text, bb_hover = [], [], [], []
             for bb in smc_result.breaker_blocks:
-                end_x = bb.invalidation_time if bb.invalidation_time is not None else last_time
+                end_x = bb.invalidation_time if bb.invalidation_time is not None else chart_end
+                if end_x < chart_start or bb.created_time > chart_end:
+                    continue
                 bullish = bb.breaker_type.value == "BULLISH"
                 # Bullish Breaker: failed supply -> support (cyan/teal border, dotted)
                 # Bearish Breaker: failed demand -> resistance (pink/coral border, dotted)
@@ -486,27 +508,33 @@ def create_candlestick_chart(
                     fill = "rgba(244, 114, 182, 0.12)" if bb.status.value != "INVALIDATED" else "rgba(244, 114, 182, 0.04)"
                     edge = "rgba(244, 114, 182, 0.70)" if bb.status.value != "INVALIDATED" else "rgba(244, 114, 182, 0.25)"
 
-                fig.add_shape(
+                shapes.append(dict(
                     type="rect",
-                    x0=bb.created_time, y0=bb.low,
-                    x1=end_x, y1=bb.high,
+                    x0=max(bb.created_time, chart_start),
+                    y0=bb.low,
+                    x1=min(end_x, chart_end),
+                    y1=bb.high,
                     fillcolor=fill,
                     line=dict(color=edge, width=1, dash="dot"),
-                    layer="below", row=1, col=1,
-                )
-                bb_x.append(bb.created_time)
-                bb_y.append((bb.high + bb.low) / 2.0)
-                status_short = {"ACTIVE": "open", "TESTED": "tested", "INVALIDATED": "inv"}
-                tag = f"SMC {bb.breaker_type.value.title()} Breaker ({status_short.get(bb.status.value, '')})"
-                bb_text.append(tag)
-                bb_hover.append(
-                    f"<b>SMC {bb.breaker_type.value} BREAKER BLOCK</b><br>"
-                    f"Inverted at: {bb.created_time.strftime('%Y-%m-%d %H:%M UTC')}<br>"
-                    f"Zone: {bb.low:.2f}–{bb.high:.2f}<br>"
-                    f"Status: {bb.status.value}"
-                    + (f"<br>Retested: {bb.retest_time.strftime('%Y-%m-%d %H:%M UTC')}" if bb.retest_time else "")
-                    + (f"<br>Invalidated: {bb.invalidation_time.strftime('%Y-%m-%d %H:%M UTC')}" if bb.invalidation_time else "")
-                )
+                    layer="below",
+                    xref="x",
+                    yref="y",
+                ))
+                marker_time = max(bb.created_time, chart_start)
+                if chart_start <= marker_time <= chart_end:
+                    bb_x.append(marker_time)
+                    bb_y.append((bb.high + bb.low) / 2.0)
+                    status_short = {"ACTIVE": "open", "TESTED": "tested", "INVALIDATED": "inv"}
+                    tag = f"SMC {bb.breaker_type.value.title()} Breaker ({status_short.get(bb.status.value, '')})"
+                    bb_text.append(tag)
+                    bb_hover.append(
+                        f"<b>SMC {bb.breaker_type.value} BREAKER BLOCK</b><br>"
+                        f"Inverted at: {bb.created_time.strftime('%Y-%m-%d %H:%M UTC')}<br>"
+                        f"Zone: {bb.low:.2f}–{bb.high:.2f}<br>"
+                        f"Status: {bb.status.value}"
+                        + (f"<br>Retested: {bb.retest_time.strftime('%Y-%m-%d %H:%M UTC')}" if bb.retest_time else "")
+                        + (f"<br>Invalidated: {bb.invalidation_time.strftime('%Y-%m-%d %H:%M UTC')}" if bb.invalidation_time else "")
+                    )
             if bb_x:
                 fig.add_trace(go.Scatter(
                     x=bb_x, y=bb_y, mode="markers+text", name="SMC Breaker Blocks",
@@ -517,29 +545,44 @@ def create_candlestick_chart(
 
         if show_structure_breaks and getattr(smc_result, "structure_breaks", None):
             for event in smc_result.structure_breaks:
+                if event.break_time < chart_start or event.broken_swing.confirmed_time > chart_end:
+                    continue
                 bullish = event.direction.value == "BULLISH"
                 event_color = bull_color if bullish else bear_color
                 dash = "dash" if event.break_type.value == "BOS" else ("longdash" if event.break_type.value == "CHoCH" else "dot")
-                fig.add_shape(
-                    type="line", x0=event.broken_swing.confirmed_time,
-                    y0=event.broken_swing.price, x1=event.break_time,
+                shapes.append(dict(
+                    type="line",
+                    x0=max(event.broken_swing.confirmed_time, chart_start),
+                    y0=event.broken_swing.price,
+                    x1=min(event.break_time, chart_end),
                     y1=event.broken_swing.price,
-                    line=dict(color=event_color, width=1.5, dash=dash), row=1, col=1,
-                )
-                fig.add_annotation(
-                    x=event.break_time, y=event.broken_swing.price,
-                    text=f"SMC {event.break_type.value}<br>{event.break_time.strftime('%Y-%m-%d %H:%M UTC')}",
-                    showarrow=False, font=dict(size=9, color=event_color), bgcolor=bg_color,
-                    bordercolor=event_color, borderwidth=1, borderpad=2, row=1, col=1,
-                )
+                    line=dict(color=event_color, width=1.5, dash=dash),
+                    xref="x",
+                    yref="y",
+                ))
+                if chart_start <= event.break_time <= chart_end:
+                    annotations.append(dict(
+                        x=event.break_time,
+                        y=event.broken_swing.price,
+                        text=f"SMC {event.break_type.value}<br>{event.break_time.strftime('%Y-%m-%d %H:%M UTC')}",
+                        showarrow=False,
+                        font=dict(size=9, color=event_color),
+                        bgcolor=bg_color,
+                        bordercolor=event_color,
+                        borderwidth=1,
+                        borderpad=2,
+                        xref="x",
+                        yref="y",
+                    ))
 
         # 4.5 SMC Fair Value Gaps — independent of ICT FVG/displacement logic.
         if show_fvgs and getattr(smc_result, "fair_value_gaps", None):
             fvg_label_x, fvg_label_y, fvg_label_text, fvg_label_hover = [], [], [], []
             for fvg in smc_result.fair_value_gaps:
+                end_x = fvg.closed_time if fvg.closed_time is not None else chart_end
+                if end_x < chart_start or fvg.creation_time > chart_end:
+                    continue
                 bullish_fvg = fvg.fvg_type.value == "BULLISH"
-                # Choose end_x based on lifecycle: stop drawing at close time if filled.
-                end_x = fvg.closed_time if fvg.closed_time is not None else last_time
                 if bullish_fvg:
                     zone_fill = "rgba(8, 153, 129, 0.14)"
                     zone_edge = "rgba(8, 153, 129, 0.55)"
@@ -550,41 +593,49 @@ def create_candlestick_chart(
                     ce_color = "rgba(242, 54, 69, 0.70)"
                 # Dim closed FVGs
                 if fvg.status.value == "CLOSED":
-                    zone_fill = zone_fill.replace("0.14", "0.05").replace("0.14", "0.05")
+                    zone_fill = zone_fill.replace("0.14", "0.05")
                     zone_edge = zone_edge.replace("0.55", "0.18")
                 # Draw gap zone rectangle
-                fig.add_shape(
+                shapes.append(dict(
                     type="rect",
-                    x0=fvg.creation_time, y0=fvg.bottom,
-                    x1=end_x, y1=fvg.top,
+                    x0=max(fvg.creation_time, chart_start),
+                    y0=fvg.bottom,
+                    x1=min(end_x, chart_end),
+                    y1=fvg.top,
                     fillcolor=zone_fill,
                     line=dict(color=zone_edge, width=1),
-                    layer="below", row=1, col=1,
-                )
+                    layer="below",
+                    xref="x",
+                    yref="y",
+                ))
                 # CE (50%) midpoint line
-                fig.add_shape(
+                shapes.append(dict(
                     type="line",
-                    x0=fvg.creation_time, y0=fvg.midpoint,
-                    x1=end_x, y1=fvg.midpoint,
+                    x0=max(fvg.creation_time, chart_start),
+                    y0=fvg.midpoint,
+                    x1=min(end_x, chart_end),
+                    y1=fvg.midpoint,
                     line=dict(color=ce_color, width=1, dash="dot"),
-                    row=1, col=1,
-                )
-                status_tag = {"OPEN": "open", "PARTIAL": "partial", "CLOSED": "✓filled"}
-                label = f"{'BFVG' if bullish_fvg else 'SFVG'} ({status_tag.get(fvg.status.value, '')})"
-                fvg_label_x.append(fvg.creation_time)
-                fvg_label_y.append(fvg.midpoint)
-                fvg_label_text.append("BFVG" if bullish_fvg else "SFVG")
-                fvg_label_hover.append(
-                    f"<b>SMC {'BULLISH' if bullish_fvg else 'BEARISH'} FVG</b><br>"
-                    f"Zone: {fvg.bottom:.2f} – {fvg.top:.2f}<br>"
-                    f"CE (50%): {fvg.midpoint:.2f}<br>"
-                    f"Size: {fvg.size:.2f} pts<br>"
-                    f"Created: {fvg.creation_time.strftime('%Y-%m-%d %H:%M UTC')}<br>"
-                    f"Status: {fvg.status.value}"
-                    + (f"<br>First touch: {fvg.first_touch_time.strftime('%Y-%m-%d %H:%M UTC')}" if fvg.first_touch_time else "")
-                    + (f"<br>CE reached: {fvg.ce_time.strftime('%Y-%m-%d %H:%M UTC')}" if fvg.ce_time else "")
-                    + (f"<br>Closed: {fvg.closed_time.strftime('%Y-%m-%d %H:%M UTC')}" if fvg.closed_time else "")
-                )
+                    xref="x",
+                    yref="y",
+                ))
+                marker_time = max(fvg.creation_time, chart_start)
+                if chart_start <= marker_time <= chart_end:
+                    status_tag = {"OPEN": "open", "PARTIAL": "partial", "CLOSED": "✓filled"}
+                    fvg_label_x.append(marker_time)
+                    fvg_label_y.append(fvg.midpoint)
+                    fvg_label_text.append("BFVG" if bullish_fvg else "SFVG")
+                    fvg_label_hover.append(
+                        f"<b>SMC {'BULLISH' if bullish_fvg else 'BEARISH'} FVG</b><br>"
+                        f"Zone: {fvg.bottom:.2f} – {fvg.top:.2f}<br>"
+                        f"CE (50%): {fvg.midpoint:.2f}<br>"
+                        f"Size: {fvg.size:.2f} pts<br>"
+                        f"Created: {fvg.creation_time.strftime('%Y-%m-%d %H:%M UTC')}<br>"
+                        f"Status: {fvg.status.value}"
+                        + (f"<br>First touch: {fvg.first_touch_time.strftime('%Y-%m-%d %H:%M UTC')}" if fvg.first_touch_time else "")
+                        + (f"<br>CE reached: {fvg.ce_time.strftime('%Y-%m-%d %H:%M UTC')}" if fvg.ce_time else "")
+                        + (f"<br>Closed: {fvg.closed_time.strftime('%Y-%m-%d %H:%M UTC')}" if fvg.closed_time else "")
+                    )
             if fvg_label_x:
                 fvg_colors = [
                     "rgba(8,153,129,0.85)" if "BFVG" in t else "rgba(242,54,69,0.85)"
@@ -610,7 +661,9 @@ def create_candlestick_chart(
             for pool in smc_result.liquidity_pools:
                 sweep = sweep_by_pool.get(id(pool))
                 is_swept = sweep is not None
-                end_x = sweep.sweep_time if is_swept else last_time
+                end_x = sweep.sweep_time if is_swept else chart_end
+                if end_x < chart_start or pool.created_time > chart_end:
+                    continue
                 buy_side = pool.liquidity_type.value == "BUY_SIDE"
                 # Zone rectangle: fills the tolerance band around the pool level.
                 tol = float(pool.tolerance)
@@ -627,34 +680,42 @@ def create_candlestick_chart(
                     edge = "rgba(96, 165, 250, 0.40)" if is_swept else "rgba(96, 165, 250, 0.75)"
                     line_color = "rgba(96, 165, 250, 0.65)" if is_swept else "rgba(96, 165, 250, 0.90)"
                 # Rectangle zone
-                fig.add_shape(
+                shapes.append(dict(
                     type="rect",
-                    x0=pool.created_time, y0=zone_bot,
-                    x1=end_x, y1=zone_top,
+                    x0=max(pool.created_time, chart_start),
+                    y0=zone_bot,
+                    x1=min(end_x, chart_end),
+                    y1=zone_top,
                     fillcolor=fill,
                     line=dict(color=edge, width=0.8, dash="dot"),
-                    layer="below", row=1, col=1,
-                )
+                    layer="below",
+                    xref="x",
+                    yref="y",
+                ))
                 # Central midline at exact pool level
-                fig.add_shape(
+                shapes.append(dict(
                     type="line",
-                    x0=pool.created_time, y0=pool.level,
-                    x1=end_x, y1=pool.level,
+                    x0=max(pool.created_time, chart_start),
+                    y0=pool.level,
+                    x1=min(end_x, chart_end),
+                    y1=pool.level,
                     line=dict(color=line_color, width=1.2, dash="dot"),
-                    row=1, col=1,
-                )
-                # Collect label points for a scatter trace
-                label_type = "BSL" if buy_side else "SSL"
-                status_tag = " ✓swept" if is_swept else ""
-                pool_label_x.append(pool.created_time)
-                pool_label_y.append(pool.level)
-                pool_label_text.append(f"{label_type}{status_tag}")
-                pool_label_hover.append(
-                    f"<b>SMC {pool.liquidity_type.value.replace('_', ' ')} POOL</b><br>"
-                    f"Level: {pool.level:.2f} ± {tol:.2f}<br>"
-                    f"Formed: {pool.created_time.strftime('%Y-%m-%d %H:%M UTC')}<br>"
-                    f"Swept: {'Yes — ' + sweep.sweep_time.strftime('%Y-%m-%d %H:%M UTC') if is_swept else 'No'}"
-                )
+                    xref="x",
+                    yref="y",
+                ))
+                marker_time = max(pool.created_time, chart_start)
+                if chart_start <= marker_time <= chart_end:
+                    label_type = "BSL" if buy_side else "SSL"
+                    status_tag = " ✓swept" if is_swept else ""
+                    pool_label_x.append(marker_time)
+                    pool_label_y.append(pool.level)
+                    pool_label_text.append(f"{label_type}{status_tag}")
+                    pool_label_hover.append(
+                        f"<b>SMC {pool.liquidity_type.value.replace('_', ' ')} POOL</b><br>"
+                        f"Level: {pool.level:.2f} ± {tol:.2f}<br>"
+                        f"Formed: {pool.created_time.strftime('%Y-%m-%d %H:%M UTC')}<br>"
+                        f"Swept: {'Yes — ' + sweep.sweep_time.strftime('%Y-%m-%d %H:%M UTC') if is_swept else 'No'}"
+                    )
             if pool_label_x:
                 fig.add_trace(go.Scatter(
                     x=pool_label_x, y=pool_label_y,
@@ -674,7 +735,10 @@ def create_candlestick_chart(
                 ("SWING_HIGH", "SMC Confirmed Swing Highs", "triangle-down", "#f59e0b"),
                 ("SWING_LOW", "SMC Confirmed Swing Lows", "triangle-up", "#60a5fa"),
             ):
-                pivots = [s for s in smc_result.swings if s.swing_type.value == swing_type]
+                pivots = [
+                    s for s in smc_result.swings
+                    if s.swing_type.value == swing_type and chart_start <= s.confirmed_time <= chart_end
+                ]
                 if pivots:
                     fig.add_trace(go.Scatter(
                         x=[s.confirmed_time for s in pivots], y=[s.price for s in pivots],
@@ -689,22 +753,26 @@ def create_candlestick_chart(
                     ), row=1, col=1)
 
         if show_sweeps and getattr(smc_result, "liquidity_sweeps", None):
-            sweeps = smc_result.liquidity_sweeps
-            fig.add_trace(go.Scatter(
-                x=[event.sweep_time for event in sweeps],
-                y=[event.sweep_price for event in sweeps],
-                mode="markers+text", name="SMC Liquidity Sweeps",
-                text=[f"{event.liquidity_type.value.replace('_', ' ').title()} Sweep" for event in sweeps],
-                textposition="top center", marker=dict(symbol="diamond", size=9, color="#ec4899"),
-                hovertext=[
-                    f"<b>SMC {event.liquidity_type.value.replace('_', ' ')} SWEEP</b><br>"
-                    f"Pool level: {event.liquidity_pool.level:.2f}<br>"
-                    f"Sweep extreme: {event.sweep_price:.2f}<br>Close: {event.close_price:.2f}<br>"
-                    f"Penetration: {event.penetration:.2f}<br>"
-                    f"Confirmed: {event.sweep_time.strftime('%Y-%m-%d %H:%M UTC')}"
-                    for event in sweeps
-                ], hoverinfo="text", textfont=dict(size=9, color="#ec4899"), showlegend=False,
-            ), row=1, col=1)
+            sweeps = [
+                event for event in smc_result.liquidity_sweeps
+                if chart_start <= event.sweep_time <= chart_end
+            ]
+            if sweeps:
+                fig.add_trace(go.Scatter(
+                    x=[event.sweep_time for event in sweeps],
+                    y=[event.sweep_price for event in sweeps],
+                    mode="markers+text", name="SMC Liquidity Sweeps",
+                    text=[f"{event.liquidity_type.value.replace('_', ' ').title()} Sweep" for event in sweeps],
+                    textposition="top center", marker=dict(symbol="diamond", size=9, color="#ec4899"),
+                    hovertext=[
+                        f"<b>SMC {event.liquidity_type.value.replace('_', ' ')} SWEEP</b><br>"
+                        f"Pool level: {event.liquidity_pool.level:.2f}<br>"
+                        f"Sweep extreme: {event.sweep_price:.2f}<br>Close: {event.close_price:.2f}<br>"
+                        f"Penetration: {event.penetration:.2f}<br>"
+                        f"Confirmed: {event.sweep_time.strftime('%Y-%m-%d %H:%M UTC')}"
+                        for event in sweeps
+                    ], hoverinfo="text", textfont=dict(size=9, color="#ec4899"), showlegend=False,
+                ), row=1, col=1)
 
         # 4.6 SMC Dealing Range (High, Low, 50% Equilibrium)
         if show_dealing_range and smc_result is not None:
@@ -712,23 +780,21 @@ def create_candlestick_chart(
             dr_high = getattr(smc_result, "dealing_range_high", None)
             dr_low = getattr(smc_result, "dealing_range_low", None)
             if eq is not None and dr_high is not None and dr_low is not None:
-                start_t = df["time"].iloc[0]
-                end_t = df["time"].iloc[-1]
-                fig.add_shape(
-                    type="line", x0=start_t, y0=dr_high, x1=end_t, y1=dr_high,
+                shapes.append(dict(
+                    type="line", x0=chart_start, y0=dr_high, x1=chart_end, y1=dr_high,
                     line=dict(color="rgba(245, 158, 11, 0.65)", width=1.2, dash="dash"),
-                    row=1, col=1
-                )
-                fig.add_shape(
-                    type="line", x0=start_t, y0=dr_low, x1=end_t, y1=dr_low,
+                    xref="x", yref="y",
+                ))
+                shapes.append(dict(
+                    type="line", x0=chart_start, y0=dr_low, x1=chart_end, y1=dr_low,
                     line=dict(color="rgba(96, 165, 250, 0.65)", width=1.2, dash="dash"),
-                    row=1, col=1
-                )
-                fig.add_shape(
-                    type="line", x0=start_t, y0=eq, x1=end_t, y1=eq,
+                    xref="x", yref="y",
+                ))
+                shapes.append(dict(
+                    type="line", x0=chart_start, y0=eq, x1=chart_end, y1=eq,
                     line=dict(color="rgba(220, 225, 235, 0.75)", width=1.2, dash="dot"),
-                    row=1, col=1
-                )
+                    xref="x", yref="y",
+                ))
 
     # 5. Strategy Trade Executions Overlay
     if show_trades and trades is not None:
@@ -794,17 +860,17 @@ def create_candlestick_chart(
                     tp = float(r.get("take_profit", 0))
 
                     if sl > 0:
-                        fig.add_shape(
-                            type="line", x0=entry_t, y0=sl, x1=exit_t, y1=sl,
+                        shapes.append(dict(
+                            type="line", x0=max(entry_t, chart_start), y0=sl, x1=min(exit_t, chart_end), y1=sl,
                             line=dict(color="rgba(255, 59, 87, 0.45)", width=1, dash="dot"),
-                            row=1, col=1
-                        )
+                            xref="x", yref="y",
+                        ))
                     if tp > 0:
-                        fig.add_shape(
-                            type="line", x0=entry_t, y0=tp, x1=exit_t, y1=tp,
+                        shapes.append(dict(
+                            type="line", x0=max(entry_t, chart_start), y0=tp, x1=min(exit_t, chart_end), y1=tp,
                             line=dict(color="rgba(0, 192, 135, 0.45)", width=1, dash="dot"),
-                            row=1, col=1
-                        )
+                            xref="x", yref="y",
+                        ))
 
                 if "exit_time" in w_trades.columns:
                     w_exits = w_trades[w_trades["exit_time"].notna()].copy()
@@ -841,6 +907,8 @@ def create_candlestick_chart(
     )
 
     fig.update_layout(
+        shapes=shapes,
+        annotations=annotations,
         title=dict(
             text=title_text,
             x=0.02,

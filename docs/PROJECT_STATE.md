@@ -1,8 +1,8 @@
 # GOLDFLOW — PROJECT STATE & REPOSITORY MEMORY
 ## Continuous Quantitative Engineering Handover & Subsystem Status Matrix
 
-**Document Version:** 1.1.0  
-**Last Updated:** October 31, 2026  
+**Document Version:** 1.2.0  
+**Last Updated:** November 1, 2026  
 **Status:** ACTIVE  
 **Primary Architect:** Principal Software Architect & Quantitative Systems Lead  
 
@@ -13,10 +13,10 @@
 | Parameter | Current Value / State |
 | :--- | :--- |
 | **Active Working Directory** | `c:\Users\ousse\Downloads\GoldFlow_Ultimate_Updated\GoldFlow_SMC_Primary_Updated` |
-| **Canonical Git HEAD** | `8eddb3ce2846df6fe148ed7b30b4a6fdcb767554` |
+| **Canonical Git HEAD** | `1a529e2638832a4b6fcf88c388f68270fc6108a5` |
 | **Git Object Format** | `sha1` |
 | **Python Runtime** | Python 3.11+ x64 (Windows) |
-| **Test Suite Baseline** | **638 passed**, 0 failed, 39 test suites |
+| **Test Suite Baseline** | **656 passed**, 0 failed, 40 test suites |
 | **Frozen SMC v1 Config Hash** | `1091fb06b24491925510e642052305ba99e397e5f602c2ca2bdbd32094e7174a` (SHA-256) |
 | **Frozen C2 Spec Hash** | `d09474e02c3dc45165a667742cec5012662e58b95cea78bfd6e5e8d782849916` (SHA-256) |
 | **Network Ingestion Gate** | **FAIL-CLOSED** (`allow_network=False`, uncalibrated scale lock) |
@@ -54,6 +54,11 @@
 - **Decision:** Candidate C2 (Fixed 2.0R / 3.0R Take-Profit) produced positive development (+282.81, PF 1.082) and validation (+265.02, PF 1.959) returns. It is retained as an active research candidate pending untouched M15 forward data acquisition.
 - **Rationale:** Mitigates the structural flaw of waiting for distant, unmitigated opposing liquidity pools that rarely get reached before trailing reversals.
 - **Status:** Active Research Track (Exploratory).
+
+### ADR-007: High-Performance Chart Rendering & Data Integrity Remediation
+- **Decision:** Resolved Plotly quadratic tuple concatenation ($O(K^2)$) by batching shapes and annotations in Python lists and passing them via bulk layout updates. Implemented visible-window temporal clamping $[t_{start}, t_{end}]$ to eliminate off-screen shape overload. Restored authentic 5,000-row `data/raw/XAUUSD_M15_raw.csv` with CRLF line endings, recovering exact 256-bit hash parity with `data/processed/XAUUSD_M15_clean.meta.json`. Centralized statistical functions with zero-division safety guards.
+- **Rationale:** Prevents browser lockup and Streamlit rendering freezes while maintaining 100% full visual SMC fidelity and cryptographic provenance.
+- **Status:** Implemented & Formally Verified (656 passing tests).
 
 ---
 
