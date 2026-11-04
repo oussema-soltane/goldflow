@@ -279,7 +279,31 @@ if load_btn or st.session_state["current_df"] is None:
                         server_timezone=server_timezone,
                         timestamp_mode_verified=timestamp_mode_verified,
                     )
-                    raw_saved_path = save_raw_data(df_raw, selected_symbol, selected_tf)
+                    # CANONICAL DATA PROTECTION: Only overwrite an existing canonical
+                    # raw file if the new fetch has at least as many rows as the
+                    # existing file. This prevents a small live-terminal fetch
+                    # (e.g. 1,500 bars) from silently destroying a larger historical
+                    # dataset (e.g. 10,000 rows) that is committed to the research
+                    # archive. The user must use scripts/download_data.py with
+                    # --allow-shrink to intentionally replace a larger dataset.
+                    _safe_symbol = selected_symbol.upper().replace("/", "").replace(" ", "")
+                    _existing_raw = Path(f"data/raw/{_safe_symbol}_{selected_tf}_raw.csv")
+                    _allow_save = True
+                    if _existing_raw.exists():
+                        try:
+                            _existing_rows = sum(1 for _ in open(_existing_raw, encoding="utf-8")) - 1
+                            if len(df_raw) < _existing_rows:
+                                st.warning(
+                                    f"⚠️ CANONICAL DATA PROTECTION: The live MT5 fetch returned "
+                                    f"{len(df_raw):,} bars but the existing canonical raw file has "
+                                    f"{_existing_rows:,} rows. The canonical file was NOT overwritten. "
+                                    f"To replace it intentionally, use `scripts/download_data.py --allow-shrink`."
+                                )
+                                _allow_save = False
+                        except Exception:
+                            pass  # If check fails, allow save (fail open for new files)
+                    if _allow_save:
+                        raw_saved_path = save_raw_data(df_raw, selected_symbol, selected_tf)
                 except Exception as exc:
                     st.error(f"Failed to fetch data from MT5: {exc}")
 
