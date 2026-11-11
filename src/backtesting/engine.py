@@ -35,6 +35,15 @@ class BacktestConfig:
     max_holding_bars: int | None = None
     spread_multiplier: float = 1.0
     override_spread_usd: float | None = None
+    # Partial-profit / split-exit configuration.
+    # When partial_exit_at_r > 0 and remaining_exit_at_r > partial_exit_at_r,
+    # each eligible trade is split into two equal legs at entry:
+    #   Leg A exits at ``partial_exit_at_r`` × initial risk distance (50% of lots).
+    #   Leg B exits at ``remaining_exit_at_r`` × initial risk distance (50% of lots).
+    # Both legs share the original stop_loss.  Set both to 0.0 (default) to
+    # reproduce the baseline behaviour with no split.
+    partial_exit_at_r: float = 0.0
+    remaining_exit_at_r: float = 0.0
 
     def __post_init__(self) -> None:
         numeric_fields = (
@@ -84,6 +93,20 @@ class BacktestConfig:
         if self.max_holding_bars is not None:
             if isinstance(self.max_holding_bars, bool) or not isinstance(self.max_holding_bars, int) or self.max_holding_bars < 1:
                 raise ValueError("max_holding_bars must be None or an integer >= 1")
+        # Validate partial exit R multiples.
+        if not isinstance(self.partial_exit_at_r, (int, float)) or isinstance(self.partial_exit_at_r, bool) or not math.isfinite(float(self.partial_exit_at_r)):
+            raise ValueError("partial_exit_at_r must be a finite real number")
+        if not isinstance(self.remaining_exit_at_r, (int, float)) or isinstance(self.remaining_exit_at_r, bool) or not math.isfinite(float(self.remaining_exit_at_r)):
+            raise ValueError("remaining_exit_at_r must be a finite real number")
+        if float(self.partial_exit_at_r) < 0 or float(self.remaining_exit_at_r) < 0:
+            raise ValueError("partial_exit_at_r and remaining_exit_at_r must be >= 0")
+        split_enabled = float(self.partial_exit_at_r) > 0 or float(self.remaining_exit_at_r) > 0
+        if split_enabled:
+            if not (0 < float(self.partial_exit_at_r) < float(self.remaining_exit_at_r)):
+                raise ValueError(
+                    "When using partial exits, partial_exit_at_r must be > 0 and "
+                    "remaining_exit_at_r must be > partial_exit_at_r"
+                )
 
 
 @dataclass
@@ -774,6 +797,42 @@ def run_event_backtest(
                 "estimated_stop_risk_cash": estimated_stop_risk,
             }
             entered_this_open += 1
+
+            # Partial-exit split: when configured, replace a single full-lots
+            # position with two equal legs, each with a fixed-R take-profit.
+            # Leg A exits at ``partial_exit_at_r`` × risk distance (the "runner"
+            # leg stops get locked in profit).  Leg B exits at the more distant
+            # ``remaining_exit_at_r`` target.  Both legs share the original stop.
+            # Risk-distance is measured as the signed price gap between entry and
+            # the executable stop (already adjusted for slippage).
+            partial_r = float(config.partial_exit_at_r)
+            remaining_r = float(config.remaining_exit_at_r)
+            if partial_r > 0 and remaining_r > partial_r:
+                # Risk distance per unit (always positive).
+                stop_distance = abs(entry_price - stop_exit_estimate)
+                if stop_distance > 1e-10:
+                    # Allocate lots from the already rounded total lots to guarantee
+                    # exact lot conservation with zero risk leakage.
+                    leg_a_lots = math.floor((lots / 2.0 + 1e-12) / config.lot_step) * config.lot_step
+                    leg_a_lots = round(leg_a_lots, 8)
+                    leg_b_lots = round(lots - leg_a_lots, 8)
+                    if leg_a_lots >= config.min_lot and leg_b_lots >= config.min_lot:
+                        # Compute fixed-R target prices from entry price.
+                        direction_sign = 1.0 if side == "LONG" else -1.0
+                        tp_a = entry_price + direction_sign * partial_r * stop_distance
+                        tp_b = entry_price + direction_sign * remaining_r * stop_distance
+
+                        leg_a_risk = risk_per_lot * leg_a_lots
+                        leg_b_risk = risk_per_lot * leg_b_lots
+                        leg_a_audit = {**item["audit_fields"], "setup_id": cid + "_legA", "take_profit_reference": tp_a}
+                        leg_b_audit = {**item["audit_fields"], "setup_id": cid + "_legB", "take_profit_reference": tp_b}
+                        pos_a = {**pos, "audit_fields": leg_a_audit, "lots": leg_a_lots,
+                                 "take_profit": tp_a, "estimated_stop_risk_cash": leg_a_risk}
+                        pos_b = {**pos, "audit_fields": leg_b_audit, "lots": leg_b_lots,
+                                 "take_profit": tp_b, "estimated_stop_risk_cash": leg_b_risk}
+                        new_positions.extend([pos_a, pos_b])
+                        max_open_seen = max(max_open_seen, len(active_at_open) + len(new_positions))
+                        continue  # skip the single-position append below
             new_positions.append(pos)
             max_open_seen = max(max_open_seen, len(active_at_open) + len(new_positions))
 

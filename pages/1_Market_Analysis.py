@@ -279,20 +279,25 @@ if load_btn or st.session_state["current_df"] is None:
                         server_timezone=server_timezone,
                         timestamp_mode_verified=timestamp_mode_verified,
                     )
-                    # CANONICAL DATA PROTECTION: Only overwrite an existing canonical
-                    # raw file if the new fetch has at least as many rows as the
-                    # existing file. This prevents a small live-terminal fetch
-                    # (e.g. 1,500 bars) from silently destroying a larger historical
-                    # dataset (e.g. 10,000 rows) that is committed to the research
-                    # archive. The user must use scripts/download_data.py with
-                    # --allow-shrink to intentionally replace a larger dataset.
+                    # CANONICAL DATA PROTECTION: Fail-closed safeguard.
+                    # An existing canonical raw file must NEVER be silently overwritten
+                    # from the interactive UI. This prevents both accidental shrinkage
+                    # (e.g. 1,500 bars replacing 10,000 bars) and silent date-shifting of
+                    # canonical research baselines. For audited dataset updates, use
+                    # scripts/download_data.py.
                     _safe_symbol = selected_symbol.upper().replace("/", "").replace(" ", "")
                     _existing_raw = Path(f"data/raw/{_safe_symbol}_{selected_tf}_raw.csv")
                     _allow_save = True
                     if _existing_raw.exists():
                         try:
-                            _existing_rows = sum(1 for _ in open(_existing_raw, encoding="utf-8")) - 1
-                            if len(df_raw) < _existing_rows:
+                            _existing_rows = sum(1 for _ in open(_existing_raw, "r", encoding="utf-8")) - 1
+                            if _existing_rows < 0:
+                                _allow_save = False
+                                st.error(
+                                    f"⚠️ CANONICAL DATA PROTECTION: Existing raw file {_existing_raw} is empty. "
+                                    "Overwrite blocked (fail-closed)."
+                                )
+                            elif len(df_raw) < _existing_rows:
                                 st.warning(
                                     f"⚠️ CANONICAL DATA PROTECTION: The live MT5 fetch returned "
                                     f"{len(df_raw):,} bars but the existing canonical raw file has "
@@ -300,8 +305,20 @@ if load_btn or st.session_state["current_df"] is None:
                                     f"To replace it intentionally, use `scripts/download_data.py --allow-shrink`."
                                 )
                                 _allow_save = False
-                        except Exception:
-                            pass  # If check fails, allow save (fail open for new files)
+                            else:
+                                st.info(
+                                    f"ℹ️ CANONICAL DATA PROTECTION: An existing canonical dataset ({_existing_rows:,} rows) "
+                                    f"is present at {_existing_raw}. Live data was loaded into memory for analysis, "
+                                    "but canonical on-disk files are preserved. Use `scripts/download_data.py` for audited promotion."
+                                )
+                                _allow_save = False
+                        except Exception as exc:
+                            # FAIL-CLOSED: Any inspection failure strictly blocks saving.
+                            _allow_save = False
+                            st.error(
+                                f"⚠️ CANONICAL DATA PROTECTION: Inspection of existing raw file failed ({exc}). "
+                                "Overwrite blocked (fail-closed)."
+                            )
                     if _allow_save:
                         raw_saved_path = save_raw_data(df_raw, selected_symbol, selected_tf)
                 except Exception as exc:
