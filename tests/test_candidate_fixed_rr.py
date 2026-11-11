@@ -91,3 +91,4 @@ class TestCandidateExecutionSplit:
         # Total lots must equal baseline lots (sum of legs)
         total_cand_lots = sum(t["lots"] for t in closed_cand)
         assert math.isclose(total_cand_lots, closed_base[0]["lots"], rel_tol=1e-5)
+

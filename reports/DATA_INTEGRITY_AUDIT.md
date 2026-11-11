@@ -68,3 +68,4 @@ All canonical datasets preserve original MT5 raw epoch timestamps in column `tim
 - **Winter bars (EET, UTC+2):** offset = `-7200` seconds. Example: H1 row 0 `time_raw_epoch = 1738339200` (2025-01-31 16:00 local) -> normalized `2025-01-31 14:00:00+00:00`.
 - **Summer bars (EEST, UTC+3):** offset = `-10800` seconds. Example: H4 row 0 `time_raw_epoch = 1690488000` (2023-07-27 20:00 local) -> normalized `2023-07-27 17:00:00+00:00`.
 - Historical transition dates between EEST and EET are handled deterministically without fixed single-offset assumptions.
+

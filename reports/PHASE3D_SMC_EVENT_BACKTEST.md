@@ -1,7 +1,7 @@
 # GoldFlow Phase 3D — Pure-SMC Event-Driven Backtest
 
-**Generated UTC:** 2026-10-21T11:52:14.086338+00:00
-**Mode:** common-window
+**Generated UTC:** 2026-11-11T12:15:24.924896+00:00
+**Mode:** full-history
 **Data readiness:** READY_WITH_WARNINGS
 **Execution specification audit:** MATCHED_CAPTURED_DEFAULTS_UNVERIFIED_PROVENANCE
 
@@ -27,10 +27,10 @@
 
 | Timeframe | Candidates | Rule exits | Time stops | End-of-data | Skipped | Win rate* | Net P&L** | Return** | Profit factor* | Max DD** | Avg R* |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| H4 | 0 | 0 | 0 | 0 | 0 | N/A | $0.00 | 0.00% | N/A | $0.00 (0.00%) | N/A |
-| H1 | 11 | 10 | 0 | 0 | 1 | 10.00% | $-692.94 | -6.93% | 0.15 | $914.16 (8.94%) | -0.77 |
-| M15 | 49 | 36 | 0 | 0 | 13 | 16.67% | $-884.02 | -8.84% | 0.67 | $1,505.34 (14.17%) | -0.28 |
-| M5 | 142 | 124 | 0 | 1 | 17 | 26.61% | $-1,263.97 | -12.64% | 0.77 | $2,877.78 (27.98%) | -0.15 |
+| H4 | 15 | 13 | 0 | 0 | 2 | 30.77% | $448.73 | 4.49% | 1.54 | $751.76 (7.21%) | 0.46 |
+| H1 | 69 | 61 | 0 | 0 | 8 | 26.23% | $-339.41 | -3.39% | 0.92 | $1,265.62 (11.66%) | -0.01 |
+| M15 | 54 | 39 | 0 | 1 | 14 | 20.51% | $-239.12 | -2.39% | 0.92 | $1,632.95 (15.37%) | -0.07 |
+| M5 | 1015 | 841 | 0 | 1 | 173 | 27.71% | $-4,955.63 | -49.56% | 0.87 | $6,392.88 (59.28%) | -0.08 |
 
 * Win rate and profit factor exclude END_OF_DATA exits, which are sample-boundary marks rather than stop/target outcomes.
 ** Net P&L and return include END_OF_DATA liquidation P&L. Inspect `end_of_data_pnl` before interpreting these metrics. Max drawdown is close-to-close mark-to-market; `max_realized_drawdown_cash` is also present in the JSON for comparison.
@@ -38,16 +38,20 @@
 ## Candidate exclusions
 
 ### H4
-- No candidates skipped by the execution layer.
+- max_concurrent_positions: 1
+- risk_budget_below_min_lot: 1
 
 ### H1
-- max_concurrent_positions: 1
+- max_concurrent_positions: 6
+- risk_budget_below_min_lot: 2
 
 ### M15
-- max_concurrent_positions: 13
+- max_concurrent_positions: 14
 
 ### M5
-- max_concurrent_positions: 17
+- invalid_stop_or_target_after_fill_costs: 2
+- max_concurrent_positions: 168
+- risk_budget_below_min_lot: 3
 
 ## Method notes and limitations
 
@@ -65,6 +69,6 @@
 
 ## Artifacts
 
-- `smc_backtest_metrics_common_window.json` — assumptions, readiness state, metrics, and equity curves.
-- `smc_backtest_trades_common_window.csv` — closed trades and skipped candidates with traceable setup IDs.
-- `PHASE3D_SMC_EVENT_BACKTEST_COMMON_WINDOW.md` — human-readable summary.
+- `smc_backtest_metrics_full_history.json` — assumptions, readiness state, metrics, and equity curves.
+- `smc_backtest_trades_full_history.csv` — closed trades and skipped candidates with traceable setup IDs.
+- `PHASE3D_SMC_EVENT_BACKTEST_FULL_HISTORY.md` — human-readable summary.

@@ -92,3 +92,4 @@ Canonical configuration `configs/smc_v1_frozen.json` was verified:
 - **Actual SHA-256:** `1091fb06b24491925510e642052305ba99e397e5f602c2ca2bdbd32094e7174a`
 - Matches baseline expectation exactly.
 - Strategy rules, parameters, and thresholds remain unoptimized and frozen.
+

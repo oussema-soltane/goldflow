@@ -102,6 +102,36 @@ with tab_backtest:
             lot_step = st.number_input("Lot step", min_value=0.001, max_value=100.0, value=0.01, step=0.01, format="%.3f")
             max_lots = st.number_input("Maximum lots", min_value=0.01, max_value=1_000_000.0, value=100.0, step=1.0)
 
+        st.markdown("##### 🎯 Strategy Variant & Exit Architecture (ADR-006)")
+        exit_mode = st.radio(
+            "Exit Architecture",
+            ["Canonical Baseline (Fixed Target: Opposing Liquidity / 2.0R Fallback)", "Candidate Strategy (2R / 3R Partial-Exit Split)", "Custom Split Exit R-Multiples"],
+            index=0,
+            horizontal=True,
+            help="Toggle between canonical baseline and ADR-006 candidate partial-exit order splitting."
+        )
+        col_c1, col_c2 = st.columns(2)
+        with col_c1:
+            partial_exit_at_r = st.number_input(
+                "Partial Exit at R (Leg A, 50% lots)",
+                min_value=0.0,
+                max_value=10.0,
+                value=2.0 if exit_mode == "Candidate Strategy (2R / 3R Partial-Exit Split)" else (0.0 if exit_mode == "Canonical Baseline (Fixed Target: Opposing Liquidity / 2.0R Fallback)" else 2.0),
+                step=0.5,
+                disabled=(exit_mode != "Custom Split Exit R-Multiples"),
+                help="When > 0 and remaining_exit_at_r > partial_exit_at_r, position is split into 50% lots exiting at partial_exit_at_r * initial risk."
+            )
+        with col_c2:
+            remaining_exit_at_r = st.number_input(
+                "Remaining Exit at R (Leg B, 50% lots)",
+                min_value=0.0,
+                max_value=10.0,
+                value=3.0 if exit_mode == "Candidate Strategy (2R / 3R Partial-Exit Split)" else (0.0 if exit_mode == "Canonical Baseline (Fixed Target: Opposing Liquidity / 2.0R Fallback)" else 3.0),
+                step=0.5,
+                disabled=(exit_mode != "Custom Split Exit R-Multiples"),
+                help="When > partial_exit_at_r, runner leg exits at remaining_exit_at_r * initial risk."
+            )
+
         require_matched_execution_spec = st.checkbox(
             "Require captured MT5 execution specifications to match configuration before running",
             value=True,
@@ -123,6 +153,8 @@ with tab_backtest:
             max_lots=float(max_lots),
             max_concurrent_positions=int(max_positions),
             max_holding_bars=None if holding_choice == "No time stop" else int(holding_choice),
+            partial_exit_at_r=float(partial_exit_at_r),
+            remaining_exit_at_r=float(remaining_exit_at_r),
         )
         mode = "common-window" if mode_label == "Common date window" else "full-history"
         with st.spinner("Computing SMC candidates and replaying event-driven execution…"):
@@ -160,6 +192,12 @@ with tab_backtest:
             f"Execution Specs: **{payload_spec_status}** | "
             f"Generated: `{payload.get('generated_at_utc', 'unknown')}`"
         )
+
+        cfg = payload.get("config", {})
+        cand_p = cfg.get("partial_exit_at_r", 0.0)
+        cand_r = cfg.get("remaining_exit_at_r", 0.0)
+        if cand_p > 0 and cand_r > cand_p:
+            st.info(f"🔬 **Candidate Strategy Active (ADR-006):** Split-exit orders enabled (Leg A: {cand_p:.1f}R / Leg B: {cand_r:.1f}R, 50%/50% lots).")
 
         table_rows = []
         for tf, m in payload.get("metrics_by_timeframe", {}).items():

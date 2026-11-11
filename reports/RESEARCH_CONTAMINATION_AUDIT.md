@@ -60,3 +60,4 @@ For the newly defined candidate strategy experiment `SMC_CANDIDATE_FIXED_RR_v1`:
 
 3. **True Out-of-Sample Final Gate:**
    - Any live deployment or forward claim requires fresh broker data post-dating `2026-11-04`, ingested through the audited downloader and cryptographically sealed before execution.
+

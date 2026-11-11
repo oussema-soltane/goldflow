@@ -59,3 +59,4 @@ Executed against canonical research datasets with standard institutional assumpt
 7. **`configs/candidate_specs/SMC_CANDIDATE_FIXED_RR_v1.json`:** Formally sealed candidate experiment specification.
 
 GoldFlow is now an institutional-quality, academically rigorous, reproducible quantitative research platform.
+

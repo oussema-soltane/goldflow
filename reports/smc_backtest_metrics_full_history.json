@@ -1,6 +1,6 @@
 {
   "report_title": "GoldFlow Phase 3D \u2014 Pure-SMC Event-Driven Backtest",
-  "generated_at_utc": "2026-10-21T11:23:06.593435+00:00",
+  "generated_at_utc": "2026-11-11T12:15:24.924896+00:00",
   "mode": "full-history",
   "instrument": "XAUUSD",
   "timeframes": [
@@ -29,7 +29,7 @@
   "execution_spec_audit_status": "MATCHED_CAPTURED_DEFAULTS_UNVERIFIED_PROVENANCE",
   "execution_spec_audit": {
     "overall_status": "MATCHED_CAPTURED_DEFAULTS_UNVERIFIED_PROVENANCE",
-    "data_dir": "C:\\Users\\ousse\\Downloads\\GoldFlow_Phase3D3_2_CalcMode_Guard\\GoldFlow_SMC_Primary_Updated\\data\\processed",
+    "data_dir": "C:\\Users\\ousse\\Downloads\\GoldFlow_Ultimate_Updated\\GoldFlow_SMC_Primary_Updated\\data\\processed",
     "dataset_count": 4,
     "default_config_assumptions": {
       "point_size": 0.01,
@@ -64,7 +64,7 @@
         "captured_broker_server": "MetaQuotes-Demo",
         "metadata_broker_server": "MetaQuotes-Demo",
         "broker_server_match_verified": true,
-        "captured_at_utc": "2026-10-21T10:57:52.618876+00:00",
+        "captured_at_utc": "2026-10-22T09:39:17.959313+00:00",
         "status": "MATCHED_CAPTURED_DEFAULTS",
         "missing_required_fields": [],
         "wrong_type_fields": [],
@@ -164,7 +164,7 @@
           "status": "captured_complete",
           "source": "MetaTrader5.symbol_info",
           "symbol": "XAUUSD",
-          "captured_at_utc": "2026-10-21T10:57:52.618876+00:00",
+          "captured_at_utc": "2026-10-22T09:39:17.959313+00:00",
           "required_core_fields": [
             "digits",
             "point",
@@ -195,7 +195,7 @@
           "trade_calc_mode": 4,
           "trade_stops_level": 0,
           "trade_freeze_level": 0,
-          "spread": 33,
+          "spread": 36,
           "spread_float": true,
           "trade_calc_mode_constant_values": {
             "SYMBOL_CALC_MODE_CFD": 2,
@@ -318,7 +318,7 @@
           "Only documented linear contract-size profit modes are allowlisted; futures/tick-price, bond, collateral, unknown, and malformed modes are blocked from strict validation.",
           "The calculation-mode check validates formula compatibility, not the broker's overall correctness or the authenticity of historical OHLC provenance."
         ],
-        "sidecar_path": "C:/Users/ousse/Downloads/GoldFlow_Phase3D3_2_CalcMode_Guard/GoldFlow_SMC_Primary_Updated/data/processed/XAUUSD_H1_clean.meta.json"
+        "sidecar_path": "C:/Users/ousse/Downloads/GoldFlow_Ultimate_Updated/GoldFlow_SMC_Primary_Updated/data/processed/XAUUSD_H1_clean.meta.json"
       },
       {
         "symbol": "XAUUSD",
@@ -331,7 +331,7 @@
         "captured_broker_server": "MetaQuotes-Demo",
         "metadata_broker_server": "MetaQuotes-Demo",
         "broker_server_match_verified": true,
-        "captured_at_utc": "2026-10-21T10:57:52.618876+00:00",
+        "captured_at_utc": "2026-10-22T09:39:17.959313+00:00",
         "status": "MATCHED_CAPTURED_DEFAULTS",
         "missing_required_fields": [],
         "wrong_type_fields": [],
@@ -431,7 +431,7 @@
           "status": "captured_complete",
           "source": "MetaTrader5.symbol_info",
           "symbol": "XAUUSD",
-          "captured_at_utc": "2026-10-21T10:57:52.618876+00:00",
+          "captured_at_utc": "2026-10-22T09:39:17.959313+00:00",
           "required_core_fields": [
             "digits",
             "point",
@@ -462,7 +462,7 @@
           "trade_calc_mode": 4,
           "trade_stops_level": 0,
           "trade_freeze_level": 0,
-          "spread": 33,
+          "spread": 36,
           "spread_float": true,
           "trade_calc_mode_constant_values": {
             "SYMBOL_CALC_MODE_CFD": 2,
@@ -585,7 +585,7 @@
           "Only documented linear contract-size profit modes are allowlisted; futures/tick-price, bond, collateral, unknown, and malformed modes are blocked from strict validation.",
           "The calculation-mode check validates formula compatibility, not the broker's overall correctness or the authenticity of historical OHLC provenance."
         ],
-        "sidecar_path": "C:/Users/ousse/Downloads/GoldFlow_Phase3D3_2_CalcMode_Guard/GoldFlow_SMC_Primary_Updated/data/processed/XAUUSD_H4_clean.meta.json"
+        "sidecar_path": "C:/Users/ousse/Downloads/GoldFlow_Ultimate_Updated/GoldFlow_SMC_Primary_Updated/data/processed/XAUUSD_H4_clean.meta.json"
       },
       {
         "symbol": "XAUUSD",
@@ -598,7 +598,7 @@
         "captured_broker_server": "MetaQuotes-Demo",
         "metadata_broker_server": "MetaQuotes-Demo",
         "broker_server_match_verified": true,
-        "captured_at_utc": "2026-10-21T10:57:52.618876+00:00",
+        "captured_at_utc": "2026-10-22T09:39:17.959313+00:00",
         "status": "MATCHED_CAPTURED_DEFAULTS",
         "missing_required_fields": [],
         "wrong_type_fields": [],
@@ -698,7 +698,7 @@
           "status": "captured_complete",
           "source": "MetaTrader5.symbol_info",
           "symbol": "XAUUSD",
-          "captured_at_utc": "2026-10-21T10:57:52.618876+00:00",
+          "captured_at_utc": "2026-10-22T09:39:17.959313+00:00",
           "required_core_fields": [
             "digits",
             "point",
@@ -729,7 +729,7 @@
           "trade_calc_mode": 4,
           "trade_stops_level": 0,
           "trade_freeze_level": 0,
-          "spread": 33,
+          "spread": 36,
           "spread_float": true,
           "trade_calc_mode_constant_values": {
             "SYMBOL_CALC_MODE_CFD": 2,
@@ -852,7 +852,7 @@
           "Only documented linear contract-size profit modes are allowlisted; futures/tick-price, bond, collateral, unknown, and malformed modes are blocked from strict validation.",
           "The calculation-mode check validates formula compatibility, not the broker's overall correctness or the authenticity of historical OHLC provenance."
         ],
-        "sidecar_path": "C:/Users/ousse/Downloads/GoldFlow_Phase3D3_2_CalcMode_Guard/GoldFlow_SMC_Primary_Updated/data/processed/XAUUSD_M15_clean.meta.json"
+        "sidecar_path": "C:/Users/ousse/Downloads/GoldFlow_Ultimate_Updated/GoldFlow_SMC_Primary_Updated/data/processed/XAUUSD_M15_clean.meta.json"
       },
       {
         "symbol": "XAUUSD",
@@ -865,7 +865,7 @@
         "captured_broker_server": "MetaQuotes-Demo",
         "metadata_broker_server": "MetaQuotes-Demo",
         "broker_server_match_verified": true,
-        "captured_at_utc": "2026-10-21T10:57:52.618876+00:00",
+        "captured_at_utc": "2026-10-22T09:39:17.959313+00:00",
         "status": "MATCHED_CAPTURED_DEFAULTS",
         "missing_required_fields": [],
         "wrong_type_fields": [],
@@ -965,7 +965,7 @@
           "status": "captured_complete",
           "source": "MetaTrader5.symbol_info",
           "symbol": "XAUUSD",
-          "captured_at_utc": "2026-10-21T10:57:52.618876+00:00",
+          "captured_at_utc": "2026-10-22T09:39:17.959313+00:00",
           "required_core_fields": [
             "digits",
             "point",
@@ -996,7 +996,7 @@
           "trade_calc_mode": 4,
           "trade_stops_level": 0,
           "trade_freeze_level": 0,
-          "spread": 33,
+          "spread": 36,
           "spread_float": true,
           "trade_calc_mode_constant_values": {
             "SYMBOL_CALC_MODE_CFD": 2,
@@ -1119,7 +1119,7 @@
           "Only documented linear contract-size profit modes are allowlisted; futures/tick-price, bond, collateral, unknown, and malformed modes are blocked from strict validation.",
           "The calculation-mode check validates formula compatibility, not the broker's overall correctness or the authenticity of historical OHLC provenance."
         ],
-        "sidecar_path": "C:/Users/ousse/Downloads/GoldFlow_Phase3D3_2_CalcMode_Guard/GoldFlow_SMC_Primary_Updated/data/processed/XAUUSD_M5_clean.meta.json"
+        "sidecar_path": "C:/Users/ousse/Downloads/GoldFlow_Ultimate_Updated/GoldFlow_SMC_Primary_Updated/data/processed/XAUUSD_M5_clean.meta.json"
       }
     ],
     "cross_dataset_matching": {
@@ -1185,7 +1185,9 @@
     "conservative_stop_first": true,
     "max_holding_bars": null,
     "spread_multiplier": 1.0,
-    "override_spread_usd": null
+    "override_spread_usd": null,
+    "partial_exit_at_r": 0.0,
+    "remaining_exit_at_r": 0.0
   },
   "metrics_by_timeframe": {
     "H4": {
@@ -106783,655 +106785,74 @@
       ]
     },
     "M15": {
-      "candidate_count": 52,
-      "closed_trades": 38,
-      "rule_exit_trades": 37,
+      "candidate_count": 54,
+      "closed_trades": 40,
+      "rule_exit_trades": 39,
       "end_of_data_exits": 1,
       "time_stop_exits": 0,
-      "end_of_data_pnl": 70.97999999999593,
-      "net_profit_from_rule_exits": -968.9950000000917,
+      "end_of_data_pnl": -25.160000000001673,
+      "net_profit_from_rule_exits": -213.96000000009917,
       "skipped_candidates": 14,
       "skipped_by_reason": {
         "max_concurrent_positions": 14
       },
-      "wins": 6,
+      "wins": 8,
       "losses": 31,
       "breakeven": 0,
-      "win_rate_pct": 16.216216216216218,
-      "win_rate_all_liquidations_pct": 18.421052631578945,
+      "win_rate_pct": 20.51282051282051,
+      "win_rate_all_liquidations_pct": 20.0,
       "initial_capital": 10000.0,
-      "final_equity": 9101.984999999902,
-      "net_profit": -898.0150000000976,
-      "return_pct": -8.980150000000975,
-      "profit_factor": 0.6454113651915653,
-      "profit_factor_all_liquidations": 0.6713853911655887,
-      "expectancy_per_rule_exit": -26.189054054056534,
-      "average_R_multiple": -0.2989147231521974,
+      "final_equity": 9760.879999999897,
+      "net_profit": -239.12000000010266,
+      "return_pct": -2.391200000001026,
+      "profit_factor": 0.921704668957383,
+      "profit_factor_all_liquidations": 0.9132960342870486,
+      "expectancy_per_rule_exit": -5.486153846156389,
+      "average_R_multiple": -0.06803832450100888,
       "max_drawdown_cash": 1632.9500000000444,
       "max_drawdown_pct": 15.374258861300753,
       "max_realized_drawdown_cash": 1032.6800000000294,
       "max_realized_drawdown_pct": 10.271329684041634,
       "drawdown_basis": "Close-to-close mark-to-market equity; open positions are hypothetically liquidated at the executable close quote with modeled slippage and round-turn commission. OHLC cannot reveal intrabar equity minima.",
       "total_commission": 0.0,
-      "total_spread_cost": 35.34,
-      "total_slippage_cost": 34.55000000012569,
-      "total_transaction_costs": 69.8900000001257,
-      "total_raw_gross_profit": -828.1249999999702,
+      "total_spread_cost": 37.28,
+      "total_slippage_cost": 35.85000000013042,
+      "total_transaction_costs": 73.13000000013042,
+      "total_raw_gross_profit": -165.98999999997042,
       "stop_gap_exits": 1,
       "stop_first_collisions": 0,
       "losses_beyond_risk_budget": 0,
-      "mean_bars_held_rule_exits": 38.83783783783784,
+      "mean_bars_held_rule_exits": 37.94871794871795,
       "max_concurrent_positions_configured": 1,
       "note": "Net profit and final equity include end-of-data liquidation P&L. Win rate, profit factor, expectancy, and average R exclude END_OF_DATA exits; TIME_STOP exits are rule exits. Max drawdown is close-to-close mark-to-market; realized-only drawdown is separately reported.",
       "max_open_positions_observed": 1,
       "max_holding_bars_configured": null,
       "rows_used_for_simulation": 5000,
-      "start_time": "2026-08-03T13:15:00+00:00",
-      "end_time": "2026-10-21T10:30:00+00:00",
+      "start_time": "2026-08-04T12:00:00+00:00",
+      "end_time": "2026-10-22T09:15:00+00:00",
       "source_verification_status": "declared_not_independently_verified",
       "source_declared": "MetaTrader 5 API",
       "candidate_funnel": {
         "total_bars": 5000,
-        "total_structure_breaks": 464,
-        "choch_breaks_evaluated": 235,
-        "choch_trend_aligned": 235,
-        "choch_with_preceding_sweep": 134,
-        "choch_with_order_block": 130,
-        "ob_retest_evaluated": 130,
+        "total_structure_breaks": 461,
+        "choch_breaks_evaluated": 232,
+        "choch_trend_aligned": 232,
+        "choch_with_preceding_sweep": 135,
+        "choch_with_order_block": 132,
+        "ob_retest_evaluated": 132,
         "ob_retest_invalidated": 22,
         "ob_retest_timed_out": 28,
-        "ob_retest_confirmed": 80,
-        "passed_premium_discount": 80,
+        "ob_retest_confirmed": 82,
+        "passed_premium_discount": 82,
         "rejected_premium_discount": 0,
-        "valid_risk_and_rr": 52,
+        "valid_risk_and_rr": 54,
         "rejected_risk_or_rr": 28,
-        "final_candidates": 52,
-        "next_bar_open_available": 52
+        "final_candidates": 54,
+        "next_bar_open_available": 54
       },
-      "candidates_before_window_filter": 52,
-      "candidates_simulated": 52,
+      "candidates_before_window_filter": 54,
+      "candidates_simulated": 54,
       "equity_curve": [
-        {
-          "time": "2026-08-03T13:15:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-03T13:30:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-03T13:45:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-03T14:00:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-03T14:15:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-03T14:30:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-03T14:45:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-03T15:00:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-03T15:15:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-03T15:30:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-03T15:45:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-03T16:00:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-03T16:15:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-03T16:30:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-03T16:45:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-03T17:00:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-03T17:15:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-03T17:30:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-03T17:45:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-03T18:00:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-03T18:15:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-03T18:30:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-03T18:45:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-03T19:00:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-03T19:15:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-03T19:30:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-03T19:45:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-03T22:00:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-03T22:15:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-03T22:30:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-03T22:45:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-03T23:00:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-03T23:15:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-03T23:30:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-03T23:45:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T00:00:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T00:15:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T00:30:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T00:45:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T01:00:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T01:15:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T01:30:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T01:45:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T02:00:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T02:15:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T02:30:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T02:45:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T03:00:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T03:15:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T03:30:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T03:45:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T04:00:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T04:15:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T04:30:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T04:45:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T05:00:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T05:15:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T05:30:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T05:45:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T06:00:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T06:15:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T06:30:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T06:45:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T07:00:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T07:15:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T07:30:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T07:45:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T08:00:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T08:15:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T08:30:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T08:45:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T09:00:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T09:15:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T09:30:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T09:45:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T10:00:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T10:15:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T10:30:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T10:45:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T11:00:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T11:15:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T11:30:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
-        {
-          "time": "2026-08-04T11:45:00+00:00",
-          "equity": 10000.0,
-          "realized_equity": 10000.0,
-          "unrealized_pnl": 0.0,
-          "open_positions": 0
-        },
         {
           "time": "2026-08-04T12:00:00+00:00",
           "equity": 10000.0,
@@ -141847,7 +141268,588 @@
         {
           "time": "2026-10-21T10:30:00+00:00",
           "equity": 9101.984999999902,
-          "realized_equity": 9101.984999999902,
+          "realized_equity": 9031.004999999906,
+          "unrealized_pnl": 70.97999999999593,
+          "open_positions": 1
+        },
+        {
+          "time": "2026-10-21T10:45:00+00:00",
+          "equity": 9090.924999999903,
+          "realized_equity": 9031.004999999906,
+          "unrealized_pnl": 59.91999999999644,
+          "open_positions": 1
+        },
+        {
+          "time": "2026-10-21T11:00:00+00:00",
+          "equity": 9105.834999999905,
+          "realized_equity": 9031.004999999906,
+          "unrealized_pnl": 74.82999999999721,
+          "open_positions": 1
+        },
+        {
+          "time": "2026-10-21T11:15:00+00:00",
+          "equity": 9126.51999999991,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-21T11:30:00+00:00",
+          "equity": 9126.51999999991,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-21T11:45:00+00:00",
+          "equity": 9126.51999999991,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-21T12:00:00+00:00",
+          "equity": 9126.51999999991,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-21T12:15:00+00:00",
+          "equity": 9126.51999999991,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-21T12:30:00+00:00",
+          "equity": 9126.51999999991,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-21T12:45:00+00:00",
+          "equity": 9126.51999999991,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-21T13:00:00+00:00",
+          "equity": 9126.51999999991,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-21T13:15:00+00:00",
+          "equity": 9126.51999999991,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-21T13:30:00+00:00",
+          "equity": 9126.51999999991,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-21T13:45:00+00:00",
+          "equity": 9126.51999999991,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-21T14:00:00+00:00",
+          "equity": 9126.51999999991,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-21T14:15:00+00:00",
+          "equity": 9126.51999999991,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-21T14:30:00+00:00",
+          "equity": 9126.51999999991,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-21T14:45:00+00:00",
+          "equity": 9126.51999999991,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-21T15:00:00+00:00",
+          "equity": 9126.51999999991,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-21T15:15:00+00:00",
+          "equity": 9126.51999999991,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-21T15:30:00+00:00",
+          "equity": 9126.51999999991,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-21T15:45:00+00:00",
+          "equity": 9126.51999999991,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-21T16:00:00+00:00",
+          "equity": 9126.51999999991,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-21T16:15:00+00:00",
+          "equity": 9126.51999999991,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-21T16:30:00+00:00",
+          "equity": 9126.51999999991,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-21T16:45:00+00:00",
+          "equity": 9126.51999999991,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-21T17:00:00+00:00",
+          "equity": 9126.51999999991,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-21T17:15:00+00:00",
+          "equity": 9126.51999999991,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-21T17:30:00+00:00",
+          "equity": 9126.51999999991,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-21T17:45:00+00:00",
+          "equity": 9126.51999999991,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-21T18:00:00+00:00",
+          "equity": 9126.51999999991,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-21T18:15:00+00:00",
+          "equity": 9126.51999999991,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-21T18:30:00+00:00",
+          "equity": 9126.51999999991,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-21T18:45:00+00:00",
+          "equity": 9126.51999999991,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-21T19:00:00+00:00",
+          "equity": 9126.51999999991,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-21T19:15:00+00:00",
+          "equity": 9126.51999999991,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-21T19:30:00+00:00",
+          "equity": 9126.51999999991,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-21T19:45:00+00:00",
+          "equity": 9126.51999999991,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-21T22:00:00+00:00",
+          "equity": 9126.51999999991,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-21T22:15:00+00:00",
+          "equity": 9126.51999999991,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-21T22:30:00+00:00",
+          "equity": 9173.859999999895,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 47.339999999985594,
+          "open_positions": 1
+        },
+        {
+          "time": "2026-10-21T22:45:00+00:00",
+          "equity": 9229.839999999906,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 103.31999999999607,
+          "open_positions": 1
+        },
+        {
+          "time": "2026-10-21T23:00:00+00:00",
+          "equity": 9281.499999999887,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 154.97999999997774,
+          "open_positions": 1
+        },
+        {
+          "time": "2026-10-21T23:15:00+00:00",
+          "equity": 9296.61999999989,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 170.09999999998035,
+          "open_positions": 1
+        },
+        {
+          "time": "2026-10-21T23:30:00+00:00",
+          "equity": 9341.079999999894,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 214.55999999998494,
+          "open_positions": 1
+        },
+        {
+          "time": "2026-10-21T23:45:00+00:00",
+          "equity": 9327.579999999894,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 201.05999999998494,
+          "open_positions": 1
+        },
+        {
+          "time": "2026-10-22T00:00:00+00:00",
+          "equity": 9399.39999999989,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 272.879999999981,
+          "open_positions": 1
+        },
+        {
+          "time": "2026-10-22T00:15:00+00:00",
+          "equity": 9439.179999999891,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 312.65999999998166,
+          "open_positions": 1
+        },
+        {
+          "time": "2026-10-22T00:30:00+00:00",
+          "equity": 9475.539999999899,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 349.0199999999895,
+          "open_positions": 1
+        },
+        {
+          "time": "2026-10-22T00:45:00+00:00",
+          "equity": 9544.119999999906,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 417.5999999999967,
+          "open_positions": 1
+        },
+        {
+          "time": "2026-10-22T01:00:00+00:00",
+          "equity": 9514.059999999905,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 387.5399999999954,
+          "open_positions": 1
+        },
+        {
+          "time": "2026-10-22T01:15:00+00:00",
+          "equity": 9478.779999999888,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 352.2599999999784,
+          "open_positions": 1
+        },
+        {
+          "time": "2026-10-22T01:30:00+00:00",
+          "equity": 9525.939999999886,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 399.4199999999764,
+          "open_positions": 1
+        },
+        {
+          "time": "2026-10-22T01:45:00+00:00",
+          "equity": 9510.639999999896,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 384.11999999998625,
+          "open_positions": 1
+        },
+        {
+          "time": "2026-10-22T02:00:00+00:00",
+          "equity": 9572.379999999901,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 445.8599999999915,
+          "open_positions": 1
+        },
+        {
+          "time": "2026-10-22T02:15:00+00:00",
+          "equity": 9456.459999999892,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 329.9399999999823,
+          "open_positions": 1
+        },
+        {
+          "time": "2026-10-22T02:30:00+00:00",
+          "equity": 9480.939999999886,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 354.4199999999764,
+          "open_positions": 1
+        },
+        {
+          "time": "2026-10-22T02:45:00+00:00",
+          "equity": 9495.699999999897,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 369.17999999998756,
+          "open_positions": 1
+        },
+        {
+          "time": "2026-10-22T03:00:00+00:00",
+          "equity": 9641.499999999887,
+          "realized_equity": 9126.51999999991,
+          "unrealized_pnl": 514.9799999999777,
+          "open_positions": 1
+        },
+        {
+          "time": "2026-10-22T03:15:00+00:00",
+          "equity": 9786.039999999899,
+          "realized_equity": 9786.039999999899,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-22T03:30:00+00:00",
+          "equity": 9786.039999999899,
+          "realized_equity": 9786.039999999899,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-22T03:45:00+00:00",
+          "equity": 9786.039999999899,
+          "realized_equity": 9786.039999999899,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-22T04:00:00+00:00",
+          "equity": 9786.039999999899,
+          "realized_equity": 9786.039999999899,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-22T04:15:00+00:00",
+          "equity": 9786.039999999899,
+          "realized_equity": 9786.039999999899,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-22T04:30:00+00:00",
+          "equity": 9786.039999999899,
+          "realized_equity": 9786.039999999899,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-22T04:45:00+00:00",
+          "equity": 9786.039999999899,
+          "realized_equity": 9786.039999999899,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-22T05:00:00+00:00",
+          "equity": 9786.039999999899,
+          "realized_equity": 9786.039999999899,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-22T05:15:00+00:00",
+          "equity": 9786.039999999899,
+          "realized_equity": 9786.039999999899,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-22T05:30:00+00:00",
+          "equity": 9786.039999999899,
+          "realized_equity": 9786.039999999899,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-22T05:45:00+00:00",
+          "equity": 9786.039999999899,
+          "realized_equity": 9786.039999999899,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-22T06:00:00+00:00",
+          "equity": 9786.039999999899,
+          "realized_equity": 9786.039999999899,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-22T06:15:00+00:00",
+          "equity": 9786.039999999899,
+          "realized_equity": 9786.039999999899,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-22T06:30:00+00:00",
+          "equity": 9786.039999999899,
+          "realized_equity": 9786.039999999899,
+          "unrealized_pnl": 0.0,
+          "open_positions": 0
+        },
+        {
+          "time": "2026-10-22T06:45:00+00:00",
+          "equity": 9796.239999999898,
+          "realized_equity": 9786.039999999899,
+          "unrealized_pnl": 10.199999999998909,
+          "open_positions": 1
+        },
+        {
+          "time": "2026-10-22T07:00:00+00:00",
+          "equity": 9821.199999999897,
+          "realized_equity": 9786.039999999899,
+          "unrealized_pnl": 35.159999999998035,
+          "open_positions": 1
+        },
+        {
+          "time": "2026-10-22T07:15:00+00:00",
+          "equity": 9799.559999999898,
+          "realized_equity": 9786.039999999899,
+          "unrealized_pnl": 13.519999999998618,
+          "open_positions": 1
+        },
+        {
+          "time": "2026-10-22T07:30:00+00:00",
+          "equity": 9787.319999999898,
+          "realized_equity": 9786.039999999899,
+          "unrealized_pnl": 1.2799999999988358,
+          "open_positions": 1
+        },
+        {
+          "time": "2026-10-22T07:45:00+00:00",
+          "equity": 9777.319999999898,
+          "realized_equity": 9786.039999999899,
+          "unrealized_pnl": -8.720000000001164,
+          "open_positions": 1
+        },
+        {
+          "time": "2026-10-22T08:00:00+00:00",
+          "equity": 9759.759999999897,
+          "realized_equity": 9786.039999999899,
+          "unrealized_pnl": -26.280000000002474,
+          "open_positions": 1
+        },
+        {
+          "time": "2026-10-22T08:15:00+00:00",
+          "equity": 9788.799999999897,
+          "realized_equity": 9786.039999999899,
+          "unrealized_pnl": 2.7599999999983993,
+          "open_positions": 1
+        },
+        {
+          "time": "2026-10-22T08:30:00+00:00",
+          "equity": 9795.719999999897,
+          "realized_equity": 9786.039999999899,
+          "unrealized_pnl": 9.679999999998472,
+          "open_positions": 1
+        },
+        {
+          "time": "2026-10-22T08:45:00+00:00",
+          "equity": 9758.159999999898,
+          "realized_equity": 9786.039999999899,
+          "unrealized_pnl": -27.88000000000102,
+          "open_positions": 1
+        },
+        {
+          "time": "2026-10-22T09:00:00+00:00",
+          "equity": 9784.679999999897,
+          "realized_equity": 9786.039999999899,
+          "unrealized_pnl": -1.360000000002401,
+          "open_positions": 1
+        },
+        {
+          "time": "2026-10-22T09:15:00+00:00",
+          "equity": 9760.879999999897,
+          "realized_equity": 9760.879999999897,
           "unrealized_pnl": 0.0,
           "open_positions": 0,
           "end_of_data_liquidation": true
@@ -142077,9 +142079,21 @@
           "trades_closed": 1
         },
         {
-          "time": "2026-10-21T10:30:00+00:00",
-          "equity": 9101.984999999902,
-          "net_pnl": 70.97999999999593,
+          "time": "2026-10-21T11:15:00+00:00",
+          "equity": 9126.51999999991,
+          "net_pnl": 95.51500000000307,
+          "trades_closed": 1
+        },
+        {
+          "time": "2026-10-22T03:15:00+00:00",
+          "equity": 9786.039999999899,
+          "net_pnl": 659.5199999999895,
+          "trades_closed": 1
+        },
+        {
+          "time": "2026-10-22T09:15:00+00:00",
+          "equity": 9760.879999999897,
+          "net_pnl": -25.160000000001673,
           "trades_closed": 1
         }
       ]
@@ -142118,9 +142132,9 @@
       "drawdown_basis": "Close-to-close mark-to-market equity; open positions are hypothetically liquidated at the executable close quote with modeled slippage and round-turn commission. OHLC cannot reveal intrabar equity minima.",
       "total_commission": 0.0,
       "total_spread_cost": 1871.25,
-      "total_slippage_cost": 1397.6500000050846,
-      "total_transaction_costs": 3268.9000000050846,
-      "total_raw_gross_profit": -1686.7250000000047,
+      "total_slippage_cost": 1397.9500000050857,
+      "total_transaction_costs": 3269.2000000050857,
+      "total_raw_gross_profit": -1686.4250000000036,
       "stop_gap_exits": 3,
       "stop_first_collisions": 4,
       "losses_beyond_risk_budget": 3,

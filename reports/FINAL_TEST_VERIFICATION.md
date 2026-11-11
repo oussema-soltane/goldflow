@@ -85,3 +85,4 @@
    Verifies that smaller live terminal fetches cannot replace larger canonical datasets.
 3. **`test_candidate_trade_splits_into_two_legs`** (`tests/test_candidate_fixed_rr.py`):
    Verifies that when partial exits are configured, a trade correctly splits into Leg A (2R) and Leg B (3R) with exact lot conservation and zero lot leakage.
+
