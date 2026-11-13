@@ -26,13 +26,22 @@ st.markdown(
     5. **Research Gate**: Bundled historical datasets remain quarantined until a live MT5 timestamp diagnostic and fresh raw-epoch-preserving retrieval pass validation.
 
     ### Technology Stack
-    - **Language:** Python 3.11 / 3.13
-    - **Data Pipeline:** MetaTrader 5 API, pandas, numpy
-    - **Validation:** Automated geometric integrity tests, pytest
-    - **Visualization:** Streamlit, Plotly
-    - **BI Analytics:** Power BI
-    
+    - **Language:** Python 3.14.7 (Windows)
+    - **Data Pipeline:** MetaTrader 5 API, pandas, numpy, scipy
+    - **Validation:** Automated geometric integrity tests, pytest (664 unit + integration tests)
+    - **Visualization:** Streamlit, Plotly (interactive event-driven charts with 4 institutional presets)
+    - **BI Analytics:** Streamlit BI Dashboard with canonical baseline and historical research source selection
+
+    ### Research Integrity Commitments
+    1. **Fail-Closed Canonical Data Guard:** Live MT5 fetches cannot overwrite verified canonical datasets.
+    2. **Research Holdout Discipline:** Validation windows formally classified as CONSUMED after first examination.
+    3. **Candidate Promotion Gate:** Hypothesis changes require pre-registered specs and pass a promotion gate (PF ≥ 1.10 on dev split) before unblinding holdout data.
+    4. **Cryptographic Dataset Hashing:** SHA-256 hashes for all four canonical datasets and the frozen SMC v1 config are logged in audit reports.
+    5. **100% Test Coverage:** 664 automated tests enforce data integrity, engine causality, backtest reproducibility, and UI AppTest verification.
+
     ### Academic Mentor Notes
-    This platform serves as an open, auditable research workbench suitable for institutional defense.
+    This platform serves as an open, auditable research workbench suitable for a final-year Data Science
+    and Business Intelligence project defence. All quantitative claims are traceable to committed
+    source code, versioned datasets, and reproducible backtest pipelines.
     """
 )

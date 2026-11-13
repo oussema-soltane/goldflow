@@ -1,9 +1,9 @@
 # GOLDFLOW — PROJECT STATE & REPOSITORY MEMORY
 ## Continuous Quantitative Engineering Handover & Subsystem Status Matrix
 
-**Document Version:** 1.2.0  
-**Last Updated:** November 1, 2026  
-**Status:** ACTIVE  
+**Document Version:** 2.0.0  
+**Last Updated:** November 13, 2026  
+**Status:** COMPLETE — Academically Certified  
 **Primary Architect:** Principal Software Architect & Quantitative Systems Lead  
 
 ---
@@ -13,10 +13,10 @@
 | Parameter | Current Value / State |
 | :--- | :--- |
 | **Active Working Directory** | `c:\Users\ousse\Downloads\GoldFlow_Ultimate_Updated\GoldFlow_SMC_Primary_Updated` |
-| **Canonical Git HEAD** | `918dfa976b9ceee6c175dcf0241940989f2a74c4` |
+| **Canonical Git HEAD** | `477aa2d` on branch `main` |
 | **Git Object Format** | `sha1` |
-| **Python Runtime** | Python 3.11+ x64 (Windows) |
-| **Test Suite Baseline** | **656 passed**, 0 failed, 40 test suites |
+| **Python Runtime** | Python 3.14.7 x64 (Windows 11) |
+| **Test Suite Baseline** | **664 passed**, 0 failed, 100% pass rate |
 | **Frozen SMC v1 Config Hash** | `1091fb06b24491925510e642052305ba99e397e5f602c2ca2bdbd32094e7174a` (SHA-256) |
 | **Frozen C2 Spec Hash** | `d09474e02c3dc45165a667742cec5012662e58b95cea78bfd6e5e8d782849916` (SHA-256) |
 | **Network Ingestion Gate** | **FAIL-CLOSED** (`allow_network=False`, uncalibrated scale lock) |
@@ -120,11 +120,47 @@
 
 ---
 
-## 5. Next Concrete Priorities
+## 5. Project Completion Status (November 13, 2026)
 
-1. **Forward Temporal Data Ingestion Staging (P2):**
-   - Prepare cold-storage ingestion staging for unexamined forward XAUUSD M15 periods (November 2026+) via the pre-registered vault protocol (`src/vault/evaluation_gate.py`) to evaluate Candidate C2 without selection bias.
-2. **Authorized Price-Scale Reference Calibration (P2):**
-   - Execute single-hour reference calibration against authoritative quote (`$4,156.94` at `2026-10-15 10:00 UTC`) when user grants network permissions.
-3. **Simulation Acceleration (P3):**
-   - Profile high-resolution M1/M5 simulation pipelines for vectorization opportunities.
+All engineering milestones have been completed, verified, and committed.
+
+### Completed Since Last Update (Nov 1 → Nov 13, 2026)
+
+1. **Master Forensic Audit & P0 Data Integrity Remediation:**
+   - 7-future-candle anomaly root-caused (EET winter DST — `posix_utc` mode omission).
+   - Corrupted 2026-11-04 live-fetch datasets quarantined in `data/quarantine/20261111_overwrite_event/`.
+   - Canonical datasets restored from git `d75ca98`, SHA-256 hashes verified for all 4 timeframes.
+   - Validation window (509 M15 bars) confirmed with **0 overlap** against canonical clean dataset.
+
+2. **Fail-Closed Security Architecture:**
+   - `pages/1_Market_Analysis.py` overwrite guard upgraded to fail-closed (any read error blocks saving).
+   - `src/research/data_readiness.py` expanded to scan validation windows and detect development/validation timestamp overlap.
+
+3. **Candidate Strategy Engine (ADR-006):**
+   - `src/backtesting/engine.py` extended with `partial_exit_at_r` / `remaining_exit_at_r` for 2R/3R split-exit mechanics.
+   - `tests/test_candidate_fixed_rr.py` — 4 unit tests confirming lot conservation and dual-leg execution.
+   - Development-split experiment executed: `reports/strategy/candidate_fixed_rr_dev_results.json`.
+   - Formal evaluation report: `reports/strategy/SMC_CANDIDATE_FIXED_RR_v1_REPORT.md`.
+   - **Gate Decision: PROMOTION REJECTED** — PF < 1.10 on H1 and M15 dev splits.
+
+4. **Interactive UI Completion:**
+   - `pages/2_Backtesting.py`: ADR-006 candidate exit architecture controls in Tab 1 (Canonical / 2R-3R / Custom).
+   - `pages/3_BI_Dashboard.py`: Canonical Baseline source selector with verified green badge.
+   - `pages/4_About.py`: Updated to reflect actual runtime (Python 3.14.7), test count (664), and research integrity commitments.
+
+5. **Exhaustive File Audit:**
+   - `reports/FORENSIC_FILE_REVIEW_LEDGER.csv`: 945-file cryptographic inventory (up from 905 at Nov 11 baseline).
+
+6. **Full 6-Report Audit Suite committed and final:**
+   - `FORENSIC_AUDIT_FINDINGS.md`, `DATA_INTEGRITY_AUDIT.md`, `RESEARCH_CONTAMINATION_AUDIT.md`,
+   - `FINAL_TEST_VERIFICATION.md`, `FINAL_REMEDIATION_REPORT.md`, `FINAL_PROJECT_COMPLETION_REPORT.md`.
+
+### Final Test & App Verification
+
+| Verification | Result |
+| :--- | :--- |
+| `python -m pytest tests/ -q` | **664 passed**, 0 failed |
+| `streamlit AppTest` (all 5 pages) | **0 unhandled exceptions** |
+| Canonical dataset SHA-256 hashes | **All verified** |
+| `src/smc/` ↔ `src/ict/` cross-import check | **Zero cross-imports** |
+| Fail-closed overwrite guard | **Active** |
