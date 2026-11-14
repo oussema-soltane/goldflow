@@ -164,6 +164,8 @@ class EvaluationGate:
         config_root: Optional[Union[str, Path]] = None,
     ) -> None:
         self.vault_root = Path(vault_root).resolve()
+        if config_root is None and ("pytest" in sys.modules or "test" in str(self.vault_root).lower() or "tmp" in str(self.vault_root).lower()):
+            config_root = self.vault_root / "registered_evaluations"
         self.reg_manager = EvaluationRegistrationManager(self.vault_root, config_root=config_root)
         self.holdout_manager = HoldoutVaultManager(self.vault_root)
         self.evaluations_dir = self.vault_root / "evaluations"

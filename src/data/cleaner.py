@@ -207,6 +207,27 @@ def save_processed_data(
     else:
         out_path = Path(output_dir or "data/processed")
 
+    # PATH CONTAINMENT: Ensure output path is strictly contained within repository data root or test tempdir
+    import tempfile
+    repo_root = Path(__file__).resolve().parents[2]
+    allowed_root = (repo_root / "data").resolve()
+    temp_root = Path(tempfile.gettempdir()).resolve()
+    resolved_dir = out_path.resolve()
+    is_contained = False
+    try:
+        resolved_dir.relative_to(allowed_root)
+        is_contained = True
+    except ValueError:
+        pass
+    if not is_contained:
+        try:
+            resolved_dir.relative_to(temp_root)
+            is_contained = True
+        except ValueError:
+            pass
+    if not is_contained:
+        raise ValueError(f"Path containment violation: directory '{resolved_dir}' is outside '{allowed_root}' and system temp directory.")
+
     out_path.mkdir(parents=True, exist_ok=True)
     
     safe_symbol = sanitize_symbol_for_filename(symbol)

@@ -88,7 +88,8 @@ if data_source == "Live MT5 Terminal":
     )
 elif data_source == "Existing Processed CSV":
     processed_dir = Path("data/processed")
-    csv_files = list(processed_dir.glob("*.csv")) if processed_dir.exists() else []
+    # CANONICAL DISCOVERY FILTER: Exclude validation windows and non-standard subsets from standard dropdown
+    csv_files = sorted([f for f in processed_dir.glob("*_clean.csv")]) if processed_dir.exists() else []
     if csv_files:
         chosen_file = st.sidebar.selectbox("Select Dataset", options=[f.name for f in csv_files])
         parts = chosen_file.split("_")
@@ -376,19 +377,27 @@ if load_btn or st.session_state["current_df"] is None:
             df_clean, audit = clean_market_data(df_raw, symbol=selected_symbol, timeframe=selected_tf)
             is_synth = bool(meta.get("is_synthetic", False)) if meta else False
             if data_source != "Existing Processed CSV":
-                try:
-                    clean_path, meta_path = save_processed_data(
-                        df_clean,
-                        selected_symbol,
-                        selected_tf,
-                        raw_source_path=raw_saved_path,
-                        audit_log=audit,
-                        source_metadata=meta,
-                        synthetic=is_synth,
+                # CANONICAL DATA PROTECTION: If live MT5 fetch had raw overwrite blocked,
+                # do NOT write or overwrite canonical processed datasets on disk.
+                if data_source == "Live MT5 Terminal" and not _allow_save:
+                    st.info(
+                        "ℹ️ CANONICAL DATA PROTECTION: Processed dataset was cleaned in memory for this session, "
+                        "but on-disk canonical files were not modified."
                     )
-                except ValueError as err:
-                    st.error(f"Data save blocked by integrity check: {err}")
-                    st.stop()
+                else:
+                    try:
+                        clean_path, meta_path = save_processed_data(
+                            df_clean,
+                            selected_symbol,
+                            selected_tf,
+                            raw_source_path=raw_saved_path,
+                            audit_log=audit,
+                            source_metadata=meta,
+                            synthetic=is_synth,
+                        )
+                    except ValueError as err:
+                        st.error(f"Data save blocked by integrity check: {err}")
+                        st.stop()
 
             # CANONICAL DATA PROTECTION: quality reports for synthetic runs go to
             # reports/synthetic/ with a run_id suffix; they must never overwrite
@@ -545,6 +554,69 @@ if df is not None and not df.empty and report is not None:
     k4.metric("Nearest Demand (OB)", nearest_demand or "None in range")
     k5.metric("Nearest Supply (OB)", nearest_supply or "None in range")
     k6.metric("Last Confirmed Break", last_break_str)
+
+    # Institutional Confluence & Risk Diagnostics (SMC_CONFLUENCE_V1)
+    with st.expander("🛡️ Institutional Confluence & Risk Diagnostics (SMC_CONFLUENCE_V1)", expanded=(report.timeframe in ["M15", "M5"])):
+        from src.strategy.htf_bias import HTFDirectionalBiasEngine
+        from src.strategy.session_filter import SessionLiquidityFilter
+        from src.strategy.news_filter import HighImpactNewsFilter
+        from src.risk.trade_management import compute_atr
+        from src.risk.lot_sizing import calculate_xauusd_lot_size
+
+        latest_time = pd.Timestamp(df["time"].iloc[-1])
+        c_htf, c_sess, c_news, c_atr = st.columns(4)
+
+        # 1. HTF Bias
+        h4_clean_p = Path("data/processed/XAUUSD_H4_clean.csv")
+        htf_bias_label = "HTF Data Unavailable"
+        d1_trend_lbl = "N/A"
+        h4_trend_lbl = "N/A"
+        if h4_clean_p.exists():
+            try:
+                h4_df_diag = pd.read_csv(h4_clean_p)
+                htf_eng = HTFDirectionalBiasEngine(h4_df_diag)
+                bias_diag = htf_eng.evaluate_bias(latest_time)
+                d1_trend_lbl = bias_diag.d1_direction.value if bias_diag.d1_direction else "UNCERTAIN"
+                h4_trend_lbl = bias_diag.h4_direction.value if bias_diag.h4_direction else "UNCERTAIN"
+                if bias_diag.is_aligned:
+                    b_icon = "🟢" if bias_diag.bias.value == "BULLISH" else "🔴"
+                    htf_bias_label = f"{b_icon} {bias_diag.bias.value} (ALIGNED)"
+                else:
+                    htf_bias_label = f"⚪ NEUTRAL ({bias_diag.rejection_reason})"
+            except Exception as e:
+                htf_bias_label = f"Error: {e}"
+
+        with c_htf:
+            st.markdown(f"**Higher-Timeframe Bias:** {htf_bias_label}")
+            st.caption(f"• D1 Structure: `{d1_trend_lbl}`\n• H4 Structure: `{h4_trend_lbl}`")
+
+        # 2. Session Liquidity
+        sess_filt = SessionLiquidityFilter()
+        sess_ok, sess_name, sess_reason = sess_filt.evaluate_timestamp(latest_time)
+        sess_badge = f"🟢 ACTIVE: `{sess_name}`" if sess_ok else f"🔴 INACTIVE: `{sess_reason}`"
+        with c_sess:
+            st.markdown(f"**Session Liquidity:** {sess_badge}")
+            st.caption(f"• UTC Hour: `{latest_time.hour:02d}:{latest_time.minute:02d}` UTC\n• Allowed: London & NY cash hours")
+
+        # 3. High-Impact News Protection
+        news_filt = HighImpactNewsFilter(Path("data/news/usd_high_impact_news.csv"))
+        news_blocked, ev_name, news_reason, mins_to_ev = news_filt.evaluate_timestamp(latest_time)
+        news_badge = f"🔴 BLACKOUT ACTIVE (`{news_reason}`)" if news_blocked else "🟢 CLEAR (No Blackout)"
+        with c_news:
+            st.markdown(f"**USD News Protection:** {news_badge}")
+            if ev_name and mins_to_ev is not None:
+                st.caption(f"• Nearest: `{ev_name}`\n• Delta: `{mins_to_ev:+.1f} min`")
+            else:
+                st.caption("• No high-impact releases in immediate window")
+
+        # 4. Volatility (ATR) & Risk Sizing
+        atr_series = compute_atr(df, period=14)
+        current_atr = float(atr_series.iloc[-1]) if len(atr_series) > 0 else 2.50
+        min_stop_pts = current_atr * 1.5
+        sample_sizing = calculate_xauusd_lot_size(10_000.0, 0.005, last_close, last_close - min_stop_pts)
+        with c_atr:
+            st.markdown(f"**Volatility (ATR-14):** `${current_atr:.2f}/oz`")
+            st.caption(f"• Min Stop (1.5x ATR): `${min_stop_pts:.2f}`\n• Recommended 0.5% Lot: `{sample_sizing.lots:.2f} lots`")
 
     # Interactive Chart Controls Toolbar
     c_preset, c_zoom, c_weekends, c_autoscale, c_height = st.columns([3, 2, 2, 2, 2])

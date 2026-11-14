@@ -21,6 +21,7 @@ TIMEFRAME_DURATIONS: Dict[str, pd.Timedelta] = {
     "M15": pd.Timedelta(minutes=15),
     "H1": pd.Timedelta(hours=1),
     "H4": pd.Timedelta(hours=4),
+    "D1": pd.Timedelta(days=1),
 }
 LOWER_TIMEFRAMES = ("M15", "M5")
 

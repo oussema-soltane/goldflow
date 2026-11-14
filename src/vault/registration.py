@@ -14,6 +14,7 @@ import json
 import logging
 from pathlib import Path
 import subprocess
+import sys
 from typing import Any, Dict, List, Optional, Tuple, Union
 import uuid
 
@@ -78,7 +79,12 @@ class EvaluationRegistrationManager:
         self.evaluations_dir = self.vault_root / "evaluations"
         self.evaluations_dir.mkdir(parents=True, exist_ok=True)
 
-        self.config_root = Path(config_root) if config_root else Path("configs/registered_evaluations")
+        if config_root is not None:
+            self.config_root = Path(config_root)
+        elif "pytest" in sys.modules or "test" in str(self.vault_root).lower() or "tmp" in str(self.vault_root).lower():
+            self.config_root = self.vault_root / "registered_evaluations"
+        else:
+            self.config_root = Path("configs/registered_evaluations")
         self.config_root.mkdir(parents=True, exist_ok=True)
 
     def register(

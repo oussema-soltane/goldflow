@@ -63,13 +63,14 @@ st.warning(
     "Never treat backtest figures as live or demo trading results."
 )
 
-tab_backtest, tab_candidates, tab_oos, tab_robustness, tab_rules, tab_ict = st.tabs([
+tab_backtest, tab_candidates, tab_oos, tab_robustness, tab_rules, tab_ict, tab_confluence = st.tabs([
     "📊 Interactive Backtest",
     "🔬 M15 Candidate Research (C0/C1/C2)",
     "📅 Out-of-Sample Validation",
     "🛡️ Robustness & Cost Sensitivity",
     "📜 Frozen Strategy v1 Rules",
     "🧭 Independent ICT Status",
+    "🚀 SMC_CONFLUENCE_V1 (Edge Research)",
 ])
 
 # ==============================================================================
@@ -680,3 +681,184 @@ with tab_ict:
         - **Market Analysis Access:** You can inspect raw ICT pattern detections at any time by switching the strategy selector in **Market Analysis** (`pages/1_Market_Analysis.py`).
         """
     )
+
+
+# ==============================================================================
+# TAB 7: SMC_CONFLUENCE_V1 (EDGE RESEARCH & ABLATION MATRIX)
+# ==============================================================================
+with tab_confluence:
+    st.subheader("🚀 SMC_CONFLUENCE_V1 — Systematic Edge & Ablation Suite")
+    st.caption("Quantitative confluence framework integrating Daily/H4 order flow, London/NY session liquidity, USD news blackout, and ATR capital preservation.")
+
+    st.info(
+        "💡 **CORE PRINCIPLE:** 'PROTECT CAPITAL FIRST. PROVE THE EDGE SECOND. AUTOMATE EXECUTION THIRD.'\n"
+        "Raw SMC produces substantial trading friction on lower timeframes ($3,200+ in broker drag on M5). "
+        "SMC_CONFLUENCE_V1 introduces orthogonal filters to eliminate counter-trend noise and protect capital."
+    )
+
+    # 1. Ablation Study Performance Comparison Matrix
+    st.markdown("### 📊 Ablation Study Performance Comparison Matrix")
+    ablation_csv_path = ROOT / "reports" / "PERFORMANCE_COMPARISON.csv"
+    if ablation_csv_path.exists():
+        perf_df = pd.read_csv(ablation_csv_path)
+        tf_filter = st.radio("Filter Ablation Table by Timeframe:", ["All Timeframes", "M15 (Primary Signal)", "M5 (Secondary Scalp)"], horizontal=True)
+        if "M15" in tf_filter:
+            display_df = perf_df[perf_df["timeframe"] == "M15"]
+        elif "M5" in tf_filter:
+            display_df = perf_df[perf_df["timeframe"] == "M5"]
+        else:
+            display_df = perf_df
+
+        st.dataframe(
+            display_df[[
+                "experiment_id", "description", "timeframe", "total_bars",
+                "accepted_candidates", "closed_trades", "win_rate_pct",
+                "profit_factor", "net_pnl_usd", "max_drawdown_pct", "average_r_multiple", "annualized_sharpe"
+            ]].style.format({
+                "win_rate_pct": "{:.2f}%",
+                "net_pnl_usd": "${:,.2f}",
+                "max_drawdown_pct": "{:.2f}%",
+                "average_r_multiple": "{:.3f}",
+            }),
+            use_container_width=True,
+        )
+
+        # Comparative Visualization Charts
+        import plotly.express as px
+        col_c1, col_c2 = st.columns(2)
+        with col_c1:
+            fig_pnl = px.bar(
+                display_df,
+                x="experiment_id",
+                y="net_pnl_usd",
+                color="timeframe",
+                barmode="group",
+                title="Net P&L ($) Across Ablation Experiments",
+                labels={"net_pnl_usd": "Net P&L (USD)", "experiment_id": "Experiment"},
+            )
+            fig_pnl.update_layout(template="plotly_dark", height=350)
+            st.plotly_chart(fig_pnl, use_container_width=True)
+
+        with col_c2:
+            fig_dd = px.bar(
+                display_df,
+                x="experiment_id",
+                y="max_drawdown_pct",
+                color="timeframe",
+                barmode="group",
+                title="Maximum Drawdown (%) Across Ablation Experiments",
+                labels={"max_drawdown_pct": "Max Drawdown (%)", "experiment_id": "Experiment"},
+            )
+            fig_dd.update_layout(template="plotly_dark", height=350)
+            st.plotly_chart(fig_dd, use_container_width=True)
+    else:
+        st.warning("Ablation study metrics not found at `reports/PERFORMANCE_COMPARISON.csv`. Run `scripts/run_smc_confluence_ablation.py`.")
+
+    # 2. Interactive Strategy Simulator
+    st.markdown("---")
+    st.markdown("### ⚙️ Interactive Confluence Simulator")
+    st.caption("Toggle individual confluence filters and simulate execution on canonical datasets.")
+
+    from src.strategy.smc_confluence import (
+        SMCConfluenceConfig,
+        SMCConfluenceStrategy,
+        run_confluence_backtest,
+    )
+    from src.smc.engine import analyze_smc, SMCConfig
+
+    with st.form("confluence_sim_form"):
+        col_f1, col_f2, col_f3 = st.columns(3)
+        with col_f1:
+            sim_tf = st.selectbox("Execution Timeframe", ["M15", "M5"], index=0)
+            sim_capital = st.number_input("Starting Capital ($)", value=10_000.0, step=1000.0)
+            sim_risk_pct = st.slider("Risk Fraction per Trade (%)", 0.1, 2.0, 0.5, step=0.1) / 100.0
+        with col_f2:
+            st.markdown("**Confluence Filters Active:**")
+            tog_htf = st.checkbox("Higher-Timeframe Directional Bias (D1 + H4)", value=True)
+            tog_sess = st.checkbox("Session Liquidity Filter (London & NY)", value=True)
+            tog_news = st.checkbox("High-Impact USD News Filter (15m/30m)", value=True)
+        with col_f3:
+            st.markdown("**Risk & Management Engine:**")
+            tog_atr = st.checkbox("Volatility ATR Stops (min 1.5x ATR)", value=True)
+            tog_be = st.checkbox("Breakeven Protection (+1.5R Lock)", value=True)
+            max_sp = st.number_input("Max Allowable Spread ($/oz)", value=0.35, step=0.05)
+
+        run_sim = st.form_submit_button("🚀 Run Confluence Simulation", use_container_width=True)
+
+    if run_sim:
+        dataset_p = ROOT / "data" / "processed" / f"XAUUSD_{sim_tf}_clean.csv"
+        h4_p = ROOT / "data" / "processed" / "XAUUSD_H4_clean.csv"
+        news_p = ROOT / "data" / "news" / "usd_high_impact_news.csv"
+
+        if not dataset_p.exists() or not h4_p.exists():
+            st.error(f"Required datasets ({dataset_p.name}, {h4_p.name}) not found on disk.")
+        else:
+            with st.spinner(f"Simulating SMC_CONFLUENCE_V1 on {sim_tf}..."):
+                sim_df = pd.read_csv(dataset_p)
+                sim_df["time"] = pd.to_datetime(sim_df["time"], utc=True)
+                h4_df_sim = pd.read_csv(h4_p)
+                h4_df_sim["time"] = pd.to_datetime(h4_df_sim["time"], utc=True)
+
+                sim_cfg = SMCConfluenceConfig(
+                    enable_htf_bias=tog_htf,
+                    enable_session_filter=tog_sess,
+                    enable_news_filter=tog_news,
+                    enable_atr_stop=tog_atr,
+                    enable_breakeven=tog_be,
+                    risk_per_trade_pct=sim_risk_pct,
+                    max_spread_dollars=max_sp,
+                )
+
+                strat = SMCConfluenceStrategy(
+                    h4_df=h4_df_sim,
+                    news_calendar_source=news_p,
+                    config=sim_cfg,
+                )
+
+                acc_cand, funnel_res, audit_data = strat.generate_candidates(sim_df, timeframe=sim_tf)
+
+                b_cfg = BacktestConfig(
+                    initial_capital=sim_capital,
+                    risk_fraction=sim_risk_pct,
+                )
+                sim_res = run_confluence_backtest(
+                    sim_df,
+                    acc_cand,
+                    config=b_cfg,
+                    timeframe=sim_tf,
+                    enable_breakeven=tog_be,
+                    breakeven_r_trigger=1.5,
+                    max_spread_dollars=max_sp,
+                )
+
+            # Display KPIs
+            m_kpi1, m_kpi2, m_kpi3, m_kpi4, m_kpi5 = st.columns(5)
+            net_pnl = sim_res.metrics.get("net_profit", 0.0)
+            wr_pct = sim_res.metrics.get("win_rate_pct", 0.0)
+            pf_str = str(sim_res.metrics.get("profit_factor", "N/A"))
+            mdd_pct = sim_res.metrics.get("max_drawdown_pct", 0.0)
+            cl_trades = sim_res.metrics.get("closed_trades", 0)
+
+            m_kpi1.metric("Net Profit", f"${net_pnl:,.2f}")
+            m_kpi2.metric("Win Rate", f"{wr_pct:.1f}%")
+            m_kpi3.metric("Profit Factor", f"{pf_str}")
+            m_kpi4.metric("Max Drawdown", f"{mdd_pct:.2f}%")
+            m_kpi5.metric("Trades Executed", f"{cl_trades} / {funnel_res['raw_candidates_input']}")
+
+            # Equity curve chart
+            eq_curve_df = pd.DataFrame(sim_res.equity_curve)
+            if not eq_curve_df.empty:
+                eq_curve_df["time"] = pd.to_datetime(eq_curve_df["time"])
+                fig_eq = px.line(
+                    eq_curve_df,
+                    x="time",
+                    y="equity",
+                    title=f"SMC_CONFLUENCE_V1 Realized Equity Curve ({sim_tf})",
+                    labels={"equity": "Equity ($)", "time": "Date"},
+                )
+                fig_eq.update_layout(template="plotly_dark", height=400)
+                st.plotly_chart(fig_eq, use_container_width=True)
+
+            # Candidate Funnel and Rejection Breakdown
+            st.markdown("#### 🔍 Candidate Filter Funnel & Rejection Breakdown")
+            st.json(funnel_res)
