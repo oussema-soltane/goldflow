@@ -754,6 +754,104 @@ with tab_confluence:
     else:
         st.warning("Ablation study metrics not found at `reports/PERFORMANCE_COMPARISON.csv`. Run `scripts/run_smc_confluence_ablation.py`.")
 
+    # --------------------------------------------------------------------------
+    # PHASE 3: EXTENDED RESEARCH & WALK-FORWARD VALIDATION SUITE (33,388 BARS)
+    # --------------------------------------------------------------------------
+    st.markdown("---")
+    st.markdown("### 🔬 Phase 3 — Extended Research & Walk-Forward Validation (33,388 Bars)")
+    st.caption("17-month dataset (May 2025 – October 2026), 10-fold expanding walk-forward, stationary block bootstrap, and regime decomposition.")
+
+    p3_gate_col1, p3_gate_col2, p3_gate_col3 = st.columns(3)
+    with p3_gate_col1:
+        st.metric("Total M15 Bars", "33,388", "17.2 Months")
+    with p3_gate_col2:
+        st.metric("Walk-Forward Positive Folds", "2 / 10 (20.0%)", "-8 Folds Negative", delta_color="inverse")
+    with p3_gate_col3:
+        st.metric("Demo Promotion Status", "STRICTLY BLOCKED", "Remain in Research", delta_color="inverse")
+
+    st.error(
+        "🛑 **DEMO TRADING / CAPITAL PROMOTION GATE: FAILED & BLOCKED**\n\n"
+        "- **Walk-Forward Positivity:** 2/10 folds (20.0%) vs required $\ge$ 7/10 (70.0%).\n"
+        "- **Out-of-Sample Net P&L:** -$116.46 across 36 evaluation trades.\n"
+        "- **Block Bootstrap 95% CI:** Profit Factor [0.800, 1.683] spans net loss territory ($P(\\text{loss}) = 20.7\\%$).\n"
+        "- **Protocol Directive:** Protect capital. Do NOT deploy to demo or live capital. Live order execution permanently disabled."
+    )
+
+    # Walk-Forward Fold Table and Chart
+    p3_wf_path = ROOT / "reports" / "PHASE3_WALK_FORWARD_VALIDATION.csv"
+    if p3_wf_path.exists():
+        st.markdown("#### 1. 10-Fold Chronological Walk-Forward Results (EXP_H_HTF_ATR)")
+        wf_df = pd.read_csv(p3_wf_path)
+
+        st.dataframe(
+            wf_df[[
+                "fold", "is_start", "is_end", "is_trades", "is_pf", "is_net",
+                "oos_start", "oos_end", "oos_trades", "oos_wr", "oos_pf", "oos_net", "oos_dd", "oos_positive"
+            ]].style.format({
+                "is_pf": "{:.3f}",
+                "is_net": "${:,.2f}",
+                "oos_wr": "{:.1f}%",
+                "oos_pf": "{:.3f}",
+                "oos_net": "${:,.2f}",
+                "oos_dd": "{:.2f}%",
+            }),
+            use_container_width=True,
+        )
+
+        fig_wf = px.bar(
+            wf_df,
+            x="fold",
+            y="oos_net",
+            color="oos_positive",
+            title="Out-of-Sample Net P&L ($) by Walk-Forward Fold (EXP_H_HTF_ATR)",
+            labels={"oos_net": "OOS Net P&L (USD)", "fold": "Walk-Forward Fold"},
+            color_discrete_map={True: "#00CC96", False: "#EF553B"},
+        )
+        fig_wf.update_layout(template="plotly_dark", height=320)
+        st.plotly_chart(fig_wf, use_container_width=True)
+
+    # Block Bootstrap & Regime Analysis
+    col_bs, col_rg = st.columns(2)
+    with col_bs:
+        st.markdown("#### 2. Stationary Block Bootstrap (10,000 Resamples)")
+        p3_bs_path = ROOT / "reports" / "PHASE3_BOOTSTRAP_ANALYSIS.csv"
+        if p3_bs_path.exists():
+            bs_df = pd.read_csv(p3_bs_path)
+            st.dataframe(
+                bs_df[[
+                    "experiment_id", "n_trades", "obs_pf", "sbb_pf_ci_lo", "sbb_pf_ci_hi",
+                    "obs_expectancy", "sbb_exp_ci_lo", "sbb_exp_ci_hi", "prob_neg_exp_sbb", "verdict"
+                ]].style.format({
+                    "obs_pf": "{:.3f}",
+                    "sbb_pf_ci_lo": "{:.3f}",
+                    "sbb_pf_ci_hi": "{:.3f}",
+                    "obs_expectancy": "${:.2f}",
+                    "sbb_exp_ci_lo": "${:.2f}",
+                    "sbb_exp_ci_hi": "${:.2f}",
+                    "prob_neg_exp_sbb": "{:.1f}%",
+                }),
+                use_container_width=True,
+            )
+            st.caption("Stationary Block Bootstrap (Politis & Romano, 1994) with mean block length L=5 preserves serial autocorrelation.")
+
+    with col_rg:
+        st.markdown("#### 3. Market Regime & Session Decomposition")
+        p3_rg_path = ROOT / "reports" / "PHASE3_REGIME_ANALYSIS.csv"
+        if p3_rg_path.exists():
+            rg_df = pd.read_csv(p3_rg_path)
+            st.dataframe(
+                rg_df[[
+                    "dimension", "trades", "win_rate", "profit_factor", "net_pnl", "expectancy"
+                ]].style.format({
+                    "win_rate": "{:.1f}%",
+                    "profit_factor": "{:.3f}",
+                    "net_pnl": "${:,.2f}",
+                    "expectancy": "${:.2f}",
+                }),
+                use_container_width=True,
+            )
+            st.caption("Alpha is heavily concentrated in London/NY (+$957.95), with severe drag in Asian/Offhours (-$429.16).")
+
     # 2. Interactive Strategy Simulator
     st.markdown("---")
     st.markdown("### ⚙️ Interactive Confluence Simulator")

@@ -21,8 +21,10 @@ _p5_dir = ROOT / "reports" / "phase5"
 _p3e_dir = ROOT / "reports" / "phase3e"
 _sources: dict[str, Path] = {}
 
+if (_reports_dir / "PHASE3_PERFORMANCE_COMPARISON.csv").exists():
+    _sources["Phase 3 — Extended Research & Walk-Forward (33k Bars)"] = _reports_dir
 if (_reports_dir / "PERFORMANCE_COMPARISON.csv").exists():
-    _sources["SMC_CONFLUENCE_V1 — Ablation Research"] = _reports_dir
+    _sources["SMC_CONFLUENCE_V1 — Ablation Research (Phase 1)"] = _reports_dir
 if (_reports_dir / "smc_backtest_metrics_full_history.json").exists():
     _sources["Canonical Baseline (Full History) — Verified"] = _reports_dir
 if (_p5_dir / "smc_mtf_metrics.json").exists():
@@ -40,8 +42,177 @@ REPORT_DIR = _sources.get(_selected_source_name, _reports_dir)
 
 is_canonical = "Canonical Baseline" in _selected_source_name
 is_confluence = "SMC_CONFLUENCE_V1" in _selected_source_name
+is_phase3 = "Phase 3" in _selected_source_name
 
-if is_confluence:
+if is_phase3:
+    st.title("🔬 Phase 3 — Extended Quantitative Research Intelligence")
+    st.caption("Comprehensive 17-month empirical evaluation (33,388 bars), 10-fold walk-forward validation, dependence-aware block bootstrapping, and regime decomposition.")
+
+    p3_perf_p = REPORT_DIR / "PHASE3_PERFORMANCE_COMPARISON.csv"
+    p3_ledger_p = REPORT_DIR / "PHASE3_TRADE_LEDGER.csv"
+    p3_wf_p = REPORT_DIR / "PHASE3_WALK_FORWARD_VALIDATION.csv"
+    p3_bs_p = REPORT_DIR / "PHASE3_BOOTSTRAP_ANALYSIS.csv"
+    p3_rg_p = REPORT_DIR / "PHASE3_REGIME_ANALYSIS.csv"
+
+    if not p3_perf_p.exists():
+        st.error(f"Phase 3 metrics file `{p3_perf_p.name}` not found. Run `scripts/run_phase3_research.py`.")
+        st.stop()
+
+    p3_perf_df = pd.read_csv(p3_perf_p)
+    p3_ledger_df = pd.read_csv(p3_ledger_p) if p3_ledger_p.exists() else None
+    p3_wf_df = pd.read_csv(p3_wf_p) if p3_wf_p.exists() else None
+    p3_bs_df = pd.read_csv(p3_bs_p) if p3_bs_p.exists() else None
+    p3_rg_df = pd.read_csv(p3_rg_p) if p3_rg_p.exists() else None
+
+    # Top KPI Strip
+    k1, k2, k3, k4, k5 = st.columns(5)
+    with k1:
+        st.metric("Total M15 Bars", "33,388", "May 2025 – Oct 2026")
+    with k2:
+        st.metric("EXP_H (Candidate)", "88 Trades | PF 1.176", "+$421.59 Net")
+    with k3:
+        st.metric("EXP_K (Full Conf)", "36 Trades | PF 1.602", "+$538.14 Net")
+    with k4:
+        st.metric("WF Positivity", "2 / 10 (20.0%)", "Failed Gate", delta_color="inverse")
+    with k5:
+        st.metric("Demo Status", "STRICTLY BLOCKED", "Protect Capital", delta_color="inverse")
+
+    st.error(
+        "🛑 **CAPITAL PRESERVATION DIRECTIVE:** "
+        "Although Full Confluence achieves PF 1.602 and EXP_H achieves PF 1.176 over the full 17 months, "
+        "the 10-fold Walk-Forward validation failed (only 2/10 positive folds, -$116.46 OOS) and "
+        "the Block Bootstrap 95% CI spans below 1.0 (to 0.800). **The system remains in quantitative research.**"
+    )
+
+    # 1. Performance Matrix
+    st.markdown("### 📊 Extended Ablation Performance Matrix (33,388 Bars)")
+    st.dataframe(
+        p3_perf_df[[
+            "experiment_id", "experiment_name", "trades", "wins", "losses", "win_rate",
+            "profit_factor", "net_pnl", "expectancy", "max_dd_pct", "max_consec_losses"
+        ]].style.format({
+            "win_rate": "{:.2f}%",
+            "profit_factor": "{:.3f}",
+            "net_pnl": "${:,.2f}",
+            "expectancy": "${:.2f}",
+            "max_dd_pct": "{:.2f}%",
+        }),
+        use_container_width=True,
+    )
+
+    col1, col2 = st.columns(2)
+    with col1:
+        fig1 = px.bar(
+            p3_perf_df,
+            x="experiment_id",
+            y="net_pnl",
+            title="Phase 3 Net P&L ($) Across 33,388 Bars",
+            labels={"net_pnl": "Net P&L (USD)", "experiment_id": "Experiment"},
+        )
+        fig1.update_layout(template="plotly_dark", height=350)
+        st.plotly_chart(fig1, use_container_width=True)
+
+    with col2:
+        fig2 = px.bar(
+            p3_perf_df,
+            x="experiment_id",
+            y="max_dd_pct",
+            title="Phase 3 Maximum Drawdown (%) Across Experiments",
+            labels={"max_dd_pct": "Max Drawdown (%)", "experiment_id": "Experiment"},
+        )
+        fig2.update_layout(template="plotly_dark", height=350)
+        st.plotly_chart(fig2, use_container_width=True)
+
+    # 2. Walk-Forward Visualizer
+    if p3_wf_df is not None:
+        st.markdown("### 🔄 10-Fold Chronological Walk-Forward Validation (EXP_H_HTF_ATR)")
+        st.dataframe(
+            p3_wf_df[[
+                "fold", "is_start", "is_end", "is_trades", "is_pf", "is_net",
+                "oos_start", "oos_end", "oos_trades", "oos_wr", "oos_pf", "oos_net", "oos_dd", "oos_positive"
+            ]].style.format({
+                "is_pf": "{:.3f}",
+                "is_net": "${:,.2f}",
+                "oos_wr": "{:.1f}%",
+                "oos_pf": "{:.3f}",
+                "oos_net": "${:,.2f}",
+                "oos_dd": "{:.2f}%",
+            }),
+            use_container_width=True,
+        )
+
+        fig_wf = px.bar(
+            p3_wf_df,
+            x="fold",
+            y="oos_net",
+            color="oos_positive",
+            title="Out-of-Sample Net P&L ($) by Walk-Forward Fold (EXP_H_HTF_ATR)",
+            labels={"oos_net": "OOS Net P&L (USD)", "fold": "Walk-Forward Fold"},
+            color_discrete_map={True: "#00CC96", False: "#EF553B"},
+        )
+        fig_wf.update_layout(template="plotly_dark", height=320)
+        st.plotly_chart(fig_wf, use_container_width=True)
+
+    # 3. Bootstrap & Regime Analysis
+    col_b, col_r = st.columns(2)
+    with col_b:
+        st.markdown("### 🎲 Stationary Block Bootstrap (10,000 Resamples)")
+        if p3_bs_df is not None:
+            st.dataframe(
+                p3_bs_df[[
+                    "experiment_id", "n_trades", "obs_pf", "sbb_pf_ci_lo", "sbb_pf_ci_hi",
+                    "obs_expectancy", "sbb_exp_ci_lo", "sbb_exp_ci_hi", "prob_neg_exp_sbb", "verdict"
+                ]].style.format({
+                    "obs_pf": "{:.3f}",
+                    "sbb_pf_ci_lo": "{:.3f}",
+                    "sbb_pf_ci_hi": "{:.3f}",
+                    "obs_expectancy": "${:.2f}",
+                    "sbb_exp_ci_lo": "${:.2f}",
+                    "sbb_exp_ci_hi": "${:.2f}",
+                    "prob_neg_exp_sbb": "{:.1f}%",
+                }),
+                use_container_width=True,
+            )
+
+    with col_r:
+        st.markdown("### 🌐 Market Regime & Session Decomposition")
+        if p3_rg_df is not None:
+            st.dataframe(
+                p3_rg_df[[
+                    "dimension", "trades", "win_rate", "profit_factor", "net_pnl", "expectancy"
+                ]].style.format({
+                    "win_rate": "{:.1f}%",
+                    "profit_factor": "{:.3f}",
+                    "net_pnl": "${:,.2f}",
+                    "expectancy": "${:.2f}",
+                }),
+                use_container_width=True,
+            )
+
+    # 4. Master Trade Ledger
+    if p3_ledger_df is not None:
+        st.markdown(f"### 📑 Phase 3 Master Trade Ledger ({len(p3_ledger_df):,} Trades)")
+        exp_filter = st.selectbox("Filter Trade Ledger by Experiment:", ["All"] + list(p3_ledger_df["experiment_id"].unique()), index=0)
+        if exp_filter != "All":
+            f_df = p3_ledger_df[p3_ledger_df["experiment_id"] == exp_filter]
+        else:
+            f_df = p3_ledger_df
+
+        st.dataframe(
+            f_df[[
+                "experiment_id", "entry_time", "exit_time", "direction",
+                "entry_price", "exit_price", "exit_reason", "net_pnl",
+                "r_multiple", "holding_bars", "regime", "session"
+            ]].style.format({
+                "entry_price": "${:,.2f}",
+                "exit_price": "${:,.2f}",
+                "net_pnl": "${:,.2f}",
+                "r_multiple": "{:.2f}R",
+            }),
+            use_container_width=True,
+        )
+
+elif is_confluence:
     st.title("📊 SMC_CONFLUENCE_V1 Research Intelligence")
     st.caption("Ablation study analytics, trade ledger breakdown, and risk metrics across M15 and M5 systematic confluence experiments.")
 

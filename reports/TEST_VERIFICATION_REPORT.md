@@ -62,3 +62,19 @@ After server restart, full test suite re-executed to confirm no regressions.
 
 Phase 2 scripts added: scripts/run_phase2_ablation.py, scripts/run_walk_forward_validation.py, scripts/run_bootstrap_analysis.py, scripts/run_regime_analysis.py
 These add no new test coverage targets but have been manually verified via execution.
+
+
+---
+
+## Appendix: Phase 3 Extended Research Test Verification (2026-11-17)
+
+Following the completion of Phase 2.5 independent audits and Phase 3 historical data expansion (33,388 bars), the full automated test suite was re-executed.
+
+| Date | Total Tests | Passed | Failed | Runtime | Branch | Notes |
+|------|:-----------:|:------:|:------:|:-------:|:------:|:------|
+| 2026-11-14 | 691 | 691 | 0 | 30.59s | main | Phase 1 initial certification |
+| 2026-11-17 | 691 | 691 | 0 | 36.57s | main | Phase 2 re-verification after server restart |
+| 2026-11-17 | 691 | 691 | 0 | 31.95s | 
+esearch/phase2.5-phase3 | **Phase 3 extended research suite verified** |
+
+**Zero Regressions:** 100% of unit, integration, and performance tests pass cleanly. All core engine modules (src/), data pipelines, and UI entrypoints remain fully operational.

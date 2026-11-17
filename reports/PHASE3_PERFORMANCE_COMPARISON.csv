@@ -1,0 +1,8 @@
+experiment_id,experiment_name,timeframe,bars,trades,wins,losses,win_rate,gross_profit,gross_loss,net_pnl,profit_factor,expectancy,avg_winner,avg_loser,max_dd_pct,max_consec_losses,enable_htf,enable_session,enable_news,enable_atr,enable_breakeven
+BASELINE,Frozen SMC v1 (Raw Baseline),M15,33388,263,78,185,29.66,7742.67,8041.46,-298.78,0.963,-1.14,99.27,-43.47,13.38,12,False,False,False,False,False
+EXP_A_HTF,HTF Bias Only (D1 + H4 alignment),M15,33388,89,30,59,33.71,2679.24,2659.31,19.93,1.007,0.22,89.31,-45.07,6.05,7,True,False,False,False,False
+EXP_B_SESSION,Session Filter Only (London & NY),M15,33388,132,39,93,29.55,3720.95,4059.11,-338.16,0.917,-2.56,95.41,-43.65,10.59,16,False,True,False,False,False
+EXP_C_NEWS,News Filter Only (USD High Impact Blackout),M15,33388,259,78,181,30.12,7714.13,7946.48,-232.35,0.971,-0.9,98.9,-43.9,13.0,12,False,False,True,False,False
+EXP_F_ATR,ATR Stops Only (Dynamic Stop Expansion),M15,33388,257,81,176,31.52,7071.23,7492.62,-421.39,0.944,-1.64,87.3,-42.57,10.8,12,False,False,False,True,False
+EXP_H_HTF_ATR,HTF Bias + ATR Stops (Primary Candidate),M15,33388,88,33,55,37.5,2810.59,2389.0,421.59,1.176,4.79,85.17,-43.44,3.67,7,True,False,False,True,False
+EXP_K_FULL,Full Confluence (HTF + Session + News + ATR + BE),M15,33388,36,15,21,41.67,1431.73,893.6,538.14,1.602,14.95,95.45,-42.55,3.29,8,True,True,True,True,True
