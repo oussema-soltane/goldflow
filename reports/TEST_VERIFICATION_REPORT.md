@@ -8,16 +8,16 @@
 **Passed:** **691 (100.0%)**  
 **Failed:** **0**  
 **Skipped:** **0**  
-**Execution Runtime:** 59.17 seconds  
+**Execution Runtime:** 36.72 seconds  
 **Test Framework:** Pytest 9.1.1 | Python 3.14.7 | Windows 11  
-**Git Branch:** `audit/phase3f-3h`  
-**Git HEAD Commit:** `9566e6e`  
+**Git Branch:** `audit/phase3i-corrective`  
+**Git HEAD Commit:** `3325bf6` (Active Corrective Worktree)  
 
 ---
 
 ## 1. Executive Summary
 
-The entire GoldFlow automated test suite was executed against the repository at current Git HEAD (`9566e6e`) on branch `audit/phase3f-3h`. All 691 unit, integration, performance, and regression tests passed cleanly.
+The entire GoldFlow automated test suite was executed against the repository on the dedicated corrective branch `audit/phase3i-corrective`. All 691 unit, integration, performance, and regression tests passed cleanly.
 
 No tests were deleted, weakened, mocked into triviality, or skipped.
 
@@ -44,7 +44,8 @@ No tests were deleted, weakened, mocked into triviality, or skipped.
 - **Test Isolation:** Pytest runs execute without leaving any untracked registration files in `configs/registered_evaluations/`.
 - **Performance Benchmarks:** Chart rendering and SMC engine operations complete within strict latency budgets.
 - **Fail-Closed Safety:** Every risk and filter boundary fails closed if context is unconfirmed or missing.
-- **Order Send Invariant:** `MetaTrader5.order_send` remains completely disabled across all modules.
+- **Order Send Invariant:** `MetaTrader5.order_send` remains completely absent from source code.
+- **Prospective Evaluation Guard:** `scripts/run_prospective_evaluation.py` enforces fail-closed rejection of consumed data.
 
 ---
 
@@ -55,6 +56,7 @@ No tests were deleted, weakened, mocked into triviality, or skipped.
 | 2026-11-14 | 691 | 691 | 0 | 30.59s | `main` | Phase 1 initial certification |
 | 2026-11-17 | 691 | 691 | 0 | 36.57s | `main` | Post-restart full re-verify — 100% clean |
 | 2026-11-17 | 691 | 691 | 0 | 31.95s | `research/phase2.5-phase3` | Phase 3 extended research suite verified |
-| **2026-11-17** | **691** | **691** | **0** | **59.17s** | `audit/phase3f-3h` | **Phase 3F–3H independent forensic audit certification** |
+| 2026-11-17 | 691 | 691 | 0 | 59.17s | `audit/phase3f-3h` | Phase 3F–3H independent forensic audit certification |
+| **2026-11-17** | **691** | **691** | **0** | **36.72s** | `audit/phase3i-corrective` | **Phase 3I corrective audit & prospective runner certification** |
 
 **Zero Regressions:** 100% of unit, integration, and performance tests pass cleanly. All core engine modules (`src/`), data pipelines, and UI entrypoints remain fully operational.

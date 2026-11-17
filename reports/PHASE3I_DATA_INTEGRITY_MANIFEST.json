@@ -1,0 +1,60 @@
+{
+  "manifest_id": "MANIFEST-PHASE3I-DATA-001",
+  "created_at": "2026-11-17T13:58:00Z",
+  "governance_status": "AWAITING_INGESTION",
+  "target_directory": "data/research/phase3i/",
+  "data_architecture": {
+    "symbol": "XAUUSD",
+    "asset_class": "Commodity / Precious Metals",
+    "base_currency": "XAU",
+    "quote_currency": "USD",
+    "contract_size_oz": 100.0,
+    "tick_size_usd": 0.01,
+    "tick_value_usd": 1.00,
+    "timezone": "UTC",
+    "timestamp_convention": "LEFT_CLOSED_INTERVAL_START",
+    "price_precision": 3
+  },
+  "required_datasets": [
+    {
+      "dataset_type": "PRIMARY_EXECUTION",
+      "timeframe": "M5",
+      "target_resampled_timeframe": "M15",
+      "target_file_raw": "data/research/phase3i/raw/XAUUSD_M5_phase3i_raw.csv",
+      "target_file_processed": "data/research/phase3i/processed/XAUUSD_M15_phase3i_clean.csv",
+      "required_window": "POST_OCTOBER_2026_OR_PRE_OCTOBER_2024",
+      "status": "PENDING_ACQUISITION",
+      "sha256": null
+    },
+    {
+      "dataset_type": "HIGHER_TIMEFRAME_CONTEXT",
+      "timeframe": "H4",
+      "target_file_processed": "data/research/phase3i/processed/XAUUSD_H4_phase3i_clean.csv",
+      "status": "PENDING_ACQUISITION",
+      "sha256": null
+    }
+  ],
+  "consumed_datasets_blacklist": [
+    {
+      "path": "data/processed/XAUUSD_M15_validation_window.csv",
+      "sha256": "41c88820c78a15993e1bfbb1eb808a735071190bc1e92d6e06b3fa203b5f7be8",
+      "classification": "QUARANTINED_PHASE2"
+    },
+    {
+      "path": "data/research/phase3/processed/XAUUSD_M15_extended.csv",
+      "sha256": "fcd5aba9b5e62a20216d6701bc6f9f1b31bb5ad95e26f5cfa928e4c334521fb9",
+      "classification": "CONSUMED_PHASE3"
+    },
+    {
+      "path": "data/raw/XAUUSD_M5_raw.csv",
+      "sha256": "5020bc8f7e25fb843c088325ef537d130a108b981249b6b72a6bca0ee2169736",
+      "classification": "CONSUMED_PHASE3_RAW"
+    }
+  ],
+  "ingestion_protocol": {
+    "allow_synthetic_bars": false,
+    "allow_forward_fill_gaps": false,
+    "require_completeness_tagging": true,
+    "require_broker_feed_provenance": true
+  }
+}
