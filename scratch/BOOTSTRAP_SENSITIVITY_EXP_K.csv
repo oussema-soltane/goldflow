@@ -1,0 +1,7 @@
+Block Length L,Resampling Type,PF 95% CI Lower,PF Median,PF 95% CI Upper,Exp 95% CI Lower,Exp 95% CI Upper,Empirical P(Net <= 0),CI Lower > 1.0
+1,I.I.D. (L=1),0.749,1.593,3.17,-7.93,39.23,10.5%,False
+3,Stationary Block (L=3),0.747,1.606,2.994,-7.91,37.38,9.9%,False
+5,Stationary Block (L=5),0.797,1.62,2.79,-6.33,34.66,7.7%,False
+10,Stationary Block (L=10),0.906,1.602,2.599,-2.85,31.35,4.7%,False
+15,Stationary Block (L=15),0.967,1.602,2.507,-1.0,30.19,3.2%,False
+20,Stationary Block (L=20),1.007,1.602,2.419,0.21,28.99,2.4%,True

@@ -1,29 +1,29 @@
 # GoldFlow — Comprehensive Test Verification Report
 ## Complete Test Suite Execution & Integrity Audit
 
-**Date:** November 2026  
+**Date:** 2026-11-17  
 **Auditor:** Quantitative QA & Software Verification Engineering  
 **Test Suite Path:** `tests/`  
 **Total Tests:** **691**  
 **Passed:** **691 (100.0%)**  
 **Failed:** **0**  
 **Skipped:** **0**  
-**Execution Runtime:** 30.59 seconds  
+**Execution Runtime:** 59.17 seconds  
 **Test Framework:** Pytest 9.1.1 | Python 3.14.7 | Windows 11  
+**Git Branch:** `audit/phase3f-3h`  
+**Git HEAD Commit:** `9566e6e`  
 
 ---
 
 ## 1. Executive Summary
 
-The entire GoldFlow automated test suite was executed against the repository at current Git HEAD. All 691 unit, integration, performance, and regression tests passed cleanly.
+The entire GoldFlow automated test suite was executed against the repository at current Git HEAD (`9566e6e`) on branch `audit/phase3f-3h`. All 691 unit, integration, performance, and regression tests passed cleanly.
 
 No tests were deleted, weakened, mocked into triviality, or skipped.
 
 ---
 
-## 2. Test Suite Composition & New Modules Added
-
-During this Quantitative Edge Development Mission, 27 new tests across 6 dedicated test modules were added to verify the `SMC_CONFLUENCE_V1` strategy and its underlying risk/confluence components:
+## 2. Test Suite Composition & Subsystem Breakdown
 
 | Test Module | Coverage Domain | Tests | Status |
 | :--- | :--- | :---: | :---: |
@@ -39,42 +39,22 @@ During this Quantitative Edge Development Mission, 27 new tests across 6 dedicat
 
 ---
 
-## 3. Verification Details
+## 3. Verification Details & Invariants
 
 - **Test Isolation:** Pytest runs execute without leaving any untracked registration files in `configs/registered_evaluations/`.
 - **Performance Benchmarks:** Chart rendering and SMC engine operations complete within strict latency budgets.
 - **Fail-Closed Safety:** Every risk and filter boundary fails closed if context is unconfirmed or missing.
-
-
-
----
-
-## Appendix: Re-Verification 2026-11-17
-
-After server restart, full test suite re-executed to confirm no regressions.
-
-| Date | Passed | Failed | Notes |
-|------|--------|--------|-------|
-| 2026-11-14 | 691 | 0 | Phase 1 commit 365157b |
-| 2026-11-17 | 691 | 0 | Post-restart full re-verify — 100% clean |
-
-**Conclusion:** Test suite is stable. No regressions from Phase 2 research scripts (which are standalone runners, not modifying core src/).
-
-Phase 2 scripts added: scripts/run_phase2_ablation.py, scripts/run_walk_forward_validation.py, scripts/run_bootstrap_analysis.py, scripts/run_regime_analysis.py
-These add no new test coverage targets but have been manually verified via execution.
-
+- **Order Send Invariant:** `MetaTrader5.order_send` remains completely disabled across all modules.
 
 ---
 
-## Appendix: Phase 3 Extended Research Test Verification (2026-11-17)
-
-Following the completion of Phase 2.5 independent audits and Phase 3 historical data expansion (33,388 bars), the full automated test suite was re-executed.
+## 4. Test Verification History
 
 | Date | Total Tests | Passed | Failed | Runtime | Branch | Notes |
-|------|:-----------:|:------:|:------:|:-------:|:------:|:------|
-| 2026-11-14 | 691 | 691 | 0 | 30.59s | main | Phase 1 initial certification |
-| 2026-11-17 | 691 | 691 | 0 | 36.57s | main | Phase 2 re-verification after server restart |
-| 2026-11-17 | 691 | 691 | 0 | 31.95s | 
-esearch/phase2.5-phase3 | **Phase 3 extended research suite verified** |
+|---|:---:|:---:|:---:|:---:|:---:|---|
+| 2026-11-14 | 691 | 691 | 0 | 30.59s | `main` | Phase 1 initial certification |
+| 2026-11-17 | 691 | 691 | 0 | 36.57s | `main` | Post-restart full re-verify — 100% clean |
+| 2026-11-17 | 691 | 691 | 0 | 31.95s | `research/phase2.5-phase3` | Phase 3 extended research suite verified |
+| **2026-11-17** | **691** | **691** | **0** | **59.17s** | `audit/phase3f-3h` | **Phase 3F–3H independent forensic audit certification** |
 
-**Zero Regressions:** 100% of unit, integration, and performance tests pass cleanly. All core engine modules (src/), data pipelines, and UI entrypoints remain fully operational.
+**Zero Regressions:** 100% of unit, integration, and performance tests pass cleanly. All core engine modules (`src/`), data pipelines, and UI entrypoints remain fully operational.
