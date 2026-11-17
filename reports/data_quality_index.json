@@ -1,11 +1,11 @@
 {
-  "generated_at_utc": "2026-11-14T08:43:47.913151+00:00",
-  "run_id": "20261114_084347",
+  "generated_at_utc": "2026-11-17T11:23:05.132296+00:00",
+  "run_id": "20261117_112305",
   "symbol": "XAUUSD",
   "timeframe_results": {
     "H1": {
-      "json": "reports/data_quality_H1_20261114_084347.json",
-      "md": "reports/data_quality_H1_20261114_084347.md",
+      "json": "reports/data_quality_H1_20261117_112305.json",
+      "md": "reports/data_quality_H1_20261117_112305.md",
       "status": "PASSED"
     }
   },

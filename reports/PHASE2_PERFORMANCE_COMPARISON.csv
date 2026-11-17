@@ -1,0 +1,21 @@
+experiment_id,experiment_name,timeframe,split,trades,wins,win_rate,gross_profit,gross_loss,net_pnl,profit_factor,expectancy,avg_winner,avg_loser,max_dd_pct,max_consec_losses,htf_bias,session_filter,news_filter,atr_stop,breakeven
+EXP_H_HTF_ATR,HTF Bias + ATR Stops only (no session/news),M15,IS,6,2,33.33,163.51,183.73,-20.22,0.89,-3.37,81.75,-45.93,1.14,2,True,False,False,True,False
+EXP_H_HTF_ATR,HTF Bias + ATR Stops only (no session/news),M15,OOS,8,4,50.0,323.1,168.95,154.15,1.912,19.27,80.77,-42.24,1.35,3,True,False,False,True,False
+EXP_I_HTF_ATR_LONDON,HTF + ATR + London Session only,M15,IS,2,0,0.0,0.0,70.42,-70.42,0.0,-35.21,0.0,-35.21,0.8,2,True,True,False,True,False
+EXP_I_HTF_ATR_LONDON,HTF + ATR + London Session only,M15,OOS,4,1,25.0,43.31,124.07,-80.76,0.349,-20.19,43.31,-41.36,1.9,3,True,True,False,True,False
+EXP_J_HTF_ATR_BREAKEVEN,HTF + ATR + Breakeven (no session/news),M15,IS,6,2,33.33,163.51,183.73,-20.22,0.89,-3.37,81.75,-45.93,1.14,2,True,False,False,True,True
+EXP_J_HTF_ATR_BREAKEVEN,HTF + ATR + Breakeven (no session/news),M15,OOS,8,4,50.0,323.1,168.95,154.15,1.912,19.27,80.77,-42.24,1.35,3,True,False,False,True,True
+EXP_K_FULL_CONFLUENCE,Full Confluence: HTF + Session + News + ATR + Breakeven,M15,IS,2,0,0.0,0.0,70.42,-70.42,0.0,-35.21,0.0,-35.21,0.8,2,True,True,True,True,True
+EXP_K_FULL_CONFLUENCE,Full Confluence: HTF + Session + News + ATR + Breakeven,M15,OOS,4,1,25.0,43.31,124.07,-80.76,0.349,-20.19,43.31,-41.36,1.9,3,True,True,True,True,True
+BASELINE,Frozen SMC v1 (Raw Baseline - for reference),M15,IS,19,4,21.05,715.29,625.7,89.58,1.143,4.71,178.82,-28.44,5.11,13,False,False,False,False,False
+BASELINE,Frozen SMC v1 (Raw Baseline - for reference),M15,OOS,23,7,30.43,936.47,714.36,222.11,1.311,9.66,133.78,-37.6,7.77,8,False,False,False,False,False
+EXP_H_HTF_ATR,HTF Bias + ATR Stops only (no session/news),H1,IS,8,2,25.0,146.44,260.07,-113.63,0.563,-14.2,73.22,-43.35,2.05,4,True,False,False,True,False
+EXP_H_HTF_ATR,HTF Bias + ATR Stops only (no session/news),H1,OOS,3,2,66.67,230.55,30.18,200.37,7.639,66.79,115.27,-15.09,0.85,2,True,False,False,True,False
+EXP_I_HTF_ATR_LONDON,HTF + ATR + London Session only,H1,IS,2,0,0.0,0.0,92.88,-92.88,0.0,-46.44,0.0,-46.44,0.93,2,True,True,False,True,False
+EXP_I_HTF_ATR_LONDON,HTF + ATR + London Session only,H1,OOS,2,2,100.0,230.55,0.0,230.55,inf,115.27,115.27,0.0,0.85,1,True,True,False,True,False
+EXP_J_HTF_ATR_BREAKEVEN,HTF + ATR + Breakeven (no session/news),H1,IS,8,2,25.0,146.44,260.07,-113.63,0.563,-14.2,73.22,-43.35,2.05,4,True,False,False,True,True
+EXP_J_HTF_ATR_BREAKEVEN,HTF + ATR + Breakeven (no session/news),H1,OOS,3,2,66.67,230.55,30.18,200.37,7.639,66.79,115.27,-15.09,0.85,2,True,False,False,True,True
+EXP_K_FULL_CONFLUENCE,Full Confluence: HTF + Session + News + ATR + Breakeven,H1,IS,2,0,0.0,0.0,92.88,-92.88,0.0,-46.44,0.0,-46.44,0.93,2,True,True,True,True,True
+EXP_K_FULL_CONFLUENCE,Full Confluence: HTF + Session + News + ATR + Breakeven,H1,OOS,2,2,100.0,230.55,0.0,230.55,inf,115.27,115.27,0.0,0.85,1,True,True,True,True,True
+BASELINE,Frozen SMC v1 (Raw Baseline - for reference),H1,IS,31,8,25.81,941.71,983.24,-41.53,0.958,-1.34,117.71,-33.9,4.86,10,False,False,False,False,False
+BASELINE,Frozen SMC v1 (Raw Baseline - for reference),H1,OOS,14,4,28.57,652.43,405.99,246.43,1.607,17.6,163.11,-19.33,4.27,10,False,False,False,False,False

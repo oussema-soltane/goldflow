@@ -45,3 +45,20 @@ During this Quantitative Edge Development Mission, 27 new tests across 6 dedicat
 - **Performance Benchmarks:** Chart rendering and SMC engine operations complete within strict latency budgets.
 - **Fail-Closed Safety:** Every risk and filter boundary fails closed if context is unconfirmed or missing.
 
+
+
+---
+
+## Appendix: Re-Verification 2026-11-17
+
+After server restart, full test suite re-executed to confirm no regressions.
+
+| Date | Passed | Failed | Notes |
+|------|--------|--------|-------|
+| 2026-11-14 | 691 | 0 | Phase 1 commit 365157b |
+| 2026-11-17 | 691 | 0 | Post-restart full re-verify — 100% clean |
+
+**Conclusion:** Test suite is stable. No regressions from Phase 2 research scripts (which are standalone runners, not modifying core src/).
+
+Phase 2 scripts added: scripts/run_phase2_ablation.py, scripts/run_walk_forward_validation.py, scripts/run_bootstrap_analysis.py, scripts/run_regime_analysis.py
+These add no new test coverage targets but have been manually verified via execution.

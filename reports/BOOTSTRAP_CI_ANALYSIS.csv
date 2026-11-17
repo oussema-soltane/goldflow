@@ -1,0 +1,4 @@
+dataset,n_trades,n_bootstrap,obs_pf,bs_pf_mean,bs_pf_lo,bs_pf_hi,obs_wr,bs_wr_mean,bs_wr_lo,bs_wr_hi,obs_exp,bs_exp_mean,bs_exp_lo,bs_exp_hi,obs_net,bs_net_mean,bs_net_lo,bs_net_hi,pf_lo_above_1,verdict
+Phase1_M15_EXP_A_HTF,15,10000,1.1444,1.3104,0.3125,3.312,40.0,40.202,13.3333,66.6667,3.695,3.9528,-24.89,34.3543,55.43,59.2915,-373.35,515.315,False,NEGATIVE (CI_LO_PF<0.8)
+Phase1_M15_BASELINE,40,10000,1.0119,1.0463,0.2373,2.3217,20.0,19.9808,7.5,32.5,0.3909,0.3751,-27.9811,37.6366,15.63,15.002,-1119.245,1505.465,False,NEGATIVE (CI_LO_PF<0.8)
+Phase2_M15_OOS_EXP_H,8,10000,1.9123,6.8184,0.2732,13.386,50.0,50.0337,12.5,87.5,19.2681,19.3096,-26.8619,65.3981,154.15,154.4772,-214.895,523.185,False,NEGATIVE (CI_LO_PF<0.8)
