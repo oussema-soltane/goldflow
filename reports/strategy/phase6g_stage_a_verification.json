@@ -1,0 +1,269 @@
+{
+  "discrepancies": [],
+  "detail": {
+    "M5_SMC_v1_frozen_baseline": {
+      "claimed": {
+        "closed_trades": 842,
+        "net_pnl": -4955.63,
+        "profit_factor": 0.878
+      },
+      "recalculated": {
+        "closed_trades": 842,
+        "wins": 234,
+        "losses": 608,
+        "win_rate_pct": 27.79,
+        "net_pnl": -4955.63,
+        "gross_wins": 35747.67,
+        "gross_losses": 40703.3,
+        "profit_factor": 0.878,
+        "avg_win": 152.77,
+        "avg_loss": 66.95,
+        "total_costs": 3269.2,
+        "max_drawdown_cash": 6392.44,
+        "expectancy": -5.89
+      }
+    },
+    "M5_SMC_v2_session_filtered": {
+      "claimed": {
+        "closed_trades": 539,
+        "net_pnl": -2365.82,
+        "profit_factor": 0.928
+      },
+      "recalculated": {
+        "closed_trades": 539,
+        "wins": 150,
+        "losses": 389,
+        "win_rate_pct": 27.83,
+        "net_pnl": -2365.82,
+        "gross_wins": 30621.29,
+        "gross_losses": 32987.11,
+        "profit_factor": 0.928,
+        "avg_win": 204.14,
+        "avg_loss": 84.8,
+        "total_costs": 2223.24,
+        "max_drawdown_cash": 3884.91,
+        "expectancy": -4.39
+      }
+    },
+    "M5_SMC_v2_target_rationalized": {
+      "claimed": {
+        "closed_trades": 1188,
+        "net_pnl": -6543.1,
+        "profit_factor": 0.881
+      },
+      "recalculated": {
+        "closed_trades": 1188,
+        "wins": 375,
+        "losses": 813,
+        "win_rate_pct": 31.57,
+        "net_pnl": -6543.1,
+        "gross_wins": 48374.13,
+        "gross_losses": 54917.23,
+        "profit_factor": 0.881,
+        "avg_win": 129.0,
+        "avg_loss": 67.55,
+        "total_costs": 3696.88,
+        "max_drawdown_cash": 7847.39,
+        "expectancy": -5.51
+      }
+    },
+    "M5_SMC_v2_composite_liquid": {
+      "claimed": {
+        "closed_trades": 779,
+        "net_pnl": -3507.86,
+        "profit_factor": 0.921
+      },
+      "recalculated": {
+        "closed_trades": 779,
+        "wins": 256,
+        "losses": 523,
+        "win_rate_pct": 32.86,
+        "net_pnl": -3507.86,
+        "gross_wins": 40998.62,
+        "gross_losses": 44506.48,
+        "profit_factor": 0.921,
+        "avg_win": 160.15,
+        "avg_loss": 85.1,
+        "total_costs": 2582.7,
+        "max_drawdown_cash": 4926.95,
+        "expectancy": -4.5
+      }
+    },
+    "M5_SMC_v2_ny_session": {
+      "claimed": {
+        "closed_trades": 415,
+        "net_pnl": -3623.11,
+        "profit_factor": 0.849
+      },
+      "recalculated": {
+        "closed_trades": 415,
+        "wins": 131,
+        "losses": 284,
+        "win_rate_pct": 31.57,
+        "net_pnl": -3623.11,
+        "gross_wins": 20404.46,
+        "gross_losses": 24027.57,
+        "profit_factor": 0.849,
+        "avg_win": 155.76,
+        "avg_loss": 84.6,
+        "total_costs": 1310.47,
+        "max_drawdown_cash": 4802.45,
+        "expectancy": -8.73
+      }
+    },
+    "M5_SMC_v2_mtf_aligned": {
+      "claimed": {
+        "closed_trades": 262,
+        "net_pnl": -2412.35,
+        "profit_factor": 0.848
+      },
+      "recalculated": {
+        "closed_trades": 262,
+        "wins": 81,
+        "losses": 181,
+        "win_rate_pct": 30.92,
+        "net_pnl": -2412.35,
+        "gross_wins": 13464.74,
+        "gross_losses": 15877.09,
+        "profit_factor": 0.848,
+        "avg_win": 166.23,
+        "avg_loss": 87.72,
+        "total_costs": 828.85,
+        "max_drawdown_cash": 3676.84,
+        "expectancy": -9.21
+      }
+    },
+    "M15_SMC_v1_frozen_baseline": {
+      "claimed": {
+        "closed_trades": 40,
+        "net_pnl": -239.12,
+        "profit_factor": 0.913
+      },
+      "recalculated": {
+        "closed_trades": 40,
+        "wins": 8,
+        "losses": 32,
+        "win_rate_pct": 20.0,
+        "net_pnl": -239.12,
+        "gross_wins": 2518.77,
+        "gross_losses": 2757.89,
+        "profit_factor": 0.913,
+        "avg_win": 314.85,
+        "avg_loss": 86.18,
+        "total_costs": 73.13,
+        "max_drawdown_cash": 1032.68,
+        "expectancy": -5.98
+      }
+    },
+    "M15_SMC_v2_session_filtered": {
+      "claimed": {
+        "closed_trades": 29,
+        "net_pnl": 479.31,
+        "profit_factor": 1.257
+      },
+      "recalculated": {
+        "closed_trades": 29,
+        "wins": 9,
+        "losses": 20,
+        "win_rate_pct": 31.03,
+        "net_pnl": 479.31,
+        "gross_wins": 2344.18,
+        "gross_losses": 1864.87,
+        "profit_factor": 1.257,
+        "avg_win": 260.46,
+        "avg_loss": 93.24,
+        "total_costs": 50.83,
+        "max_drawdown_cash": 800.78,
+        "expectancy": 16.53
+      }
+    },
+    "M15_SMC_v2_target_rationalized": {
+      "claimed": {
+        "closed_trades": 59,
+        "net_pnl": 282.81,
+        "profit_factor": 1.082
+      },
+      "recalculated": {
+        "closed_trades": 59,
+        "wins": 21,
+        "losses": 38,
+        "win_rate_pct": 35.59,
+        "net_pnl": 282.81,
+        "gross_wins": 3727.8,
+        "gross_losses": 3444.99,
+        "profit_factor": 1.082,
+        "avg_win": 177.51,
+        "avg_loss": 90.66,
+        "total_costs": 93.16,
+        "max_drawdown_cash": 779.48,
+        "expectancy": 4.79
+      }
+    },
+    "M15_SMC_v2_composite_liquid": {
+      "claimed": {
+        "closed_trades": 35,
+        "net_pnl": -267.27,
+        "profit_factor": 0.876
+      },
+      "recalculated": {
+        "closed_trades": 35,
+        "wins": 11,
+        "losses": 24,
+        "win_rate_pct": 31.43,
+        "net_pnl": -267.27,
+        "gross_wins": 1892.46,
+        "gross_losses": 2159.73,
+        "profit_factor": 0.876,
+        "avg_win": 172.04,
+        "avg_loss": 89.99,
+        "total_costs": 52.31,
+        "max_drawdown_cash": 640.0,
+        "expectancy": -7.64
+      }
+    },
+    "M15_SMC_v2_ny_session": {
+      "claimed": {
+        "closed_trades": 21,
+        "net_pnl": -567.22,
+        "profit_factor": 0.604
+      },
+      "recalculated": {
+        "closed_trades": 21,
+        "wins": 5,
+        "losses": 16,
+        "win_rate_pct": 23.81,
+        "net_pnl": -567.22,
+        "gross_wins": 864.85,
+        "gross_losses": 1432.07,
+        "profit_factor": 0.604,
+        "avg_win": 172.97,
+        "avg_loss": 89.5,
+        "total_costs": 35.59,
+        "max_drawdown_cash": 539.13,
+        "expectancy": -27.01
+      }
+    },
+    "M15_SMC_v2_mtf_aligned": {
+      "claimed": {
+        "closed_trades": 6,
+        "net_pnl": -515.58,
+        "profit_factor": 0.0
+      },
+      "recalculated": {
+        "closed_trades": 6,
+        "wins": 0,
+        "losses": 6,
+        "win_rate_pct": 0.0,
+        "net_pnl": -515.58,
+        "gross_wins": 0.0,
+        "gross_losses": 515.58,
+        "profit_factor": 0.0,
+        "avg_win": 0.0,
+        "avg_loss": 85.93,
+        "total_costs": 6.6,
+        "max_drawdown_cash": 431.82,
+        "expectancy": -85.93
+      }
+    }
+  }
+}

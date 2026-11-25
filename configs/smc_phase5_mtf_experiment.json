@@ -1,0 +1,40 @@
+{
+  "_schema": "smc_phase5_mtf_experiment",
+  "_description": "GoldFlow Phase 5 Experimental SMC Multi-Timeframe Strategy Configuration. Evaluates H4/H1 trend alignment filtering on lower-timeframe SMC v1 candidates.",
+  "_created_at_utc": "2026-10-26T12:50:00Z",
+  "_phase": "Phase 5 - Independent Validation & Research Reliability",
+  "_strategy_name": "SMC_v1_H4_H1_confirmed",
+  "_instrument": "XAUUSD",
+  "_baseline_reference": {
+    "config_file": "configs/smc_v1_frozen.json",
+    "expected_sha256": "1091fb06b24491925510e642052305ba99e397e5f602c2ca2bdbd32094e7174a",
+    "status": "UNTOUCHED_FROZEN_BENCHMARK"
+  },
+  "strategy_rules": {
+    "base_setup": "Liquidity Sweep => Opposite CHoCH => Order-Block Retest/Rejection (identical to SMC v1 frozen)",
+    "mtf_filter": {
+      "higher_timeframes": ["H4", "H1"],
+      "lower_timeframes": ["M15", "M5"],
+      "rule": "Both H4 and H1 completed structure trends must agree with candidate direction",
+      "candle_close_availability": "Structure breaks available only at candle open + timeframe duration (strictly closed candles)",
+      "lookahead_prevention": "Snapshot timestamp <= entry_time (next bar open)",
+      "conflict_policy": "Reject candidate if H4 and H1 directions disagree or either is neutral"
+    },
+    "execution_costs": {
+      "spread_markup_points": 0.0,
+      "slippage_per_side": 0.05,
+      "commission_per_lot": 0.0,
+      "source": "Captured defaults from initial MT5 live-audit fixture"
+    },
+    "risk_management": {
+      "risk_mode": "FIXED_PERCENTAGE",
+      "risk_per_trade_percent": 1.0,
+      "initial_capital": 10000.0,
+      "max_open_positions": 1,
+      "point_value": 1.0,
+      "lot_step": 0.01,
+      "min_lot": 0.01,
+      "max_lot": 100.0
+    }
+  }
+}

@@ -1,0 +1,166 @@
+# GOLDFLOW — PROJECT STATE & REPOSITORY MEMORY
+## Continuous Quantitative Engineering Handover & Subsystem Status Matrix
+
+**Document Version:** 2.0.0  
+**Last Updated:** November 13, 2026  
+**Status:** COMPLETE — Academically Certified  
+**Primary Architect:** Principal Software Architect & Quantitative Systems Lead  
+
+---
+
+## 1. Canonical Project Baseline
+
+| Parameter | Current Value / State |
+| :--- | :--- |
+| **Active Working Directory** | `c:\Users\ousse\Downloads\GoldFlow_Ultimate_Updated\GoldFlow_SMC_Primary_Updated` |
+| **Canonical Git HEAD** | `477aa2d` on branch `main` |
+| **Git Object Format** | `sha1` |
+| **Python Runtime** | Python 3.14.7 x64 (Windows 11) |
+| **Test Suite Baseline** | **664 passed**, 0 failed, 100% pass rate |
+| **Frozen SMC v1 Config Hash** | `1091fb06b24491925510e642052305ba99e397e5f602c2ca2bdbd32094e7174a` (SHA-256) |
+| **Frozen C2 Spec Hash** | `d09474e02c3dc45165a667742cec5012662e58b95cea78bfd6e5e8d782849916` (SHA-256) |
+| **Network Ingestion Gate** | **FAIL-CLOSED** (`allow_network=False`, uncalibrated scale lock) |
+
+---
+
+## 2. Architectural Decisions Log (ADR)
+
+### ADR-001: Primary Analytical Engine Dedicated to Pure SMC
+- **Decision:** Smart Money Concepts (SMC) is established as GoldFlow's default, standalone primary analytical engine (`src/smc/`).
+- **Rationale:** Institutional swing pivots, close-confirmed breaks of structure (BOS), changes of character (CHoCH), equal high/low liquidity pools, order blocks, breaker blocks, and 3-candle fair value gaps provide a mathematically deterministic baseline without heuristic ambiguity.
+- **Status:** Implemented & Verified.
+
+### ADR-002: Complete Architectural Decoupling of the ICT Engine
+- **Decision:** Inner Circle Trader concepts are isolated inside `src/ict/`. SMC modules must never import from or reference ICT modules.
+- **Rationale:** Prevents methodology bleed and cross-contamination. Fair Value Gaps (FVG), Consequent Encroachment (CE), displacement metrics, and Market Structure Shifts (MSS) remain cleanly testable as a standalone alternative.
+- **Status:** Implemented & Verified (60+ ICT unit tests passing independently).
+
+### ADR-003: Strict Elimination of Look-Ahead Bias via Pivot Delay
+- **Decision:** Swing highs and lows require a $k$-bar confirmation window ($i + k$). No structure break or setup can be signaled before bar index $i + k$.
+- **Rationale:** Prevents peeking into future price action during backtests and live telemetry.
+- **Status:** Implemented & Verified.
+
+### ADR-004: Fail-Closed Security & Instrument Price-Scale Gate
+- **Decision:** Network data ingestion is disabled by default. Live XAUUSD ingestion is gated behind `validate_for_real_network_ingestion()`, which blocks until single-hour empirical reference calibration is executed.
+- **Rationale:** Ensures raw tick binary formats (`.bi5`) do not corrupt accounts or backtests with 10x or 100x pricing miscalibrations.
+- **Status:** Active & Locked.
+
+### ADR-005: Rejection of Session Filter Candidate C1
+- **Decision:** Phase 6G demonstrated that Candidate C1 (London/NY Killzones) overfit historical M5/M15 sample windows and failed to generalize on unseen validation data (PF collapsed from 1.257 to 0.699). C1 was officially rejected and must not be promoted.
+- **Rationale:** Rigorous cost-adjusted backtesting showed a collapsed profit factor when transaction costs and out-of-sample periods were applied.
+- **Status:** Formally Closed / Rejected.
+
+### ADR-006: Target Rationalization Candidate C2 Retained for Research
+- **Decision:** Candidate C2 (Fixed 2.0R / 3.0R Take-Profit) produced positive development (+282.81, PF 1.082) and validation (+265.02, PF 1.959) returns. It is retained as an active research candidate pending untouched M15 forward data acquisition.
+- **Rationale:** Mitigates the structural flaw of waiting for distant, unmitigated opposing liquidity pools that rarely get reached before trailing reversals.
+- **Status:** Active Research Track (Exploratory).
+
+### ADR-007: High-Performance Chart Rendering & Data Integrity Remediation
+- **Decision:** Resolved Plotly quadratic tuple concatenation ($O(K^2)$) by batching shapes and annotations in Python lists and passing them via bulk layout updates. Implemented visible-window temporal clamping $[t_{start}, t_{end}]$ to eliminate off-screen shape overload. Restored authentic 5,000-row `data/raw/XAUUSD_M15_raw.csv` with CRLF line endings, recovering exact 256-bit hash parity with `data/processed/XAUUSD_M15_clean.meta.json`. Centralized statistical functions with zero-division safety guards.
+- **Rationale:** Prevents browser lockup and Streamlit rendering freezes while maintaining 100% full visual SMC fidelity and cryptographic provenance.
+- **Status:** Implemented & Formally Verified (656 passing tests).
+
+### ADR-008: Institutional Market Analysis Chart Redesign & Visual Hierarchy
+- **Decision:** Completely re-engineered the Market Analysis chart visualization layer to resolve user-documented issues:
+  1. *Dynamic Price Framing:* Locked Y-axis range to visible OHLC candles (+8% padding) with `autorange=False` and proximity filtering, completely eliminating the $2,800–$5,500 vertical compression failure.
+  2. *Overlay Relevance Architecture:* Introduced 4 distinct presets (`clean`, `smc_analysis`, `full_research`, `custom`). The default institutional view caps nearest demand/supply order blocks and filters distant off-screen historical zones.
+  3. *Non-Overlapping Structure Badges:* Replaced giant 2-line opaque text boxes with sleek 8px pill badges (`+BOS`, `-CHoCH`) offset by $\pm 9\text{px}$, moving deep diagnostics to interactive hovercards.
+  4. *Continuous Timeflow:* Suppressed non-trading weekend voids (Friday 19:00 to Sunday 22:00 UTC) across all chart panels using Plotly `rangebreaks=[dict(bounds=["sat", "mon"])]`.
+  5. *Framework Separation & Purity:* SMC and ICT engines remain decoupled. Strategy trading rules, backtest execution metrics, and Research Vault remain 100% unchanged.
+- **Rationale:** Delivers academic-grade visual polish and immediate 5-second chart comprehension while strictly preserving data science integrity and underlying analytical calculations.
+- **Status:** Implemented & Formally Verified across H4, H1, M15, M5 proof artifacts.
+
+---
+
+## 3. Subsystem Health Matrix
+
+| Subsystem | Core Path | Status | Test Coverage | Key Capabilities / Notes |
+| :--- | :--- | :--- | :--- | :--- |
+| **Data Ingestion** | `src/data/ingestion/` | Ready (Guarded) | High | Bi5 binary tick parser, Dukascopy adapter, fail-closed gate. |
+| **Data Cleaning** | `src/data/cleaner.py` | Operational | Complete | OHLCV validation, duplicate removal, gap detection. |
+| **SMC Engine** | `src/smc/` | Production | Complete | Swings, BOS, CHoCH, Liquidity Pools, Sweeps, OBs, Breaker Blocks, FVGs, Dealing Range. |
+| **SMC Setups** | `src/strategy/smc_setups.py` | Production | Complete | Sweep $\to$ CHoCH $\to$ OB Retest state machine. |
+| **ICT Engine** | `src/ict/` | Production | Complete | 3-bar FVGs, 50% CE, displacement filters, MSS, BSL/SSL sweeps. |
+| **Backtester** | `src/backtesting/` | Production | Complete | Event-driven sequential candle execution, slippage, commission, conservative collision. |
+| **Security Vault** | `src/vault/` | Operational | Complete | Holdout isolation, immutable registration hashes, audit logging. |
+| **Visualization & UI** | `app.py`, `pages/` | Production | High | 3 Streamlit pages, dual-engine toggle, interactive Plotly charts, Monte Carlo fan charts, candidate gate UI. |
+
+---
+
+## 4. Completed Engineering Milestones This Session
+
+1. **SMC Fair Value Gap Engine & UI (P1.1):**
+   - Implemented `SMCFairValueGap`, `SMCFVGType`, `SMCFVGStatus` in `src/smc/models.py`.
+   - Added `detect_smc_fvgs` in `src/smc/engine.py` (pure 3-candle imbalance without displacement requirement).
+   - Rendered FVG zones with 50% CE midpoint and lifecycle dimming in `src/visualization/charts.py`.
+   - Integrated sidebar parameter `smc_min_fvg_size`, overlay toggle `show_smc_fvgs`, and tabular summary in `pages/1_Market_Analysis.py`.
+
+2. **SMC Liquidity Pool Zone Rectangles (P1.2):**
+   - Upgraded liquidity pool overlays in `src/visualization/charts.py` from thin horizontal lines to tolerance-band rectangular zones with hover inspection and dimming for swept pools.
+
+3. **SMC Breaker Block Engine (P2.2):**
+   - Added `SMCBreakerBlock`, `SMCBreakerBlockType`, `SMCBreakerBlockStatus` in `src/smc/models.py`.
+   - Added `detect_smc_breaker_blocks` in `src/smc/engine.py` detecting inverted failed OBs and tracking retest/invalidation lifecycle.
+   - Comprehensive unit test suite in `tests/test_smc_engine.py` (21 passing unit tests).
+
+4. **Statistical Context & Non-Parametric Robustness (P1.3):**
+   - Integrated sample size adequacy warning ($N < 30$ underpowered flag).
+   - Implemented 1,000-resample non-parametric bootstrap 95% Confidence Interval for Profit Factor.
+   - Built 250-path Monte Carlo equity fan chart (`create_monte_carlo_equity_fan_chart`) with 10th, 50th, 90th percentile bands and realized trajectory.
+   - Analyzed consecutive loss streaks in `pages/2_Backtesting.py`.
+
+5. **M15 Candidate Research Gate in UI (P2.1):**
+   - Added new Tab 2 in `pages/2_Backtesting.py` presenting C0 (Frozen Baseline), C1 (Session Filter), and C2 (Target Rationalized).
+   - Embedded development vs. validation performance matrix and formal gate decisions (C1 rejected, C2 exploratory).
+
+6. **Documentation Suite (P3):**
+   - Created `docs/CODEBASE_INVENTORY.md` mapping all 45 source files.
+   - Created `docs/DATA_FLOW.md` documenting end-to-end data lifecycle.
+   - Created `docs/TECHNICAL_DEBT.md` cataloging known limitations and remediation tracks.
+
+---
+
+## 5. Project Completion Status (November 13, 2026)
+
+All engineering milestones have been completed, verified, and committed.
+
+### Completed Since Last Update (Nov 1 → Nov 13, 2026)
+
+1. **Master Forensic Audit & P0 Data Integrity Remediation:**
+   - 7-future-candle anomaly root-caused (EET winter DST — `posix_utc` mode omission).
+   - Corrupted 2026-11-04 live-fetch datasets quarantined in `data/quarantine/20261111_overwrite_event/`.
+   - Canonical datasets restored from git `d75ca98`, SHA-256 hashes verified for all 4 timeframes.
+   - Validation window (509 M15 bars) confirmed with **0 overlap** against canonical clean dataset.
+
+2. **Fail-Closed Security Architecture:**
+   - `pages/1_Market_Analysis.py` overwrite guard upgraded to fail-closed (any read error blocks saving).
+   - `src/research/data_readiness.py` expanded to scan validation windows and detect development/validation timestamp overlap.
+
+3. **Candidate Strategy Engine (ADR-006):**
+   - `src/backtesting/engine.py` extended with `partial_exit_at_r` / `remaining_exit_at_r` for 2R/3R split-exit mechanics.
+   - `tests/test_candidate_fixed_rr.py` — 4 unit tests confirming lot conservation and dual-leg execution.
+   - Development-split experiment executed: `reports/strategy/candidate_fixed_rr_dev_results.json`.
+   - Formal evaluation report: `reports/strategy/SMC_CANDIDATE_FIXED_RR_v1_REPORT.md`.
+   - **Gate Decision: PROMOTION REJECTED** — PF < 1.10 on H1 and M15 dev splits.
+
+4. **Interactive UI Completion:**
+   - `pages/2_Backtesting.py`: ADR-006 candidate exit architecture controls in Tab 1 (Canonical / 2R-3R / Custom).
+   - `pages/3_BI_Dashboard.py`: Canonical Baseline source selector with verified green badge.
+   - `pages/4_About.py`: Updated to reflect actual runtime (Python 3.14.7), test count (664), and research integrity commitments.
+
+5. **Exhaustive File Audit:**
+   - `reports/FORENSIC_FILE_REVIEW_LEDGER.csv`: 945-file cryptographic inventory (up from 905 at Nov 11 baseline).
+
+6. **Full 6-Report Audit Suite committed and final:**
+   - `FORENSIC_AUDIT_FINDINGS.md`, `DATA_INTEGRITY_AUDIT.md`, `RESEARCH_CONTAMINATION_AUDIT.md`,
+   - `FINAL_TEST_VERIFICATION.md`, `FINAL_REMEDIATION_REPORT.md`, `FINAL_PROJECT_COMPLETION_REPORT.md`.
+
+### Final Test & App Verification
+
+| Verification | Result |
+| :--- | :--- |
+| `python -m pytest tests/ -q` | **664 passed**, 0 failed |
+| `streamlit AppTest` (all 5 pages) | **0 unhandled exceptions** |
+| Canonical dataset SHA-256 hashes | **All verified** |
+| `src/smc/` ↔ `src/ict/` cross-import check | **Zero cross-imports** |
+| Fail-closed overwrite guard | **Active** |

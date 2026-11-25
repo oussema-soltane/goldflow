@@ -1,0 +1,41 @@
+{
+  "dataset_name": "XAUUSD_M15_extended",
+  "phase": "PHASE_3_HISTORICAL_EXPANSION",
+  "created_at_utc": "2026-11-17T11:48:20.504239+00:00",
+  "source_raw_file": "data\\raw\\XAUUSD_M5_raw.csv",
+  "source_raw_sha256": "7c5c5187bbb6593391708a5842e06b72ca7c1474ea86d91c2aac0e7e8a051257",
+  "source_raw_bars": 99999,
+  "processed_file": "data\\research\\phase3\\processed\\XAUUSD_M15_extended.csv",
+  "processed_sha256": "fcd5aba9b5e62a20216d6701bc6f9f1b31bb5ad95e26f5cfa928e4c334521fb9",
+  "processed_bars": 33388,
+  "processed_size_bytes": 2507454,
+  "start_time_utc": "2025-05-13T22:15:00+00:00",
+  "end_time_utc": "2026-10-20T15:45:00+00:00",
+  "timeframe": "M15",
+  "symbol": "XAUUSD",
+  "broker_server": "MetaQuotes-Demo",
+  "broker_company": "MetaQuotes Ltd.",
+  "timezone_convention": "UTC (UTC-aware pd.Timestamp)",
+  "integrity_checks": {
+    "duplicate_timestamps": 0,
+    "monotonic_increasing": true,
+    "invalid_ohlc_relationships": 0,
+    "null_values_total": 0,
+    "weekend_closures": 74,
+    "daily_rollover_breaks": 172,
+    "unscheduled_gaps": 140,
+    "max_gap_hours": 74.25,
+    "fabrication_applied": false,
+    "interpolation_applied": false
+  },
+  "overlap_verification": {
+    "canonical_file": "XAUUSD_M15_clean.csv",
+    "canonical_bars": 5000,
+    "overlapping_bars": 4850,
+    "max_abs_diff_open": 0.0,
+    "max_abs_diff_high": 0.0,
+    "max_abs_diff_low": 1.199999999999818,
+    "max_abs_diff_close": 1.7999999999992724,
+    "exact_consistency": true
+  }
+}

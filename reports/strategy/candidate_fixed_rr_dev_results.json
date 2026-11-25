@@ -1,0 +1,188 @@
+{
+  "experiment_id": "SMC_CANDIDATE_FIXED_RR_v1",
+  "experiment_name": "Fixed 2R/3R Target with Partial Exit vs Baseline (Development Split 60%)",
+  "split_ratio": 0.6,
+  "validation_holdout_locked": true,
+  "timeframes": {
+    "H4": {
+      "dev_period": {
+        "start": "2023-07-27T17:00:00+00:00",
+        "end": "2025-07-07T01:00:00+00:00",
+        "bars": 3000
+      },
+      "val_period_locked": {
+        "start": "2025-07-07T05:00:00+00:00",
+        "end": "2026-10-20T09:00:00+00:00",
+        "bars": 2000,
+        "status": "LOCKED_HOLDOUT"
+      },
+      "baseline": {
+        "candidate_count": 7,
+        "closed_trades": 6,
+        "rule_exit_trades": 6,
+        "end_of_data_exits": 0,
+        "win_rate_pct": 33.33333333333333,
+        "net_profit": 566.48,
+        "return_pct": 5.66,
+        "profit_factor": 2.478,
+        "max_drawdown_cash": 751.76,
+        "max_drawdown_pct": 7.21,
+        "average_R_multiple": 1.119,
+        "expectancy_per_rule_exit": 94.41
+      },
+      "candidate": {
+        "candidate_count": 14,
+        "closed_trades": 14,
+        "rule_exit_trades": 14,
+        "end_of_data_exits": 0,
+        "win_rate_pct": 42.857142857142854,
+        "net_profit": 312.1,
+        "return_pct": 3.12,
+        "profit_factor": 1.817,
+        "max_drawdown_cash": 213.04,
+        "max_drawdown_pct": 2.1,
+        "average_R_multiple": 0.5,
+        "expectancy_per_rule_exit": 22.29
+      },
+      "delta": {
+        "net_profit_delta_usd": -254.38,
+        "profit_factor_delta": -0.661
+      }
+    },
+    "H1": {
+      "dev_period": {
+        "start": "2025-01-31T14:00:00+00:00",
+        "end": "2026-02-06T20:00:00+00:00",
+        "bars": 6000
+      },
+      "val_period_locked": {
+        "start": "2026-02-06T21:00:00+00:00",
+        "end": "2026-10-20T14:00:00+00:00",
+        "bars": 4000,
+        "status": "LOCKED_HOLDOUT"
+      },
+      "baseline": {
+        "candidate_count": 37,
+        "closed_trades": 33,
+        "rule_exit_trades": 33,
+        "end_of_data_exits": 0,
+        "win_rate_pct": 24.242424242424242,
+        "net_profit": -251.54,
+        "return_pct": -2.52,
+        "profit_factor": 0.892,
+        "max_drawdown_cash": 1249.98,
+        "max_drawdown_pct": 11.66,
+        "average_R_multiple": -0.073,
+        "expectancy_per_rule_exit": -7.62
+      },
+      "candidate": {
+        "candidate_count": 66,
+        "closed_trades": 60,
+        "rule_exit_trades": 60,
+        "end_of_data_exits": 0,
+        "win_rate_pct": 28.333333333333332,
+        "net_profit": -184.79,
+        "return_pct": -1.85,
+        "profit_factor": 0.913,
+        "max_drawdown_cash": 1161.43,
+        "max_drawdown_pct": 10.6,
+        "average_R_multiple": -0.033,
+        "expectancy_per_rule_exit": -3.08
+      },
+      "delta": {
+        "net_profit_delta_usd": 66.75,
+        "profit_factor_delta": 0.021
+      }
+    },
+    "M15": {
+      "dev_period": {
+        "start": "2026-08-04T12:00:00+00:00",
+        "end": "2026-09-21T15:15:00+00:00",
+        "bars": 3000
+      },
+      "val_period_locked": {
+        "start": "2026-09-21T15:30:00+00:00",
+        "end": "2026-10-22T09:15:00+00:00",
+        "bars": 2000,
+        "status": "LOCKED_HOLDOUT"
+      },
+      "baseline": {
+        "candidate_count": 27,
+        "closed_trades": 20,
+        "rule_exit_trades": 19,
+        "end_of_data_exits": 1,
+        "win_rate_pct": 21.052631578947366,
+        "net_profit": 170.09,
+        "return_pct": 1.7,
+        "profit_factor": 1.018,
+        "max_drawdown_cash": 1048.52,
+        "max_drawdown_pct": 10.43,
+        "average_R_multiple": 0.012,
+        "expectancy_per_rule_exit": 1.22
+      },
+      "candidate": {
+        "candidate_count": 47,
+        "closed_trades": 40,
+        "rule_exit_trades": 39,
+        "end_of_data_exits": 1,
+        "win_rate_pct": 28.205128205128204,
+        "net_profit": -49.94,
+        "return_pct": -0.5,
+        "profit_factor": 0.903,
+        "max_drawdown_cash": 690.58,
+        "max_drawdown_pct": 6.77,
+        "average_R_multiple": -0.051,
+        "expectancy_per_rule_exit": -3.16
+      },
+      "delta": {
+        "net_profit_delta_usd": -220.03,
+        "profit_factor_delta": -0.115
+      }
+    },
+    "M5": {
+      "dev_period": {
+        "start": "2025-05-13T22:15:00+00:00",
+        "end": "2026-03-20T01:45:00+00:00",
+        "bars": 59999
+      },
+      "val_period_locked": {
+        "start": "2026-03-20T01:50:00+00:00",
+        "end": "2026-10-20T15:50:00+00:00",
+        "bars": 40000,
+        "status": "LOCKED_HOLDOUT"
+      },
+      "baseline": {
+        "candidate_count": 594,
+        "closed_trades": 485,
+        "rule_exit_trades": 485,
+        "end_of_data_exits": 0,
+        "win_rate_pct": 26.18556701030928,
+        "net_profit": -3947.54,
+        "return_pct": -39.48,
+        "profit_factor": 0.85,
+        "max_drawdown_cash": 5955.15,
+        "max_drawdown_pct": 55.22,
+        "average_R_multiple": -0.098,
+        "expectancy_per_rule_exit": -8.14
+      },
+      "candidate": {
+        "candidate_count": 1056,
+        "closed_trades": 933,
+        "rule_exit_trades": 933,
+        "end_of_data_exits": 0,
+        "win_rate_pct": 27.438370846730976,
+        "net_profit": -2352.4,
+        "return_pct": -23.52,
+        "profit_factor": 0.921,
+        "max_drawdown_cash": 4885.01,
+        "max_drawdown_pct": 42.02,
+        "average_R_multiple": -0.058,
+        "expectancy_per_rule_exit": -2.52
+      },
+      "delta": {
+        "net_profit_delta_usd": 1595.14,
+        "profit_factor_delta": 0.071
+      }
+    }
+  }
+}

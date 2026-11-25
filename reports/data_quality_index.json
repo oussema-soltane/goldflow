@@ -1,0 +1,13 @@
+{
+  "generated_at_utc": "2026-11-17T13:00:30.860279+00:00",
+  "run_id": "20261117_130030",
+  "symbol": "XAUUSD",
+  "timeframe_results": {
+    "H1": {
+      "json": "reports/data_quality_H1_20261117_130030.json",
+      "md": "reports/data_quality_H1_20261117_130030.md",
+      "status": "PASSED"
+    }
+  },
+  "note": "Per-timeframe quality reports. Each covers exactly one timeframe; this index aggregates them. It is NOT a full 4-TF audit unless all four timeframes ran successfully in this pipeline invocation."
+}

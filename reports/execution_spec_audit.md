@@ -1,6 +1,6 @@
 # GoldFlow — Broker Execution Specification Audit
 
-**Generated (UTC):** 2026-10-22T09:39:19.289370+00:00
+**Generated (UTC):** 2026-10-29T18:43:01.177754+00:00
 **Overall status:** MATCHED_CAPTURED_DEFAULTS_UNVERIFIED_PROVENANCE
 
 This preflight compares current BacktestConfig defaults with instrument metadata captured from `MT5.symbol_info`. It does not verify that the historical price data is authentic, and it does not certify execution quality.

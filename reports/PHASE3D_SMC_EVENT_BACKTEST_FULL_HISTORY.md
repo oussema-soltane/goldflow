@@ -1,6 +1,6 @@
 # GoldFlow Phase 3D — Pure-SMC Event-Driven Backtest
 
-**Generated UTC:** 2026-10-21T11:23:06.593435+00:00
+**Generated UTC:** 2026-11-11T12:15:24.924896+00:00
 **Mode:** full-history
 **Data readiness:** READY_WITH_WARNINGS
 **Execution specification audit:** MATCHED_CAPTURED_DEFAULTS_UNVERIFIED_PROVENANCE
@@ -29,7 +29,7 @@
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | H4 | 15 | 13 | 0 | 0 | 2 | 30.77% | $448.73 | 4.49% | 1.54 | $751.76 (7.21%) | 0.46 |
 | H1 | 69 | 61 | 0 | 0 | 8 | 26.23% | $-339.41 | -3.39% | 0.92 | $1,265.62 (11.66%) | -0.01 |
-| M15 | 52 | 37 | 0 | 1 | 14 | 16.22% | $-898.02 | -8.98% | 0.65 | $1,632.95 (15.37%) | -0.30 |
+| M15 | 54 | 39 | 0 | 1 | 14 | 20.51% | $-239.12 | -2.39% | 0.92 | $1,632.95 (15.37%) | -0.07 |
 | M5 | 1015 | 841 | 0 | 1 | 173 | 27.71% | $-4,955.63 | -49.56% | 0.87 | $6,392.88 (59.28%) | -0.08 |
 
 * Win rate and profit factor exclude END_OF_DATA exits, which are sample-boundary marks rather than stop/target outcomes.

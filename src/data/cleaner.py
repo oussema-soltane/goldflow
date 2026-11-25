@@ -157,10 +157,13 @@ def save_processed_data(
     df: pd.DataFrame,
     symbol: str,
     timeframe: str,
-    output_dir: Union[str, Path] = "data/processed",
+    output_dir: Optional[Union[str, Path]] = None,
     raw_source_path: Optional[Union[str, Path]] = None,
     audit_log: Optional[Dict[str, Any]] = None,
     source_metadata: Optional[Dict[str, Any]] = None,
+    *,
+    synthetic: bool = False,
+    allow_shrink: bool = False,
 ) -> Tuple[Path, Path]:
     """
     Save cleaned historical dataset to CSV and generate a JSON metadata sidecar.
@@ -173,24 +176,89 @@ def save_processed_data(
         Original broker symbol (e.g. 'XAUUSD', 'XAU/USD').
     timeframe : str
         Timeframe (e.g. 'M15').
-    output_dir : str or Path
-        Output directory.
+    output_dir : str or Path, optional
+        Output directory. Defaults to data/processed or data/synthetic/processed.
     raw_source_path : str or Path, optional
         Path to corresponding raw CSV file for provenance tracing.
     audit_log : dict, optional
         Cleaning audit dictionary returned by clean_market_data.
+    synthetic : bool, default False
+        When True, data is routed to ``data/synthetic/processed/`` by default.
+        Raises ValueError if caller explicitly passes a canonical path while
+        setting synthetic=True.
+    allow_shrink : bool, default False
+        When False (default), prevents overwriting an existing canonical dataset
+        with fewer rows to protect against accidental historical data truncation.
 
     Returns
     -------
     Tuple[Path, Path]
         (path_to_cleaned_csv, path_to_metadata_json)
     """
-    out_path = Path(output_dir)
+    # CANONICAL DATA PROTECTION: synthetic data must never land in data/processed/.
+    if synthetic:
+        if output_dir is not None:
+            norm_str = str(output_dir).replace("\\", "/").rstrip("/")
+            if norm_str.endswith("data/processed") or norm_str == "data/processed":
+                raise ValueError("Synthetic data must NOT be written to canonical data/processed directory.")
+            out_path = Path(output_dir)
+        else:
+            out_path = Path("data/synthetic/processed")
+    else:
+        out_path = Path(output_dir or "data/processed")
+
+    # PATH CONTAINMENT: Ensure output path is strictly contained within repository data root or test tempdir
+    import tempfile
+    repo_root = Path(__file__).resolve().parents[2]
+    allowed_root = (repo_root / "data").resolve()
+    temp_root = Path(tempfile.gettempdir()).resolve()
+    resolved_dir = out_path.resolve()
+    is_contained = False
+    try:
+        resolved_dir.relative_to(allowed_root)
+        is_contained = True
+    except ValueError:
+        pass
+    if not is_contained:
+        try:
+            resolved_dir.relative_to(temp_root)
+            is_contained = True
+        except ValueError:
+            pass
+    if not is_contained:
+        raise ValueError(f"Path containment violation: directory '{resolved_dir}' is outside '{allowed_root}' and system temp directory.")
+
     out_path.mkdir(parents=True, exist_ok=True)
     
     safe_symbol = sanitize_symbol_for_filename(symbol)
     csv_filename = f"{safe_symbol}_{timeframe}_clean.csv"
     csv_path = out_path / csv_filename
+    meta_filename = f"{safe_symbol}_{timeframe}_clean.meta.json"
+    meta_path = out_path / meta_filename
+
+    # CANONICAL HISTORY SHRINK PROTECTION:
+    # Overwriting an existing canonical dataset with fewer rows truncates historical data.
+    if not synthetic and csv_path.exists():
+        existing_rows = None
+        if meta_path.exists():
+            try:
+                with open(meta_path, "r", encoding="utf-8") as mf:
+                    existing_meta = json.load(mf)
+                    existing_rows = existing_meta.get("processed_row_count")
+            except Exception:
+                existing_rows = None
+        if existing_rows is None:
+            try:
+                with open(csv_path, "r", encoding="utf-8") as cf:
+                    existing_rows = max(0, sum(1 for _ in cf) - 1)
+            except Exception:
+                existing_rows = None
+        if existing_rows is not None and len(df) < existing_rows and not allow_shrink:
+            raise ValueError(
+                f"CANONICAL DATA SHRINK PROTECTED: Attempted to overwrite canonical dataset "
+                f"'{csv_path.name}' ({existing_rows} rows) with a smaller dataset ({len(df)} rows). "
+                f"Overwriting canonical history with truncated samples is prohibited without allow_shrink=True."
+            )
 
     # Compute raw file hash if available
     raw_hash = None
@@ -257,9 +325,6 @@ def save_processed_data(
         "end_time": df["time"].iloc[-1].isoformat() if len(df) > 0 else None,
         "audit_operations": audit_log.get("operations", []) if audit_log else [],
     }
-
-    meta_filename = f"{safe_symbol}_{timeframe}_clean.meta.json"
-    meta_path = out_path / meta_filename
 
     # DATA SAFETY: Write both CSV and JSON atomically via temporary files
     fd_csv, tmp_csv_name = tempfile.mkstemp(dir=out_path, prefix=f"{csv_filename}.tmp.", suffix=".csv")

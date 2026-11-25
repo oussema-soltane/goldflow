@@ -1,0 +1,103 @@
+{
+  "manifest_version": "1.0.0",
+  "audit_date": "2026-10-31",
+  "reconciliation_date": "2026-11-01",
+  "git_baseline_head": "1a529e2638832a4b6fcf88c388f68270fc6108a5",
+  "environment": {
+    "os": "Windows 11",
+    "python_version": "3.14.7 / 3.13.7",
+    "pytest_version": "9.1.1"
+  },
+  "frozen_controls_verified": {
+    "configs/smc_v1_frozen.json": {
+      "sha256": "1091fb06b24491925510e642052305ba99e397e5f602c2ca2bdbd32094e7174a",
+      "status": "IMMUTABLE_VERIFIED"
+    },
+    "reports/strategy/phase6h_candidate_spec.json": {
+      "sha256": "d09474e02c3dc45165a667742cec5012662e58b95cea78bfd6e5e8d782849916",
+      "status": "IMMUTABLE_VERIFIED"
+    }
+  },
+  "audit_manifest_entries": [
+    {
+      "file_path": "src/visualization/charts.py",
+      "status": "MODIFIED",
+      "sha256": "7cb3bd3ac52a56b78dff1f831a7183c8d86519aa254c592479fdb594bd476f50",
+      "size_bytes": 60494,
+      "line_count": 1337,
+      "description": "Fixed quadratic Plotly shape concatenation via bulk layout assignment; implemented visible-window temporal clamping [t_start, t_end]; added missing import numpy as np. Reduced chart build time from >60s to 0.413s."
+    },
+    {
+      "file_path": "src/backtesting/engine.py",
+      "status": "MODIFIED",
+      "sha256": "337a7956f9496c694cafcbfbc8d30b4f0d7dee1fb9eecb8bef16238ea22b0bc1",
+      "size_bytes": 45614,
+      "line_count": 996,
+      "description": "Centralized statistical bootstrap confidence interval and consecutive loss streak analysis functions with zero-division safety guards."
+    },
+    {
+      "file_path": "pages/2_Backtesting.py",
+      "status": "MODIFIED",
+      "sha256": "695cf6d78ee8956bc66de3302ade06c6d7401b67ae479a3922b146e83c320e13",
+      "size_bytes": 36882,
+      "line_count": 644,
+      "description": "Refactored statistical helper calls to import directly from src.backtesting.engine."
+    },
+    {
+      "file_path": "data/raw/XAUUSD_M15_raw.csv",
+      "status": "RESTORED",
+      "sha256": "b893bc507daec515d36ff51cb988e4f6e33df23f3ccddd6924794b64fbe7b075",
+      "size_bytes": 429670,
+      "line_count": 5001,
+      "description": "Restored authentic 5,000-row historical raw CSV with CRLF line endings from commit ad9807f, recovering exact SHA-256 parity with data/processed/XAUUSD_M15_clean.meta.json."
+    },
+    {
+      "file_path": "tests/test_chart_performance_and_statistics.py",
+      "status": "NEW",
+      "sha256": "d862ebb15715791313b7cdd906cbbea2eeb0a5b751da1005d7c273c371a376de",
+      "size_bytes": 9943,
+      "line_count": 232,
+      "description": "18 new unit and regression tests covering chart latency, window filtering, M15 cryptographic provenance, bootstrap CI edge cases, and Monte Carlo equity curves."
+    },
+    {
+      "file_path": "docs/ENGINEERING_AUDIT_REPORT_20261031.md",
+      "status": "NEW",
+      "sha256": "378775c9cd3bb90ff655acfbf12c16cc5e42b2112db90e870345a6048e5655c7",
+      "size_bytes": 11771,
+      "line_count": 137,
+      "description": "Master engineering audit report documenting root causes, latency benchmarks, cryptographic reconciliation, and architecture."
+    },
+    {
+      "file_path": "docs/BACKTEST_REPRODUCTION_REPORT_20261031.md",
+      "status": "NEW",
+      "sha256": "70b6426491eb2a41ea97087e266b4462f01c447126eb735a5889d92b281f57ea",
+      "size_bytes": 5859,
+      "line_count": 105,
+      "description": "Full reproduction report of SMC event backtest across all four timeframes (H4, H1, M15 C0 baseline, M5)."
+    },
+    {
+      "file_path": "docs/TEST_VERIFICATION_REPORT_20261031.md",
+      "status": "NEW",
+      "sha256": "2db7441ed3f1074c2ff986e5145c2695278f329b7a926bdd0644b3930cca2c6a",
+      "size_bytes": 5821,
+      "line_count": 91,
+      "description": "Test verification report documenting execution of all 656 test cases across the entire GoldFlow test suite."
+    },
+    {
+      "file_path": "configs/smc_v1_frozen.json",
+      "status": "UNMODIFIED_FROZEN",
+      "sha256": "1091fb06b24491925510e642052305ba99e397e5f602c2ca2bdbd32094e7174a",
+      "size_bytes": 4933,
+      "line_count": 116,
+      "description": "Frozen configuration baseline preserved without alteration."
+    },
+    {
+      "file_path": "reports/strategy/phase6h_candidate_spec.json",
+      "status": "UNMODIFIED_FROZEN",
+      "sha256": "d09474e02c3dc45165a667742cec5012662e58b95cea78bfd6e5e8d782849916",
+      "size_bytes": 3065,
+      "line_count": 95,
+      "description": "Candidate C2 frozen specification preserved without alteration."
+    }
+  ]
+}

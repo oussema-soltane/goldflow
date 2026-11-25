@@ -1,0 +1,53 @@
+{
+  "status": "RECONCILIATION_COMPLETED",
+  "primary": {
+    "file_name": "provider_a_xauusd.csv",
+    "file_path": "C:\\Users\\ousse\\Downloads\\GoldFlow_Ultimate_Updated\\GoldFlow_SMC_Primary_Updated\\data\\synthetic\\provider_a_xauusd.csv",
+    "sha256": "0af910df7d5a4401461926302b9400e06c299a1bf1196a26c772b3824f76d169",
+    "row_count": 6,
+    "earliest_time": "2024-10-01T08:00:00+00:00",
+    "latest_time": "2024-10-01T08:04:30+00:00",
+    "columns": [
+      "timestamp_utc",
+      "ask",
+      "bid",
+      "ask_vol",
+      "bid_vol",
+      "time_utc"
+    ]
+  },
+  "comparison": {
+    "file_name": "provider_b_xauusd.csv",
+    "file_path": "C:\\Users\\ousse\\Downloads\\GoldFlow_Ultimate_Updated\\GoldFlow_SMC_Primary_Updated\\data\\synthetic\\provider_b_xauusd.csv",
+    "sha256": "ad72c8569bc746736fdda65a810708a5d7a7e331ef33b2b83e0c723524a6af05",
+    "row_count": 5,
+    "earliest_time": "2024-10-01T08:00:00+00:00",
+    "latest_time": "2024-10-01T08:04:30+00:00",
+    "columns": [
+      "timestamp_utc",
+      "ask",
+      "bid",
+      "ask_vol",
+      "bid_vol",
+      "time_utc"
+    ]
+  },
+  "overlap_window": {
+    "start_utc": "2024-10-01T08:00:00+00:00",
+    "end_utc": "2024-10-01T08:04:30+00:00",
+    "duration_hours": 0.07
+  },
+  "coverage": {
+    "primary_overlap_rows": 6,
+    "comparison_overlap_rows": 5,
+    "aligned_bars": 5,
+    "primary_only_bars": 1,
+    "comparison_only_bars": 0,
+    "primary_duplicate_timestamps": 0,
+    "comparison_duplicate_timestamps": 0
+  },
+  "price_deviations": {},
+  "spread_comparison": {},
+  "tolerance_pts": 0.5,
+  "methodology_disclaimer": "HISTORICAL CROSS-PROVIDER FEED RECONCILIATION: This audit compares historical pricing structures across two feeds to evaluate broker markup, spread widening, and liquidity differences. It does NOT constitute forward temporal validation and must not be used as evidence of strategy profitability."
+}

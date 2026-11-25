@@ -1,0 +1,51 @@
+{
+  "freeze_timestamp_utc": "2026-10-30T12:00:00Z",
+  "git_head": "ad9807f8405811d65148d73d72139243f3d6a77f",
+  "smc_v1_config_hash": "1091fb06b24491925510e642052305ba99e397e5f602c2ca2bdbd32094e7174a",
+  "candidates": {
+    "C0_baseline": {
+      "name": "SMC_v1_frozen_baseline",
+      "version": "1.0.0",
+      "session_filter_enabled": false,
+      "session_start_hour_utc": null,
+      "session_end_hour_utc": null,
+      "use_opposing_liquidity_target": true,
+      "fixed_rr": 2.0,
+      "minimum_reward_risk": 1.0,
+      "require_htf_confirmation": false
+    },
+    "C1_session_filter": {
+      "name": "SMC_v2_session_filtered",
+      "version": "2.0.0-alpha.1",
+      "session_filter_enabled": true,
+      "session_start_hour_utc": 7,
+      "session_end_hour_utc": 21,
+      "filter_note": "Inclusive of 07:00, exclusive of 21:00. Signal time (bar close) determines session. UTC-only \u2014 no DST conversion.",
+      "use_opposing_liquidity_target": true,
+      "fixed_rr": 2.0,
+      "minimum_reward_risk": 1.0,
+      "require_htf_confirmation": false
+    },
+    "C2_target_rationalized": {
+      "name": "SMC_v2_target_rationalized",
+      "version": "2.0.0-alpha.2",
+      "session_filter_enabled": false,
+      "session_start_hour_utc": null,
+      "session_end_hour_utc": null,
+      "use_opposing_liquidity_target": false,
+      "fixed_rr": 2.0,
+      "minimum_reward_risk": 1.0,
+      "require_htf_confirmation": false
+    }
+  },
+  "backtest_config": {
+    "initial_capital_usd": 10000.0,
+    "risk_fraction": 0.01,
+    "fallback_spread_usd": 0.2,
+    "slippage_per_side_usd": 0.05,
+    "commission_per_lot_per_side": 0.0,
+    "contract_size_oz": 100.0,
+    "cost_per_roundtrip_usd": 0.6,
+    "position_sizing": "fraction_of_equity * risk_distance_adjusted"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "_schema": "smc_confluence_v1_strategy",
+  "_description": "GoldFlow SMC Confluence Version 1 - Systematic XAU/USD Trading Strategy with Higher-Timeframe Order Flow, Session Liquidity, High-Impact News Filter, and Capital Preservation Risk Management.",
+  "strategy_name": "SMC_CONFLUENCE_V1",
+  "version": "1.0.0",
+  "instrument": "XAUUSD",
+  "baseline_detector": "smc_v1_frozen",
+  "filters": {
+    "htf_bias": {
+      "enabled": true,
+      "timeframes": ["D1", "H4"],
+      "policy": "Candidate direction must align with both D1 and H4 completed structure breaks.",
+      "fail_closed": true
+    },
+    "session_liquidity": {
+      "enabled": true,
+      "allow_london": true,
+      "allow_new_york": true,
+      "allow_asian": false,
+      "london_window": "07:00-11:00 (Europe/London)",
+      "new_york_window": "08:00-12:00 (America/New_York)",
+      "fail_closed": true
+    },
+    "news_blackout": {
+      "enabled": true,
+      "calendar_path": "data/news/usd_high_impact_news.csv",
+      "pre_news_minutes": 15,
+      "post_news_minutes": 30,
+      "fail_closed": true
+    },
+    "risk_management": {
+      "enabled": true,
+      "risk_per_trade_pct": 0.005,
+      "max_daily_drawdown_pct": 0.02,
+      "max_concurrency": 1,
+      "max_spread_dollars": 0.35,
+      "min_atr_multiple": 1.5,
+      "breakeven_r_trigger": 1.5,
+      "breakeven_buffer_usd": 0.05
+    }
+  }
+}
+

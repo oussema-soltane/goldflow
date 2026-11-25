@@ -1,0 +1,95 @@
+{
+  "spec_version": "1.0.0",
+  "candidate_name": "SMC_v2_target_rationalized",
+  "candidate_id": "C2",
+  "version": "2.0.0-alpha.2",
+  "freeze_timestamp_utc": "2026-10-30T14:00:00Z",
+  "git_head": "ad9807f8405811d65148d73d72139243f3d6a77f",
+  "frozen_smc_v1_config_hash": "1091fb06b24491925510e642052305ba99e397e5f602c2ca2bdbd32094e7174a",
+  "strategy_framework": "Smart Money Concepts (SMC) Reversal",
+  "target_policy": {
+    "target_mechanism": "FIXED_RR",
+    "fixed_rr_multiple": 2.0,
+    "minimum_reward_risk": 1.0,
+    "use_opposing_liquidity_target": false,
+    "target_reference_formula": {
+      "long": "entry_reference + (fixed_rr * risk_distance)",
+      "short": "entry_reference - (fixed_rr * risk_distance)"
+    }
+  },
+  "entry_policy": {
+    "signal_trigger": "Close-confirmed Order Block retest following liquidity sweep and CHoCH",
+    "execution_timing": "Next bar open (causal, no forming bar)",
+    "entry_quote": {
+      "long": "ask_open + slippage",
+      "short": "bid_open - slippage"
+    }
+  },
+  "exit_policy": {
+    "stop_loss_trigger": {
+      "long": "bid reaches stop_loss_price",
+      "short": "ask reaches stop_loss_price"
+    },
+    "take_profit_trigger": {
+      "long": "bid reaches take_profit_price",
+      "short": "ask reaches take_profit_price"
+    },
+    "stop_buffer_usd": 0.50,
+    "conservative_stop_first": true
+  },
+  "session_filter": {
+    "enabled": false,
+    "note": "C2 does not restrict trading sessions; operates across all 24 hours UTC"
+  },
+  "htf_confirmation": {
+    "enabled": false,
+    "note": "Independent single-timeframe execution on M15"
+  },
+  "instrument_specification": {
+    "symbol": "XAUUSD",
+    "asset_class": "Commodity / Precious Metal",
+    "contract_size_oz": 100.0,
+    "point_size": 0.01,
+    "currency": "USD"
+  },
+  "risk_and_money_management": {
+    "initial_capital_usd": 10000.0,
+    "risk_fraction": 0.01,
+    "lot_step": 0.01,
+    "min_lot": 0.01,
+    "max_lots": 100.0,
+    "max_concurrent_positions": 1,
+    "position_sizing_formula": "floor((equity * risk_fraction) / (risk_distance_with_costs * contract_size), lot_step)"
+  },
+  "execution_cost_model": {
+    "fallback_spread_usd": 0.20,
+    "slippage_per_side_usd": 0.05,
+    "commission_per_lot_per_side_usd": 0.0,
+    "total_round_turn_friction_per_lot_usd": 30.00
+  },
+  "historical_records": {
+    "phase6f_development": {
+      "dataset": "data/processed/XAUUSD_M15_clean.csv",
+      "bars": 5000,
+      "closed_trades": 59,
+      "win_rate_pct": 35.59,
+      "gross_pnl_usd": 282.81,
+      "net_pnl_usd": 282.81,
+      "profit_factor": 1.082,
+      "expectancy_per_trade_usd": 4.79
+    },
+    "phase6g_validation": {
+      "dataset": "data/processed/XAUUSD_M15_validation_window.csv",
+      "bars": 509,
+      "closed_trades": 6,
+      "win_rate_pct": 50.0,
+      "gross_pnl_usd": 265.02,
+      "net_pnl_usd": 265.02,
+      "profit_factor": 1.959,
+      "expectancy_per_trade_usd": 44.17
+    }
+  },
+  "status": "EXPLORATORY_CANDIDATE_FROZEN",
+  "promotion_status": "NOT_PROMOTED_PENDING_INDEPENDENT_EVALUATION"
+}
+

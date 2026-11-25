@@ -1,0 +1,32 @@
+{
+  "symbol": "XAUUSD",
+  "timeframe": "H1",
+  "total_rows": 100,
+  "start_date": "2026-02-02 08:00:00 UTC",
+  "end_date": "2026-02-03 08:45:00 UTC",
+  "is_chronological": true,
+  "duplicate_timestamps_count": 0,
+  "duplicate_timestamps": [],
+  "missing_values_by_column": {
+    "time": 0,
+    "open": 0,
+    "high": 0,
+    "low": 0,
+    "close": 0,
+    "tick_volume": 0,
+    "spread": 0,
+    "real_volume": 0,
+    "time_raw_epoch": 0,
+    "timestamp_correction_applied_seconds": 0
+  },
+  "invalid_ohlc_count": 0,
+  "invalid_ohlc_indices": [],
+  "total_gaps_count": 0,
+  "weekend_gaps_count": 0,
+  "abnormal_gaps_count": 0,
+  "abnormal_gaps": [],
+  "incomplete_candle_detected": false,
+  "status": "PASSED",
+  "warnings": [],
+  "errors": []
+}

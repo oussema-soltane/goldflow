@@ -1,0 +1,2546 @@
+{
+  "symbol": "XAUUSD",
+  "timeframe": "H1",
+  "total_rows": 10000,
+  "start_date": "2025-01-31 14:00:00 UTC",
+  "end_date": "2026-10-20 14:00:00 UTC",
+  "is_chronological": true,
+  "duplicate_timestamps_count": 0,
+  "duplicate_timestamps": [],
+  "missing_values_by_column": {
+    "time": 0,
+    "open": 0,
+    "high": 0,
+    "low": 0,
+    "close": 0,
+    "tick_volume": 0,
+    "spread": 0,
+    "real_volume": 0
+  },
+  "invalid_ohlc_count": 0,
+  "invalid_ohlc_indices": [],
+  "total_gaps_count": 446,
+  "weekend_gaps_count": 87,
+  "abnormal_gaps_count": 359,
+  "abnormal_gaps": [
+    {
+      "row_index": 31,
+      "start_time": "2025-02-03 21:00:00+00:00",
+      "end_time": "2025-02-03 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 54,
+      "start_time": "2025-02-04 21:00:00+00:00",
+      "end_time": "2025-02-04 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 77,
+      "start_time": "2025-02-05 21:00:00+00:00",
+      "end_time": "2025-02-05 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 100,
+      "start_time": "2025-02-06 21:00:00+00:00",
+      "end_time": "2025-02-06 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 146,
+      "start_time": "2025-02-10 21:00:00+00:00",
+      "end_time": "2025-02-10 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 169,
+      "start_time": "2025-02-11 21:00:00+00:00",
+      "end_time": "2025-02-11 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 192,
+      "start_time": "2025-02-12 21:00:00+00:00",
+      "end_time": "2025-02-12 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 215,
+      "start_time": "2025-02-13 21:00:00+00:00",
+      "end_time": "2025-02-13 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 259,
+      "start_time": "2025-02-17 19:00:00+00:00",
+      "end_time": "2025-02-17 23:00:00+00:00",
+      "duration_minutes": 240.0,
+      "description": "Missing ~4 bars during active market hours"
+    },
+    {
+      "row_index": 282,
+      "start_time": "2025-02-18 21:00:00+00:00",
+      "end_time": "2025-02-18 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 305,
+      "start_time": "2025-02-19 21:00:00+00:00",
+      "end_time": "2025-02-19 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 328,
+      "start_time": "2025-02-20 21:00:00+00:00",
+      "end_time": "2025-02-20 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 374,
+      "start_time": "2025-02-24 21:00:00+00:00",
+      "end_time": "2025-02-24 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 397,
+      "start_time": "2025-02-25 21:00:00+00:00",
+      "end_time": "2025-02-25 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 420,
+      "start_time": "2025-02-26 21:00:00+00:00",
+      "end_time": "2025-02-26 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 443,
+      "start_time": "2025-02-27 21:00:00+00:00",
+      "end_time": "2025-02-27 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 489,
+      "start_time": "2025-03-03 21:00:00+00:00",
+      "end_time": "2025-03-03 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 512,
+      "start_time": "2025-03-04 21:00:00+00:00",
+      "end_time": "2025-03-04 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 535,
+      "start_time": "2025-03-05 21:00:00+00:00",
+      "end_time": "2025-03-05 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 558,
+      "start_time": "2025-03-06 21:00:00+00:00",
+      "end_time": "2025-03-06 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 604,
+      "start_time": "2025-03-10 20:00:00+00:00",
+      "end_time": "2025-03-10 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 627,
+      "start_time": "2025-03-11 20:00:00+00:00",
+      "end_time": "2025-03-11 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 650,
+      "start_time": "2025-03-12 20:00:00+00:00",
+      "end_time": "2025-03-12 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 673,
+      "start_time": "2025-03-13 20:00:00+00:00",
+      "end_time": "2025-03-13 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 719,
+      "start_time": "2025-03-17 20:00:00+00:00",
+      "end_time": "2025-03-17 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 742,
+      "start_time": "2025-03-18 20:00:00+00:00",
+      "end_time": "2025-03-18 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 765,
+      "start_time": "2025-03-19 20:00:00+00:00",
+      "end_time": "2025-03-19 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 788,
+      "start_time": "2025-03-20 20:00:00+00:00",
+      "end_time": "2025-03-20 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 834,
+      "start_time": "2025-03-24 20:00:00+00:00",
+      "end_time": "2025-03-24 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 857,
+      "start_time": "2025-03-25 20:00:00+00:00",
+      "end_time": "2025-03-25 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 880,
+      "start_time": "2025-03-26 20:00:00+00:00",
+      "end_time": "2025-03-26 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 903,
+      "start_time": "2025-03-27 20:00:00+00:00",
+      "end_time": "2025-03-27 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 949,
+      "start_time": "2025-03-31 20:00:00+00:00",
+      "end_time": "2025-03-31 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 972,
+      "start_time": "2025-04-01 20:00:00+00:00",
+      "end_time": "2025-04-01 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 995,
+      "start_time": "2025-04-02 20:00:00+00:00",
+      "end_time": "2025-04-02 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 1018,
+      "start_time": "2025-04-03 20:00:00+00:00",
+      "end_time": "2025-04-03 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 1064,
+      "start_time": "2025-04-07 20:00:00+00:00",
+      "end_time": "2025-04-07 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 1087,
+      "start_time": "2025-04-08 20:00:00+00:00",
+      "end_time": "2025-04-08 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 1110,
+      "start_time": "2025-04-09 20:00:00+00:00",
+      "end_time": "2025-04-09 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 1133,
+      "start_time": "2025-04-10 20:00:00+00:00",
+      "end_time": "2025-04-10 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 1179,
+      "start_time": "2025-04-14 20:00:00+00:00",
+      "end_time": "2025-04-14 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 1202,
+      "start_time": "2025-04-15 20:00:00+00:00",
+      "end_time": "2025-04-15 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 1225,
+      "start_time": "2025-04-16 20:00:00+00:00",
+      "end_time": "2025-04-16 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 1248,
+      "start_time": "2025-04-17 20:00:00+00:00",
+      "end_time": "2025-04-20 22:00:00+00:00",
+      "duration_minutes": 4440.0,
+      "description": "Missing ~74 bars during active market hours"
+    },
+    {
+      "row_index": 1271,
+      "start_time": "2025-04-21 20:00:00+00:00",
+      "end_time": "2025-04-21 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 1294,
+      "start_time": "2025-04-22 20:00:00+00:00",
+      "end_time": "2025-04-22 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 1317,
+      "start_time": "2025-04-23 20:00:00+00:00",
+      "end_time": "2025-04-23 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 1340,
+      "start_time": "2025-04-24 20:00:00+00:00",
+      "end_time": "2025-04-24 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 1386,
+      "start_time": "2025-04-28 20:00:00+00:00",
+      "end_time": "2025-04-28 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 1409,
+      "start_time": "2025-04-29 20:00:00+00:00",
+      "end_time": "2025-04-29 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 1432,
+      "start_time": "2025-04-30 20:00:00+00:00",
+      "end_time": "2025-04-30 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 1455,
+      "start_time": "2025-05-01 20:00:00+00:00",
+      "end_time": "2025-05-01 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 1501,
+      "start_time": "2025-05-05 20:00:00+00:00",
+      "end_time": "2025-05-05 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 1524,
+      "start_time": "2025-05-06 20:00:00+00:00",
+      "end_time": "2025-05-06 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 1547,
+      "start_time": "2025-05-07 20:00:00+00:00",
+      "end_time": "2025-05-07 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 1570,
+      "start_time": "2025-05-08 20:00:00+00:00",
+      "end_time": "2025-05-08 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 1616,
+      "start_time": "2025-05-12 20:00:00+00:00",
+      "end_time": "2025-05-12 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 1639,
+      "start_time": "2025-05-13 20:00:00+00:00",
+      "end_time": "2025-05-13 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 1662,
+      "start_time": "2025-05-14 20:00:00+00:00",
+      "end_time": "2025-05-14 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 1685,
+      "start_time": "2025-05-15 20:00:00+00:00",
+      "end_time": "2025-05-15 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 1731,
+      "start_time": "2025-05-19 20:00:00+00:00",
+      "end_time": "2025-05-19 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 1754,
+      "start_time": "2025-05-20 20:00:00+00:00",
+      "end_time": "2025-05-20 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 1777,
+      "start_time": "2025-05-21 20:00:00+00:00",
+      "end_time": "2025-05-21 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 1800,
+      "start_time": "2025-05-22 20:00:00+00:00",
+      "end_time": "2025-05-22 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 1844,
+      "start_time": "2025-05-26 18:00:00+00:00",
+      "end_time": "2025-05-26 22:00:00+00:00",
+      "duration_minutes": 240.0,
+      "description": "Missing ~4 bars during active market hours"
+    },
+    {
+      "row_index": 1867,
+      "start_time": "2025-05-27 20:00:00+00:00",
+      "end_time": "2025-05-27 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 1890,
+      "start_time": "2025-05-28 20:00:00+00:00",
+      "end_time": "2025-05-28 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 1913,
+      "start_time": "2025-05-29 20:00:00+00:00",
+      "end_time": "2025-05-29 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 1959,
+      "start_time": "2025-06-02 20:00:00+00:00",
+      "end_time": "2025-06-02 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 1982,
+      "start_time": "2025-06-03 20:00:00+00:00",
+      "end_time": "2025-06-03 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 2005,
+      "start_time": "2025-06-04 20:00:00+00:00",
+      "end_time": "2025-06-04 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 2028,
+      "start_time": "2025-06-05 20:00:00+00:00",
+      "end_time": "2025-06-05 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 2074,
+      "start_time": "2025-06-09 20:00:00+00:00",
+      "end_time": "2025-06-09 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 2097,
+      "start_time": "2025-06-10 20:00:00+00:00",
+      "end_time": "2025-06-10 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 2120,
+      "start_time": "2025-06-11 20:00:00+00:00",
+      "end_time": "2025-06-11 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 2143,
+      "start_time": "2025-06-12 20:00:00+00:00",
+      "end_time": "2025-06-12 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 2189,
+      "start_time": "2025-06-16 20:00:00+00:00",
+      "end_time": "2025-06-16 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 2212,
+      "start_time": "2025-06-17 20:00:00+00:00",
+      "end_time": "2025-06-17 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 2235,
+      "start_time": "2025-06-18 20:00:00+00:00",
+      "end_time": "2025-06-18 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 2256,
+      "start_time": "2025-06-19 18:00:00+00:00",
+      "end_time": "2025-06-19 22:00:00+00:00",
+      "duration_minutes": 240.0,
+      "description": "Missing ~4 bars during active market hours"
+    },
+    {
+      "row_index": 2302,
+      "start_time": "2025-06-23 20:00:00+00:00",
+      "end_time": "2025-06-23 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 2325,
+      "start_time": "2025-06-24 20:00:00+00:00",
+      "end_time": "2025-06-24 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 2348,
+      "start_time": "2025-06-25 20:00:00+00:00",
+      "end_time": "2025-06-25 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 2371,
+      "start_time": "2025-06-26 20:00:00+00:00",
+      "end_time": "2025-06-26 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 2417,
+      "start_time": "2025-06-30 20:00:00+00:00",
+      "end_time": "2025-06-30 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 2440,
+      "start_time": "2025-07-01 20:00:00+00:00",
+      "end_time": "2025-07-01 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 2463,
+      "start_time": "2025-07-02 20:00:00+00:00",
+      "end_time": "2025-07-02 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 2466,
+      "start_time": "2025-07-03 00:00:00+00:00",
+      "end_time": "2025-07-03 09:00:00+00:00",
+      "duration_minutes": 540.0,
+      "description": "Missing ~9 bars during active market hours"
+    },
+    {
+      "row_index": 2478,
+      "start_time": "2025-07-03 20:00:00+00:00",
+      "end_time": "2025-07-03 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 2482,
+      "start_time": "2025-07-04 01:00:00+00:00",
+      "end_time": "2025-07-04 07:00:00+00:00",
+      "duration_minutes": 360.0,
+      "description": "Missing ~6 bars during active market hours"
+    },
+    {
+      "row_index": 2492,
+      "start_time": "2025-07-04 16:00:00+00:00",
+      "end_time": "2025-07-06 22:00:00+00:00",
+      "duration_minutes": 3240.0,
+      "description": "Missing ~54 bars during active market hours"
+    },
+    {
+      "row_index": 2515,
+      "start_time": "2025-07-07 20:00:00+00:00",
+      "end_time": "2025-07-07 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 2538,
+      "start_time": "2025-07-08 20:00:00+00:00",
+      "end_time": "2025-07-08 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 2561,
+      "start_time": "2025-07-09 20:00:00+00:00",
+      "end_time": "2025-07-09 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 2584,
+      "start_time": "2025-07-10 20:00:00+00:00",
+      "end_time": "2025-07-10 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 2630,
+      "start_time": "2025-07-14 20:00:00+00:00",
+      "end_time": "2025-07-14 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 2653,
+      "start_time": "2025-07-15 20:00:00+00:00",
+      "end_time": "2025-07-15 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 2676,
+      "start_time": "2025-07-16 20:00:00+00:00",
+      "end_time": "2025-07-16 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 2699,
+      "start_time": "2025-07-17 20:00:00+00:00",
+      "end_time": "2025-07-17 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 2745,
+      "start_time": "2025-07-21 20:00:00+00:00",
+      "end_time": "2025-07-21 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 2768,
+      "start_time": "2025-07-22 20:00:00+00:00",
+      "end_time": "2025-07-22 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 2791,
+      "start_time": "2025-07-23 20:00:00+00:00",
+      "end_time": "2025-07-23 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 2814,
+      "start_time": "2025-07-24 20:00:00+00:00",
+      "end_time": "2025-07-24 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 2860,
+      "start_time": "2025-07-28 20:00:00+00:00",
+      "end_time": "2025-07-28 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 2883,
+      "start_time": "2025-07-29 20:00:00+00:00",
+      "end_time": "2025-07-29 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 2906,
+      "start_time": "2025-07-30 20:00:00+00:00",
+      "end_time": "2025-07-30 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 2929,
+      "start_time": "2025-07-31 20:00:00+00:00",
+      "end_time": "2025-07-31 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 2975,
+      "start_time": "2025-08-04 20:00:00+00:00",
+      "end_time": "2025-08-04 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 2998,
+      "start_time": "2025-08-05 20:00:00+00:00",
+      "end_time": "2025-08-05 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 3021,
+      "start_time": "2025-08-06 20:00:00+00:00",
+      "end_time": "2025-08-06 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 3044,
+      "start_time": "2025-08-07 20:00:00+00:00",
+      "end_time": "2025-08-07 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 3090,
+      "start_time": "2025-08-11 20:00:00+00:00",
+      "end_time": "2025-08-11 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 3113,
+      "start_time": "2025-08-12 20:00:00+00:00",
+      "end_time": "2025-08-12 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 3136,
+      "start_time": "2025-08-13 20:00:00+00:00",
+      "end_time": "2025-08-13 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 3159,
+      "start_time": "2025-08-14 20:00:00+00:00",
+      "end_time": "2025-08-14 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 3205,
+      "start_time": "2025-08-18 20:00:00+00:00",
+      "end_time": "2025-08-18 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 3228,
+      "start_time": "2025-08-19 20:00:00+00:00",
+      "end_time": "2025-08-19 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 3251,
+      "start_time": "2025-08-20 20:00:00+00:00",
+      "end_time": "2025-08-20 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 3274,
+      "start_time": "2025-08-21 20:00:00+00:00",
+      "end_time": "2025-08-21 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 3320,
+      "start_time": "2025-08-25 20:00:00+00:00",
+      "end_time": "2025-08-25 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 3343,
+      "start_time": "2025-08-26 20:00:00+00:00",
+      "end_time": "2025-08-26 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 3366,
+      "start_time": "2025-08-27 20:00:00+00:00",
+      "end_time": "2025-08-27 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 3389,
+      "start_time": "2025-08-28 20:00:00+00:00",
+      "end_time": "2025-08-28 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 3433,
+      "start_time": "2025-09-01 18:00:00+00:00",
+      "end_time": "2025-09-01 22:00:00+00:00",
+      "duration_minutes": 240.0,
+      "description": "Missing ~4 bars during active market hours"
+    },
+    {
+      "row_index": 3456,
+      "start_time": "2025-09-02 20:00:00+00:00",
+      "end_time": "2025-09-02 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 3479,
+      "start_time": "2025-09-03 20:00:00+00:00",
+      "end_time": "2025-09-03 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 3502,
+      "start_time": "2025-09-04 20:00:00+00:00",
+      "end_time": "2025-09-04 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 3548,
+      "start_time": "2025-09-08 20:00:00+00:00",
+      "end_time": "2025-09-08 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 3571,
+      "start_time": "2025-09-09 20:00:00+00:00",
+      "end_time": "2025-09-09 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 3594,
+      "start_time": "2025-09-10 20:00:00+00:00",
+      "end_time": "2025-09-10 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 3617,
+      "start_time": "2025-09-11 20:00:00+00:00",
+      "end_time": "2025-09-11 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 3663,
+      "start_time": "2025-09-15 20:00:00+00:00",
+      "end_time": "2025-09-15 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 3686,
+      "start_time": "2025-09-16 20:00:00+00:00",
+      "end_time": "2025-09-16 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 3709,
+      "start_time": "2025-09-17 20:00:00+00:00",
+      "end_time": "2025-09-17 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 3732,
+      "start_time": "2025-09-18 20:00:00+00:00",
+      "end_time": "2025-09-18 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 3778,
+      "start_time": "2025-09-22 20:00:00+00:00",
+      "end_time": "2025-09-22 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 3801,
+      "start_time": "2025-09-23 20:00:00+00:00",
+      "end_time": "2025-09-23 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 3824,
+      "start_time": "2025-09-24 20:00:00+00:00",
+      "end_time": "2025-09-24 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 3847,
+      "start_time": "2025-09-25 20:00:00+00:00",
+      "end_time": "2025-09-25 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 3893,
+      "start_time": "2025-09-29 20:00:00+00:00",
+      "end_time": "2025-09-29 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 3916,
+      "start_time": "2025-09-30 20:00:00+00:00",
+      "end_time": "2025-09-30 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 3939,
+      "start_time": "2025-10-01 20:00:00+00:00",
+      "end_time": "2025-10-01 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 3962,
+      "start_time": "2025-10-02 20:00:00+00:00",
+      "end_time": "2025-10-02 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 4008,
+      "start_time": "2025-10-06 20:00:00+00:00",
+      "end_time": "2025-10-06 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 4031,
+      "start_time": "2025-10-07 20:00:00+00:00",
+      "end_time": "2025-10-07 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 4054,
+      "start_time": "2025-10-08 20:00:00+00:00",
+      "end_time": "2025-10-08 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 4077,
+      "start_time": "2025-10-09 20:00:00+00:00",
+      "end_time": "2025-10-09 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 4123,
+      "start_time": "2025-10-13 20:00:00+00:00",
+      "end_time": "2025-10-13 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 4146,
+      "start_time": "2025-10-14 20:00:00+00:00",
+      "end_time": "2025-10-14 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 4169,
+      "start_time": "2025-10-15 20:00:00+00:00",
+      "end_time": "2025-10-15 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 4192,
+      "start_time": "2025-10-16 20:00:00+00:00",
+      "end_time": "2025-10-16 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 4238,
+      "start_time": "2025-10-20 20:00:00+00:00",
+      "end_time": "2025-10-20 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 4261,
+      "start_time": "2025-10-21 20:00:00+00:00",
+      "end_time": "2025-10-21 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 4284,
+      "start_time": "2025-10-22 20:00:00+00:00",
+      "end_time": "2025-10-22 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 4304,
+      "start_time": "2025-10-23 17:00:00+00:00",
+      "end_time": "2025-10-23 19:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 4306,
+      "start_time": "2025-10-23 20:00:00+00:00",
+      "end_time": "2025-10-23 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 4352,
+      "start_time": "2025-10-27 20:00:00+00:00",
+      "end_time": "2025-10-27 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 4375,
+      "start_time": "2025-10-28 20:00:00+00:00",
+      "end_time": "2025-10-28 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 4398,
+      "start_time": "2025-10-29 20:00:00+00:00",
+      "end_time": "2025-10-29 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 4421,
+      "start_time": "2025-10-30 20:00:00+00:00",
+      "end_time": "2025-10-30 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 4467,
+      "start_time": "2025-11-03 21:00:00+00:00",
+      "end_time": "2025-11-03 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 4490,
+      "start_time": "2025-11-04 21:00:00+00:00",
+      "end_time": "2025-11-04 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 4513,
+      "start_time": "2025-11-05 21:00:00+00:00",
+      "end_time": "2025-11-05 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 4536,
+      "start_time": "2025-11-06 21:00:00+00:00",
+      "end_time": "2025-11-06 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 4582,
+      "start_time": "2025-11-10 21:00:00+00:00",
+      "end_time": "2025-11-10 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 4605,
+      "start_time": "2025-11-11 21:00:00+00:00",
+      "end_time": "2025-11-11 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 4628,
+      "start_time": "2025-11-12 21:00:00+00:00",
+      "end_time": "2025-11-12 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 4651,
+      "start_time": "2025-11-13 21:00:00+00:00",
+      "end_time": "2025-11-13 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 4697,
+      "start_time": "2025-11-17 21:00:00+00:00",
+      "end_time": "2025-11-17 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 4720,
+      "start_time": "2025-11-18 21:00:00+00:00",
+      "end_time": "2025-11-18 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 4743,
+      "start_time": "2025-11-19 21:00:00+00:00",
+      "end_time": "2025-11-19 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 4766,
+      "start_time": "2025-11-20 21:00:00+00:00",
+      "end_time": "2025-11-20 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 4812,
+      "start_time": "2025-11-24 21:00:00+00:00",
+      "end_time": "2025-11-24 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 4835,
+      "start_time": "2025-11-25 21:00:00+00:00",
+      "end_time": "2025-11-25 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 4858,
+      "start_time": "2025-11-26 21:00:00+00:00",
+      "end_time": "2025-11-26 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 4881,
+      "start_time": "2025-11-27 21:00:00+00:00",
+      "end_time": "2025-11-27 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 4925,
+      "start_time": "2025-12-01 21:00:00+00:00",
+      "end_time": "2025-12-01 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 4948,
+      "start_time": "2025-12-02 21:00:00+00:00",
+      "end_time": "2025-12-02 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 4971,
+      "start_time": "2025-12-03 21:00:00+00:00",
+      "end_time": "2025-12-03 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 4994,
+      "start_time": "2025-12-04 21:00:00+00:00",
+      "end_time": "2025-12-04 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 5040,
+      "start_time": "2025-12-08 21:00:00+00:00",
+      "end_time": "2025-12-08 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 5063,
+      "start_time": "2025-12-09 21:00:00+00:00",
+      "end_time": "2025-12-09 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 5086,
+      "start_time": "2025-12-10 21:00:00+00:00",
+      "end_time": "2025-12-10 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 5109,
+      "start_time": "2025-12-11 21:00:00+00:00",
+      "end_time": "2025-12-11 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 5155,
+      "start_time": "2025-12-15 21:00:00+00:00",
+      "end_time": "2025-12-15 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 5178,
+      "start_time": "2025-12-16 21:00:00+00:00",
+      "end_time": "2025-12-16 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 5201,
+      "start_time": "2025-12-17 21:00:00+00:00",
+      "end_time": "2025-12-17 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 5224,
+      "start_time": "2025-12-18 21:00:00+00:00",
+      "end_time": "2025-12-18 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 5270,
+      "start_time": "2025-12-22 21:00:00+00:00",
+      "end_time": "2025-12-22 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 5293,
+      "start_time": "2025-12-23 21:00:00+00:00",
+      "end_time": "2025-12-23 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 5313,
+      "start_time": "2025-12-24 18:00:00+00:00",
+      "end_time": "2025-12-25 23:00:00+00:00",
+      "duration_minutes": 1740.0,
+      "description": "Missing ~29 bars during active market hours"
+    },
+    {
+      "row_index": 5359,
+      "start_time": "2025-12-29 21:00:00+00:00",
+      "end_time": "2025-12-29 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 5382,
+      "start_time": "2025-12-30 21:00:00+00:00",
+      "end_time": "2025-12-30 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 5405,
+      "start_time": "2025-12-31 21:00:00+00:00",
+      "end_time": "2026-01-01 23:00:00+00:00",
+      "duration_minutes": 1560.0,
+      "description": "Missing ~26 bars during active market hours"
+    },
+    {
+      "row_index": 5451,
+      "start_time": "2026-01-05 21:00:00+00:00",
+      "end_time": "2026-01-05 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 5474,
+      "start_time": "2026-01-06 21:00:00+00:00",
+      "end_time": "2026-01-06 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 5497,
+      "start_time": "2026-01-07 21:00:00+00:00",
+      "end_time": "2026-01-07 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 5520,
+      "start_time": "2026-01-08 21:00:00+00:00",
+      "end_time": "2026-01-08 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 5566,
+      "start_time": "2026-01-12 21:00:00+00:00",
+      "end_time": "2026-01-12 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 5589,
+      "start_time": "2026-01-13 21:00:00+00:00",
+      "end_time": "2026-01-13 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 5612,
+      "start_time": "2026-01-14 21:00:00+00:00",
+      "end_time": "2026-01-14 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 5635,
+      "start_time": "2026-01-15 21:00:00+00:00",
+      "end_time": "2026-01-15 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 5679,
+      "start_time": "2026-01-19 19:00:00+00:00",
+      "end_time": "2026-01-19 23:00:00+00:00",
+      "duration_minutes": 240.0,
+      "description": "Missing ~4 bars during active market hours"
+    },
+    {
+      "row_index": 5702,
+      "start_time": "2026-01-20 21:00:00+00:00",
+      "end_time": "2026-01-20 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 5725,
+      "start_time": "2026-01-21 21:00:00+00:00",
+      "end_time": "2026-01-21 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 5748,
+      "start_time": "2026-01-22 21:00:00+00:00",
+      "end_time": "2026-01-22 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 5794,
+      "start_time": "2026-01-26 21:00:00+00:00",
+      "end_time": "2026-01-26 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 5817,
+      "start_time": "2026-01-27 21:00:00+00:00",
+      "end_time": "2026-01-27 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 5840,
+      "start_time": "2026-01-28 21:00:00+00:00",
+      "end_time": "2026-01-28 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 5863,
+      "start_time": "2026-01-29 21:00:00+00:00",
+      "end_time": "2026-01-29 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 5909,
+      "start_time": "2026-02-02 21:00:00+00:00",
+      "end_time": "2026-02-02 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 5932,
+      "start_time": "2026-02-03 21:00:00+00:00",
+      "end_time": "2026-02-03 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 5955,
+      "start_time": "2026-02-04 21:00:00+00:00",
+      "end_time": "2026-02-04 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 5978,
+      "start_time": "2026-02-05 21:00:00+00:00",
+      "end_time": "2026-02-05 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 6024,
+      "start_time": "2026-02-09 21:00:00+00:00",
+      "end_time": "2026-02-09 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 6047,
+      "start_time": "2026-02-10 21:00:00+00:00",
+      "end_time": "2026-02-10 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 6070,
+      "start_time": "2026-02-11 21:00:00+00:00",
+      "end_time": "2026-02-11 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 6093,
+      "start_time": "2026-02-12 21:00:00+00:00",
+      "end_time": "2026-02-12 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 6137,
+      "start_time": "2026-02-16 19:00:00+00:00",
+      "end_time": "2026-02-16 23:00:00+00:00",
+      "duration_minutes": 240.0,
+      "description": "Missing ~4 bars during active market hours"
+    },
+    {
+      "row_index": 6160,
+      "start_time": "2026-02-17 21:00:00+00:00",
+      "end_time": "2026-02-17 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 6183,
+      "start_time": "2026-02-18 21:00:00+00:00",
+      "end_time": "2026-02-18 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 6206,
+      "start_time": "2026-02-19 21:00:00+00:00",
+      "end_time": "2026-02-19 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 6252,
+      "start_time": "2026-02-23 21:00:00+00:00",
+      "end_time": "2026-02-23 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 6275,
+      "start_time": "2026-02-24 21:00:00+00:00",
+      "end_time": "2026-02-24 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 6298,
+      "start_time": "2026-02-25 21:00:00+00:00",
+      "end_time": "2026-02-25 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 6319,
+      "start_time": "2026-02-26 19:00:00+00:00",
+      "end_time": "2026-02-27 01:00:00+00:00",
+      "duration_minutes": 360.0,
+      "description": "Missing ~6 bars during active market hours"
+    },
+    {
+      "row_index": 6363,
+      "start_time": "2026-03-02 21:00:00+00:00",
+      "end_time": "2026-03-02 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 6386,
+      "start_time": "2026-03-03 21:00:00+00:00",
+      "end_time": "2026-03-03 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 6409,
+      "start_time": "2026-03-04 21:00:00+00:00",
+      "end_time": "2026-03-04 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 6432,
+      "start_time": "2026-03-05 21:00:00+00:00",
+      "end_time": "2026-03-05 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 6478,
+      "start_time": "2026-03-09 21:00:00+00:00",
+      "end_time": "2026-03-09 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 6501,
+      "start_time": "2026-03-10 21:00:00+00:00",
+      "end_time": "2026-03-10 23:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 6523,
+      "start_time": "2026-03-11 20:00:00+00:00",
+      "end_time": "2026-03-11 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 6546,
+      "start_time": "2026-03-12 20:00:00+00:00",
+      "end_time": "2026-03-12 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 6592,
+      "start_time": "2026-03-16 20:00:00+00:00",
+      "end_time": "2026-03-16 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 6615,
+      "start_time": "2026-03-17 20:00:00+00:00",
+      "end_time": "2026-03-17 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 6638,
+      "start_time": "2026-03-18 20:00:00+00:00",
+      "end_time": "2026-03-18 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 6661,
+      "start_time": "2026-03-19 20:00:00+00:00",
+      "end_time": "2026-03-19 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 6707,
+      "start_time": "2026-03-23 20:00:00+00:00",
+      "end_time": "2026-03-23 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 6730,
+      "start_time": "2026-03-24 20:00:00+00:00",
+      "end_time": "2026-03-24 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 6753,
+      "start_time": "2026-03-25 20:00:00+00:00",
+      "end_time": "2026-03-25 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 6776,
+      "start_time": "2026-03-26 20:00:00+00:00",
+      "end_time": "2026-03-26 22:00:00+00:00",
+      "duration_minutes": 120.0,
+      "description": "Missing ~2 bars during active market hours"
+    },
+    {
+      "row_index": 6821,
+      "start_time": "2026-03-30 19:00:00+00:00",
+      "end_time": "2026-03-30 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 6843,
+      "start_time": "2026-03-31 19:00:00+00:00",
+      "end_time": "2026-03-31 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 6865,
+      "start_time": "2026-04-01 19:00:00+00:00",
+      "end_time": "2026-04-01 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 6887,
+      "start_time": "2026-04-02 19:00:00+00:00",
+      "end_time": "2026-04-05 22:00:00+00:00",
+      "duration_minutes": 4500.0,
+      "description": "Missing ~75 bars during active market hours"
+    },
+    {
+      "row_index": 6909,
+      "start_time": "2026-04-06 19:00:00+00:00",
+      "end_time": "2026-04-06 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 6931,
+      "start_time": "2026-04-07 19:00:00+00:00",
+      "end_time": "2026-04-07 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 6953,
+      "start_time": "2026-04-08 19:00:00+00:00",
+      "end_time": "2026-04-08 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 6975,
+      "start_time": "2026-04-09 19:00:00+00:00",
+      "end_time": "2026-04-09 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 7019,
+      "start_time": "2026-04-13 19:00:00+00:00",
+      "end_time": "2026-04-13 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 7041,
+      "start_time": "2026-04-14 19:00:00+00:00",
+      "end_time": "2026-04-14 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 7063,
+      "start_time": "2026-04-15 19:00:00+00:00",
+      "end_time": "2026-04-15 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 7085,
+      "start_time": "2026-04-16 19:00:00+00:00",
+      "end_time": "2026-04-16 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 7129,
+      "start_time": "2026-04-20 19:00:00+00:00",
+      "end_time": "2026-04-20 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 7151,
+      "start_time": "2026-04-21 19:00:00+00:00",
+      "end_time": "2026-04-21 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 7173,
+      "start_time": "2026-04-22 19:00:00+00:00",
+      "end_time": "2026-04-22 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 7195,
+      "start_time": "2026-04-23 19:00:00+00:00",
+      "end_time": "2026-04-23 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 7239,
+      "start_time": "2026-04-27 19:00:00+00:00",
+      "end_time": "2026-04-27 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 7261,
+      "start_time": "2026-04-28 19:00:00+00:00",
+      "end_time": "2026-04-28 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 7283,
+      "start_time": "2026-04-29 19:00:00+00:00",
+      "end_time": "2026-04-29 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 7305,
+      "start_time": "2026-04-30 19:00:00+00:00",
+      "end_time": "2026-04-30 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 7349,
+      "start_time": "2026-05-04 19:00:00+00:00",
+      "end_time": "2026-05-04 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 7371,
+      "start_time": "2026-05-05 19:00:00+00:00",
+      "end_time": "2026-05-05 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 7393,
+      "start_time": "2026-05-06 19:00:00+00:00",
+      "end_time": "2026-05-06 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 7415,
+      "start_time": "2026-05-07 19:00:00+00:00",
+      "end_time": "2026-05-07 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 7459,
+      "start_time": "2026-05-11 19:00:00+00:00",
+      "end_time": "2026-05-11 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 7481,
+      "start_time": "2026-05-12 19:00:00+00:00",
+      "end_time": "2026-05-12 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 7503,
+      "start_time": "2026-05-13 19:00:00+00:00",
+      "end_time": "2026-05-13 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 7525,
+      "start_time": "2026-05-14 19:00:00+00:00",
+      "end_time": "2026-05-14 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 7569,
+      "start_time": "2026-05-18 19:00:00+00:00",
+      "end_time": "2026-05-18 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 7591,
+      "start_time": "2026-05-19 19:00:00+00:00",
+      "end_time": "2026-05-19 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 7613,
+      "start_time": "2026-05-20 19:00:00+00:00",
+      "end_time": "2026-05-20 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 7635,
+      "start_time": "2026-05-21 19:00:00+00:00",
+      "end_time": "2026-05-21 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 7678,
+      "start_time": "2026-05-25 18:00:00+00:00",
+      "end_time": "2026-05-25 22:00:00+00:00",
+      "duration_minutes": 240.0,
+      "description": "Missing ~4 bars during active market hours"
+    },
+    {
+      "row_index": 7700,
+      "start_time": "2026-05-26 19:00:00+00:00",
+      "end_time": "2026-05-26 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 7722,
+      "start_time": "2026-05-27 19:00:00+00:00",
+      "end_time": "2026-05-27 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 7744,
+      "start_time": "2026-05-28 19:00:00+00:00",
+      "end_time": "2026-05-28 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 7788,
+      "start_time": "2026-06-01 19:00:00+00:00",
+      "end_time": "2026-06-01 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 7810,
+      "start_time": "2026-06-02 19:00:00+00:00",
+      "end_time": "2026-06-02 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 7832,
+      "start_time": "2026-06-03 19:00:00+00:00",
+      "end_time": "2026-06-03 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 7854,
+      "start_time": "2026-06-04 19:00:00+00:00",
+      "end_time": "2026-06-04 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 7898,
+      "start_time": "2026-06-08 19:00:00+00:00",
+      "end_time": "2026-06-08 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 7920,
+      "start_time": "2026-06-09 19:00:00+00:00",
+      "end_time": "2026-06-09 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 7942,
+      "start_time": "2026-06-10 19:00:00+00:00",
+      "end_time": "2026-06-10 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 7964,
+      "start_time": "2026-06-11 19:00:00+00:00",
+      "end_time": "2026-06-11 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 8008,
+      "start_time": "2026-06-15 19:00:00+00:00",
+      "end_time": "2026-06-15 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 8030,
+      "start_time": "2026-06-16 19:00:00+00:00",
+      "end_time": "2026-06-16 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 8052,
+      "start_time": "2026-06-17 19:00:00+00:00",
+      "end_time": "2026-06-17 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 8074,
+      "start_time": "2026-06-18 19:00:00+00:00",
+      "end_time": "2026-06-18 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 8116,
+      "start_time": "2026-06-22 19:00:00+00:00",
+      "end_time": "2026-06-22 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 8138,
+      "start_time": "2026-06-23 19:00:00+00:00",
+      "end_time": "2026-06-23 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 8160,
+      "start_time": "2026-06-24 19:00:00+00:00",
+      "end_time": "2026-06-24 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 8182,
+      "start_time": "2026-06-25 19:00:00+00:00",
+      "end_time": "2026-06-25 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 8226,
+      "start_time": "2026-06-29 19:00:00+00:00",
+      "end_time": "2026-06-29 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 8248,
+      "start_time": "2026-06-30 19:00:00+00:00",
+      "end_time": "2026-06-30 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 8270,
+      "start_time": "2026-07-01 19:00:00+00:00",
+      "end_time": "2026-07-01 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 8292,
+      "start_time": "2026-07-02 19:00:00+00:00",
+      "end_time": "2026-07-02 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 8334,
+      "start_time": "2026-07-06 19:00:00+00:00",
+      "end_time": "2026-07-06 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 8356,
+      "start_time": "2026-07-07 19:00:00+00:00",
+      "end_time": "2026-07-07 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 8378,
+      "start_time": "2026-07-08 19:00:00+00:00",
+      "end_time": "2026-07-08 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 8400,
+      "start_time": "2026-07-09 19:00:00+00:00",
+      "end_time": "2026-07-09 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 8444,
+      "start_time": "2026-07-13 19:00:00+00:00",
+      "end_time": "2026-07-13 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 8466,
+      "start_time": "2026-07-14 19:00:00+00:00",
+      "end_time": "2026-07-14 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 8488,
+      "start_time": "2026-07-15 19:00:00+00:00",
+      "end_time": "2026-07-15 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 8510,
+      "start_time": "2026-07-16 19:00:00+00:00",
+      "end_time": "2026-07-16 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 8554,
+      "start_time": "2026-07-20 19:00:00+00:00",
+      "end_time": "2026-07-20 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 8576,
+      "start_time": "2026-07-21 19:00:00+00:00",
+      "end_time": "2026-07-21 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 8598,
+      "start_time": "2026-07-22 19:00:00+00:00",
+      "end_time": "2026-07-22 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 8620,
+      "start_time": "2026-07-23 19:00:00+00:00",
+      "end_time": "2026-07-23 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 8664,
+      "start_time": "2026-07-27 19:00:00+00:00",
+      "end_time": "2026-07-27 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 8686,
+      "start_time": "2026-07-28 19:00:00+00:00",
+      "end_time": "2026-07-28 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 8708,
+      "start_time": "2026-07-29 19:00:00+00:00",
+      "end_time": "2026-07-29 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 8730,
+      "start_time": "2026-07-30 19:00:00+00:00",
+      "end_time": "2026-07-30 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 8774,
+      "start_time": "2026-08-03 19:00:00+00:00",
+      "end_time": "2026-08-03 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 8796,
+      "start_time": "2026-08-04 19:00:00+00:00",
+      "end_time": "2026-08-04 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 8818,
+      "start_time": "2026-08-05 19:00:00+00:00",
+      "end_time": "2026-08-05 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 8840,
+      "start_time": "2026-08-06 19:00:00+00:00",
+      "end_time": "2026-08-06 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 8884,
+      "start_time": "2026-08-10 19:00:00+00:00",
+      "end_time": "2026-08-10 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 8906,
+      "start_time": "2026-08-11 19:00:00+00:00",
+      "end_time": "2026-08-11 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 8928,
+      "start_time": "2026-08-12 19:00:00+00:00",
+      "end_time": "2026-08-12 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 8950,
+      "start_time": "2026-08-13 19:00:00+00:00",
+      "end_time": "2026-08-13 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 8994,
+      "start_time": "2026-08-17 19:00:00+00:00",
+      "end_time": "2026-08-17 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 9016,
+      "start_time": "2026-08-18 19:00:00+00:00",
+      "end_time": "2026-08-18 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 9038,
+      "start_time": "2026-08-19 19:00:00+00:00",
+      "end_time": "2026-08-19 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 9060,
+      "start_time": "2026-08-20 19:00:00+00:00",
+      "end_time": "2026-08-20 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 9104,
+      "start_time": "2026-08-24 19:00:00+00:00",
+      "end_time": "2026-08-24 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 9126,
+      "start_time": "2026-08-25 19:00:00+00:00",
+      "end_time": "2026-08-25 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 9148,
+      "start_time": "2026-08-26 19:00:00+00:00",
+      "end_time": "2026-08-26 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 9170,
+      "start_time": "2026-08-27 19:00:00+00:00",
+      "end_time": "2026-08-27 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 9214,
+      "start_time": "2026-08-31 19:00:00+00:00",
+      "end_time": "2026-08-31 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 9236,
+      "start_time": "2026-09-01 19:00:00+00:00",
+      "end_time": "2026-09-01 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 9258,
+      "start_time": "2026-09-02 19:00:00+00:00",
+      "end_time": "2026-09-02 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 9280,
+      "start_time": "2026-09-03 19:00:00+00:00",
+      "end_time": "2026-09-03 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 9323,
+      "start_time": "2026-09-07 18:00:00+00:00",
+      "end_time": "2026-09-07 22:00:00+00:00",
+      "duration_minutes": 240.0,
+      "description": "Missing ~4 bars during active market hours"
+    },
+    {
+      "row_index": 9345,
+      "start_time": "2026-09-08 19:00:00+00:00",
+      "end_time": "2026-09-08 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 9367,
+      "start_time": "2026-09-09 19:00:00+00:00",
+      "end_time": "2026-09-09 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 9389,
+      "start_time": "2026-09-10 19:00:00+00:00",
+      "end_time": "2026-09-10 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 9433,
+      "start_time": "2026-09-14 19:00:00+00:00",
+      "end_time": "2026-09-14 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 9455,
+      "start_time": "2026-09-15 19:00:00+00:00",
+      "end_time": "2026-09-15 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 9477,
+      "start_time": "2026-09-16 19:00:00+00:00",
+      "end_time": "2026-09-16 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 9499,
+      "start_time": "2026-09-17 19:00:00+00:00",
+      "end_time": "2026-09-17 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 9543,
+      "start_time": "2026-09-21 19:00:00+00:00",
+      "end_time": "2026-09-21 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 9565,
+      "start_time": "2026-09-22 19:00:00+00:00",
+      "end_time": "2026-09-22 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 9587,
+      "start_time": "2026-09-23 19:00:00+00:00",
+      "end_time": "2026-09-23 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 9609,
+      "start_time": "2026-09-24 19:00:00+00:00",
+      "end_time": "2026-09-24 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 9653,
+      "start_time": "2026-09-28 19:00:00+00:00",
+      "end_time": "2026-09-28 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 9675,
+      "start_time": "2026-09-29 19:00:00+00:00",
+      "end_time": "2026-09-29 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 9697,
+      "start_time": "2026-09-30 19:00:00+00:00",
+      "end_time": "2026-09-30 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 9719,
+      "start_time": "2026-10-01 19:00:00+00:00",
+      "end_time": "2026-10-01 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 9763,
+      "start_time": "2026-10-05 19:00:00+00:00",
+      "end_time": "2026-10-05 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 9785,
+      "start_time": "2026-10-06 19:00:00+00:00",
+      "end_time": "2026-10-06 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 9807,
+      "start_time": "2026-10-07 19:00:00+00:00",
+      "end_time": "2026-10-07 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 9829,
+      "start_time": "2026-10-08 19:00:00+00:00",
+      "end_time": "2026-10-08 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 9873,
+      "start_time": "2026-10-12 19:00:00+00:00",
+      "end_time": "2026-10-12 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 9895,
+      "start_time": "2026-10-13 19:00:00+00:00",
+      "end_time": "2026-10-13 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 9917,
+      "start_time": "2026-10-14 19:00:00+00:00",
+      "end_time": "2026-10-14 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 9939,
+      "start_time": "2026-10-15 19:00:00+00:00",
+      "end_time": "2026-10-15 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 9983,
+      "start_time": "2026-10-19 19:00:00+00:00",
+      "end_time": "2026-10-19 22:00:00+00:00",
+      "duration_minutes": 180.0,
+      "description": "Missing ~3 bars during active market hours"
+    }
+  ],
+  "incomplete_candle_detected": false,
+  "status": "PASSED_WITH_WARNINGS",
+  "warnings": [
+    "Detected 359 abnormal intraday/weekday gap(s) exceeding normal H1 interval."
+  ],
+  "errors": []
+}

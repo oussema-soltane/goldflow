@@ -1,0 +1,112 @@
+{
+  "symbol": "XAUUSD",
+  "timeframe": "H4",
+  "total_rows": 5000,
+  "start_date": "2023-08-11 16:00:00 UTC",
+  "end_date": "2026-11-04 08:00:00 UTC",
+  "is_chronological": true,
+  "duplicate_timestamps_count": 0,
+  "duplicate_timestamps": [],
+  "missing_values_by_column": {
+    "time": 0,
+    "open": 0,
+    "high": 0,
+    "low": 0,
+    "close": 0,
+    "tick_volume": 0,
+    "spread": 0,
+    "real_volume": 0,
+    "time_raw_epoch": 0,
+    "timestamp_correction_applied_seconds": 0
+  },
+  "invalid_ohlc_count": 0,
+  "invalid_ohlc_indices": [],
+  "total_gaps_count": 174,
+  "weekend_gaps_count": 163,
+  "abnormal_gaps_count": 11,
+  "abnormal_gaps": [
+    {
+      "row_index": 572,
+      "start_time": "2023-12-22 20:00:00+00:00",
+      "end_time": "2023-12-26 00:00:00+00:00",
+      "duration_minutes": 4560.0,
+      "description": "Missing ~19 bars during active market hours"
+    },
+    {
+      "row_index": 596,
+      "start_time": "2023-12-29 20:00:00+00:00",
+      "end_time": "2024-01-02 00:00:00+00:00",
+      "duration_minutes": 4560.0,
+      "description": "Missing ~19 bars during active market hours"
+    },
+    {
+      "row_index": 974,
+      "start_time": "2024-03-28 20:00:00+00:00",
+      "end_time": "2024-04-01 00:00:00+00:00",
+      "duration_minutes": 4560.0,
+      "description": "Missing ~19 bars during active market hours"
+    },
+    {
+      "row_index": 2126,
+      "start_time": "2024-12-24 20:00:00+00:00",
+      "end_time": "2024-12-26 00:00:00+00:00",
+      "duration_minutes": 1680.0,
+      "description": "Missing ~7 bars during active market hours"
+    },
+    {
+      "row_index": 2150,
+      "start_time": "2024-12-31 20:00:00+00:00",
+      "end_time": "2025-01-02 00:00:00+00:00",
+      "duration_minutes": 1680.0,
+      "description": "Missing ~7 bars during active market hours"
+    },
+    {
+      "row_index": 2606,
+      "start_time": "2025-04-17 20:00:00+00:00",
+      "end_time": "2025-04-21 00:00:00+00:00",
+      "duration_minutes": 4560.0,
+      "description": "Missing ~19 bars during active market hours"
+    },
+    {
+      "row_index": 2925,
+      "start_time": "2025-07-03 00:00:00+00:00",
+      "end_time": "2025-07-03 12:00:00+00:00",
+      "duration_minutes": 720.0,
+      "description": "Missing ~3 bars during active market hours"
+    },
+    {
+      "row_index": 2933,
+      "start_time": "2025-07-04 16:00:00+00:00",
+      "end_time": "2025-07-07 00:00:00+00:00",
+      "duration_minutes": 3360.0,
+      "description": "Missing ~14 bars during active market hours"
+    },
+    {
+      "row_index": 3671,
+      "start_time": "2025-12-24 20:00:00+00:00",
+      "end_time": "2025-12-26 00:00:00+00:00",
+      "duration_minutes": 1680.0,
+      "description": "Missing ~7 bars during active market hours"
+    },
+    {
+      "row_index": 3695,
+      "start_time": "2025-12-31 20:00:00+00:00",
+      "end_time": "2026-01-02 00:00:00+00:00",
+      "duration_minutes": 1680.0,
+      "description": "Missing ~7 bars during active market hours"
+    },
+    {
+      "row_index": 4085,
+      "start_time": "2026-04-02 20:00:00+00:00",
+      "end_time": "2026-04-06 00:00:00+00:00",
+      "duration_minutes": 4560.0,
+      "description": "Missing ~19 bars during active market hours"
+    }
+  ],
+  "incomplete_candle_detected": false,
+  "status": "PASSED_WITH_WARNINGS",
+  "warnings": [
+    "Detected 11 abnormal intraday/weekday gap(s) exceeding normal H4 interval."
+  ],
+  "errors": []
+}

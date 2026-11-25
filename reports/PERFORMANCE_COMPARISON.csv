@@ -1,0 +1,17 @@
+experiment_id,description,timeframe,total_bars,raw_candidates,accepted_candidates,closed_trades,rule_trades,win_rate_pct,profit_factor,net_pnl_usd,return_pct,max_drawdown_usd,max_drawdown_pct,expectancy_per_trade_usd,average_r_multiple,annualized_sharpe
+BASELINE,Frozen SMC v1 (Raw Baseline),M15,5000,54,54,40,39,20.51,1.022,15.63,0.16,787.66,7.57,0.72,-0.068,0.107
+EXP_A_HTF,SMC + HTF Bias (D1 + H4),M15,5000,54,15,15,15,40.0,1.144,55.43,0.55,144.34,1.42,3.7,0.043,0.446
+EXP_B_SESSION,SMC + Session Liquidity Filter,M15,5000,54,21,20,19,15.79,0.281,-482.7,-4.83,483.38,4.83,-25.07,-0.582,-4.257
+EXP_C_NEWS,SMC + High-Impact News Filter,M15,5000,54,54,40,39,20.51,1.022,15.63,0.16,787.66,7.57,0.72,-0.068,0.107
+EXP_D_HTF_SESSION,SMC + HTF Bias + Session Filter,M15,5000,54,6,6,6,16.67,0.176,-172.69,-1.73,222.67,2.23,-28.78,-0.66,-3.281
+EXP_E_TRIPLE,SMC + HTF + Session + News (Triple Confluence),M15,5000,54,6,6,6,16.67,0.176,-172.69,-1.73,222.67,2.23,-28.78,-0.66,-3.281
+EXP_F_ATR,Candidate E + ATR Stops (1.5x ATR),M15,5000,54,6,6,6,16.67,0.190,-157.61,-1.58,217.65,2.17,-26.27,-0.66,-3.205
+EXP_G_BREAKEVEN,Candidate F + 1.5R Breakeven Trade Mgmt,M15,5000,54,6,6,6,16.67,0.248,-111.73,-1.12,148.61,1.49,-18.62,-0.494,-2.572
+BASELINE,Frozen SMC v1 (Raw Baseline),M5,99999,1015,1015,838,837,27.6,0.879,-2733.11,-27.33,3570.67,34.44,-3.42,-0.078,-0.905
+EXP_A_HTF,SMC + HTF Bias (D1 + H4),M5,99999,1015,273,253,252,28.57,0.892,-712.15,-7.12,1411.64,14.0,-3.47,-0.059,-0.339
+EXP_B_SESSION,SMC + Session Liquidity Filter,M5,99999,1015,394,344,343,25.07,0.693,-2869.88,-28.7,3147.68,31.02,-8.74,-0.22,-1.799
+EXP_C_NEWS,SMC + High-Impact News Filter,M5,99999,1015,1001,832,831,27.56,0.865,-2997.85,-29.98,3845.99,37.1,-3.76,-0.091,-1.038
+EXP_D_HTF_SESSION,SMC + HTF Bias + Session Filter,M5,99999,1015,93,89,88,27.27,0.675,-726.81,-7.27,1111.36,11.01,-10.1,-0.233,-0.989
+EXP_E_TRIPLE,SMC + HTF + Session + News (Triple Confluence),M5,99999,1015,88,84,83,27.71,0.687,-645.77,-6.46,1113.73,11.03,-9.73,-0.218,-0.891
+EXP_F_ATR,Candidate E + ATR Stops (1.5x ATR),M5,99999,1015,88,85,84,32.14,0.866,-134.06,-1.34,909.22,9.0,-3.91,-0.091,-0.16
+EXP_G_BREAKEVEN,Candidate F + 1.5R Breakeven Trade Mgmt,M5,99999,1015,88,85,84,27.38,0.788,-478.6,-4.79,890.29,8.83,-5.7,-0.138,-0.694

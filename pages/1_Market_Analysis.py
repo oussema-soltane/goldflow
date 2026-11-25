@@ -88,7 +88,8 @@ if data_source == "Live MT5 Terminal":
     )
 elif data_source == "Existing Processed CSV":
     processed_dir = Path("data/processed")
-    csv_files = list(processed_dir.glob("*.csv")) if processed_dir.exists() else []
+    # CANONICAL DISCOVERY FILTER: Exclude validation windows and non-standard subsets from standard dropdown
+    csv_files = sorted([f for f in processed_dir.glob("*_clean.csv")]) if processed_dir.exists() else []
     if csv_files:
         chosen_file = st.sidebar.selectbox("Select Dataset", options=[f.name for f in csv_files])
         parts = chosen_file.split("_")
@@ -189,6 +190,9 @@ show_smc_breaks = True
 show_smc_pools = True
 show_smc_sweeps = True
 show_smc_obs = True
+show_smc_breakers = True
+show_smc_fvgs = True
+smc_min_fvg_size = 0.0
 swing_window = 2
 break_mode = "Candle Close (Institutional)"
 min_fvg_gap = 0.5
@@ -217,6 +221,10 @@ if analysis_framework == "SMC (Primary)":
         smc_order_block_zone_basis = st.radio("Order Block Zone", ["wick", "body"], index=0,
                                                help="wick uses the full candle high/low; body uses open/close bounds.")
         smc_track_lifecycle = st.checkbox("Track OB Mitigation/Invalidation", value=True)
+        smc_min_fvg_size = st.number_input(
+            "Min FVG Gap ($)", min_value=0.0, max_value=20.0, value=0.0, step=0.05,
+            help="Minimum dollar gap required between candle 1 and candle 3 for SMC Fair Value Gap detection."
+        )
         st.markdown("**SMC Setup Hypothesis: Sweep → CHoCH → OB Retest**")
         smc_max_sweep_to_choch_bars = st.slider("Max Bars: Sweep to CHoCH", min_value=1, max_value=100, value=20)
         smc_max_choch_to_retest_bars = st.slider("Max Bars: CHoCH to OB Retest", min_value=1, max_value=100, value=20)
@@ -230,6 +238,8 @@ if analysis_framework == "SMC (Primary)":
         show_smc_pools = st.checkbox("Equal High/Low Liquidity Pools", value=True)
         show_smc_sweeps = st.checkbox("Liquidity Sweeps", value=True)
         show_smc_obs = st.checkbox("SMC Order Blocks", value=True)
+        show_smc_breakers = st.checkbox("SMC Breaker Blocks", value=True)
+        show_smc_fvgs = st.checkbox("SMC Fair Value Gaps (FVG)", value=True)
 else:
     with st.sidebar.expander("🏛️ Existing ICT Settings", expanded=True):
         enable_ict = st.checkbox("Enable ICT Engine", value=True)
@@ -270,7 +280,48 @@ if load_btn or st.session_state["current_df"] is None:
                         server_timezone=server_timezone,
                         timestamp_mode_verified=timestamp_mode_verified,
                     )
-                    raw_saved_path = save_raw_data(df_raw, selected_symbol, selected_tf)
+                    # CANONICAL DATA PROTECTION: Fail-closed safeguard.
+                    # An existing canonical raw file must NEVER be silently overwritten
+                    # from the interactive UI. This prevents both accidental shrinkage
+                    # (e.g. 1,500 bars replacing 10,000 bars) and silent date-shifting of
+                    # canonical research baselines. For audited dataset updates, use
+                    # scripts/download_data.py.
+                    _safe_symbol = selected_symbol.upper().replace("/", "").replace(" ", "")
+                    _existing_raw = Path(f"data/raw/{_safe_symbol}_{selected_tf}_raw.csv")
+                    _allow_save = True
+                    if _existing_raw.exists():
+                        try:
+                            _existing_rows = sum(1 for _ in open(_existing_raw, "r", encoding="utf-8")) - 1
+                            if _existing_rows < 0:
+                                _allow_save = False
+                                st.error(
+                                    f"⚠️ CANONICAL DATA PROTECTION: Existing raw file {_existing_raw} is empty. "
+                                    "Overwrite blocked (fail-closed)."
+                                )
+                            elif len(df_raw) < _existing_rows:
+                                st.warning(
+                                    f"⚠️ CANONICAL DATA PROTECTION: The live MT5 fetch returned "
+                                    f"{len(df_raw):,} bars but the existing canonical raw file has "
+                                    f"{_existing_rows:,} rows. The canonical file was NOT overwritten. "
+                                    f"To replace it intentionally, use `scripts/download_data.py --allow-shrink`."
+                                )
+                                _allow_save = False
+                            else:
+                                st.info(
+                                    f"ℹ️ CANONICAL DATA PROTECTION: An existing canonical dataset ({_existing_rows:,} rows) "
+                                    f"is present at {_existing_raw}. Live data was loaded into memory for analysis, "
+                                    "but canonical on-disk files are preserved. Use `scripts/download_data.py` for audited promotion."
+                                )
+                                _allow_save = False
+                        except Exception as exc:
+                            # FAIL-CLOSED: Any inspection failure strictly blocks saving.
+                            _allow_save = False
+                            st.error(
+                                f"⚠️ CANONICAL DATA PROTECTION: Inspection of existing raw file failed ({exc}). "
+                                "Overwrite blocked (fail-closed)."
+                            )
+                    if _allow_save:
+                        raw_saved_path = save_raw_data(df_raw, selected_symbol, selected_tf)
                 except Exception as exc:
                     st.error(f"Failed to fetch data from MT5: {exc}")
 
@@ -300,35 +351,77 @@ if load_btn or st.session_state["current_df"] is None:
                     except Exception:
                         pass
             else:
-                df_raw, meta = generate_synthetic_gold_data(
-                    symbol=selected_symbol, timeframe=selected_tf, n_bars=n_bars
+                # CANONICAL DATA PROTECTION: do NOT generate synthetic data here.
+                # Show an error and stop — the user must either select a file or
+                # explicitly switch to Synthetic Benchmark mode.
+                st.error(
+                    "No processed CSV file is selected. "
+                    "Please select a file from the dropdown above, or switch the "
+                    "Data Source Mode to 'Synthetic Benchmark (Offline)' if you "
+                    "want to use generated data for testing."
                 )
-                raw_saved_path = save_raw_data(df_raw, selected_symbol, selected_tf)
+                st.stop()
 
         else:  # Synthetic benchmark
+            # CANONICAL DATA PROTECTION: synthetic data is routed to data/synthetic/
+            # paths. It must never overwrite data/raw/ or data/processed/.
             df_raw, meta = generate_synthetic_gold_data(
                 symbol=selected_symbol, timeframe=selected_tf, n_bars=n_bars
             )
-            raw_saved_path = save_raw_data(df_raw, selected_symbol, selected_tf)
+            raw_saved_path = save_raw_data(df_raw, selected_symbol, selected_tf, synthetic=True)
 
         if df_raw is not None and not df_raw.empty:
             # Audit Quality
             report = validate_market_data(df_raw, symbol=selected_symbol, timeframe=selected_tf)
             # Clean and persist with provenance sidecar
             df_clean, audit = clean_market_data(df_raw, symbol=selected_symbol, timeframe=selected_tf)
+            is_synth = bool(meta.get("is_synthetic", False)) if meta else False
             if data_source != "Existing Processed CSV":
-                clean_path, meta_path = save_processed_data(
-                    df_clean,
-                    selected_symbol,
-                    selected_tf,
-                    raw_source_path=raw_saved_path,
-                    audit_log=audit,
-                    source_metadata=meta,
+                # CANONICAL DATA PROTECTION: If live MT5 fetch had raw overwrite blocked,
+                # do NOT write or overwrite canonical processed datasets on disk.
+                if data_source == "Live MT5 Terminal" and not _allow_save:
+                    st.info(
+                        "ℹ️ CANONICAL DATA PROTECTION: Processed dataset was cleaned in memory for this session, "
+                        "but on-disk canonical files were not modified."
+                    )
+                else:
+                    try:
+                        clean_path, meta_path = save_processed_data(
+                            df_clean,
+                            selected_symbol,
+                            selected_tf,
+                            raw_source_path=raw_saved_path,
+                            audit_log=audit,
+                            source_metadata=meta,
+                            synthetic=is_synth,
+                        )
+                    except ValueError as err:
+                        st.error(f"Data save blocked by integrity check: {err}")
+                        st.stop()
+
+            # CANONICAL DATA PROTECTION: quality reports for synthetic runs go to
+            # reports/synthetic/ with a run_id suffix; they must never overwrite
+            # the canonical data_quality_report.json / .md files.
+            import datetime as _dt
+            _run_id = _dt.datetime.now(_dt.timezone.utc).strftime("%Y%m%d_%H%M%S")
+            if is_synth:
+                _report_dir = Path("reports/synthetic")
+                _report_dir.mkdir(parents=True, exist_ok=True)
+                _json_path = str(_report_dir / f"data_quality_{selected_tf}_{_run_id}.json")
+                _md_path = str(_report_dir / f"data_quality_{selected_tf}_{_run_id}.md")
+                report.save_json(_json_path)
+                report.save_markdown(_md_path)
+                st.caption(
+                    f"Synthetic quality report (research-ineligible): "
+                    f"reports/synthetic/data_quality_{selected_tf}_{_run_id}.json"
                 )
-            
-            # Save reports
-            report.save_json("reports/data_quality_report.json")
-            report.save_markdown("reports/data_quality_report.md")
+            else:
+                # Per-TF report for live/canonical data
+                _report_dir = Path("reports")
+                _json_path = str(_report_dir / f"data_quality_{selected_tf}_{_run_id}.json")
+                _md_path = str(_report_dir / f"data_quality_{selected_tf}_{_run_id}.md")
+                report.save_json(_json_path)
+                report.save_markdown(_md_path)
 
             st.session_state["current_df"] = df_clean
             st.session_state["current_meta"] = meta
@@ -360,6 +453,7 @@ if df is not None and not df.empty and report is not None:
                 order_block_lookback=smc_order_block_lookback,
                 order_block_zone_basis=smc_order_block_zone_basis,
                 track_order_block_lifecycle=smc_track_lifecycle,
+                min_fvg_size=smc_min_fvg_size,
             ),
         )
     elif analysis_framework == "ICT (Existing)" and enable_ict:
@@ -416,24 +510,208 @@ if df is not None and not df.empty and report is not None:
     elif meta and meta.get("source_verification_status") == "declared_not_independently_verified":
         st.warning("The source is declared by the ingestion pipeline, not independently verified. Preserve the retrieval report and inspect the raw timestamp epoch column.")
 
-    # Top KPI Metrics Strip
-    k1, k2, k3, k4, k5 = st.columns(5)
-    last_close = df["close"].iloc[-1]
-    high_max = df["high"].max()
-    low_min = df["low"].min()
+    # Compute Nearest Order Blocks and Last Confirmed Structure Break for Top Information Strip
+    last_close = float(df["close"].iloc[-1])
+    high_max = float(df["high"].max())
+    low_min = float(df["low"].min())
     bars_total = len(df)
     
+    nearest_demand = None
+    nearest_supply = None
+    if smc_res and getattr(smc_res, "order_blocks", None):
+        active_bulls = [ob for ob in smc_res.order_blocks if ob.direction.value == "BULLISH" and ob.status.value == "ACTIVE" and ob.high <= last_close]
+        active_bears = [ob for ob in smc_res.order_blocks if ob.direction.value == "BEARISH" and ob.status.value == "ACTIVE" and ob.low >= last_close]
+        if active_bulls:
+            active_bulls.sort(key=lambda ob: last_close - ob.high)
+            nearest_demand = f"${active_bulls[0].high:.2f}"
+        if active_bears:
+            active_bears.sort(key=lambda ob: ob.low - last_close)
+            nearest_supply = f"${active_bears[0].low:.2f}"
+
+    last_break_str = "None"
+    if smc_res and getattr(smc_res, "structure_breaks", None) and smc_res.structure_breaks:
+        last_brk = smc_res.structure_breaks[-1]
+        brk_sign = "+" if last_brk.direction.value == "BULLISH" else "-"
+        last_break_str = f"{brk_sign}{last_brk.break_type.value} (${last_brk.broken_swing.price:.2f})"
+
+    # Top Institutional KPI Metrics Strip
+    k1, k2, k3, k4, k5, k6 = st.columns(6)
     k1.metric("Latest Price", f"${last_close:,.2f}")
-    k2.metric("Period High", f"${high_max:,.2f}")
-    k3.metric("Period Low", f"${low_min:,.2f}")
-    k4.metric("Audited Bars", f"{bars_total:,}")
     
     if active_res:
         trend_color = "🟢" if active_res.current_trend.value == "BULLISH" else ("🔴" if active_res.current_trend.value == "BEARISH" else "⚪")
-        k5.metric("Market Structure Trend", f"{trend_color} {active_res.current_trend.value}")
+        k2.metric("Structure Trend", f"{trend_color} {active_res.current_trend.value}")
+        if smc_res and hasattr(smc_res, "current_zone") and getattr(smc_res, "equilibrium", None) is not None:
+            zone_color = "🔵" if smc_res.current_zone == "DISCOUNT" else ("🟠" if smc_res.current_zone == "PREMIUM" else "⚪")
+            k3.metric("Dealing Zone", f"{zone_color} {smc_res.current_zone}", f"EQ: ${smc_res.equilibrium:.2f}")
+        else:
+            k3.metric("CHoCH Count", f"{active_res.choch_count if hasattr(active_res, 'choch_count') else 0}")
     else:
         status_label = "🟢 PASSED" if report.status == "PASSED" else "🟡 WARNINGS"
-        k5.metric("Data Quality Status", status_label)
+        k2.metric("Data Quality", status_label)
+        k3.metric("Integrity", "VERIFIED" if meta and meta.get("timestamp_integrity_status") == "verified" else "UNVERIFIED")
+
+    k4.metric("Nearest Demand (OB)", nearest_demand or "None in range")
+    k5.metric("Nearest Supply (OB)", nearest_supply or "None in range")
+    k6.metric("Last Confirmed Break", last_break_str)
+
+    # Institutional Confluence & Risk Diagnostics (SMC_CONFLUENCE_V1)
+    with st.expander("🛡️ Institutional Confluence & Risk Diagnostics (SMC_CONFLUENCE_V1)", expanded=(report.timeframe in ["M15", "M5"])):
+        from src.strategy.htf_bias import HTFDirectionalBiasEngine
+        from src.strategy.session_filter import SessionLiquidityFilter
+        from src.strategy.news_filter import HighImpactNewsFilter
+        from src.risk.trade_management import compute_atr
+        from src.risk.lot_sizing import calculate_xauusd_lot_size
+
+        latest_time = pd.Timestamp(df["time"].iloc[-1])
+        c_htf, c_sess, c_news, c_atr = st.columns(4)
+
+        # 1. HTF Bias
+        h4_clean_p = Path("data/processed/XAUUSD_H4_clean.csv")
+        htf_bias_label = "HTF Data Unavailable"
+        d1_trend_lbl = "N/A"
+        h4_trend_lbl = "N/A"
+        if h4_clean_p.exists():
+            try:
+                h4_df_diag = pd.read_csv(h4_clean_p)
+                htf_eng = HTFDirectionalBiasEngine(h4_df_diag)
+                bias_diag = htf_eng.evaluate_bias(latest_time)
+                d1_trend_lbl = bias_diag.d1_direction.value if bias_diag.d1_direction else "UNCERTAIN"
+                h4_trend_lbl = bias_diag.h4_direction.value if bias_diag.h4_direction else "UNCERTAIN"
+                if bias_diag.is_aligned:
+                    b_icon = "🟢" if bias_diag.bias.value == "BULLISH" else "🔴"
+                    htf_bias_label = f"{b_icon} {bias_diag.bias.value} (ALIGNED)"
+                else:
+                    htf_bias_label = f"⚪ NEUTRAL ({bias_diag.rejection_reason})"
+            except Exception as e:
+                htf_bias_label = f"Error: {e}"
+
+        with c_htf:
+            st.markdown(f"**Higher-Timeframe Bias:** {htf_bias_label}")
+            st.caption(f"• D1 Structure: `{d1_trend_lbl}`\n• H4 Structure: `{h4_trend_lbl}`")
+
+        # 2. Session Liquidity
+        sess_filt = SessionLiquidityFilter()
+        sess_ok, sess_name, sess_reason = sess_filt.evaluate_timestamp(latest_time)
+        sess_badge = f"🟢 ACTIVE: `{sess_name}`" if sess_ok else f"🔴 INACTIVE: `{sess_reason}`"
+        with c_sess:
+            st.markdown(f"**Session Liquidity:** {sess_badge}")
+            st.caption(f"• UTC Hour: `{latest_time.hour:02d}:{latest_time.minute:02d}` UTC\n• Allowed: London & NY cash hours")
+
+        # 3. High-Impact News Protection
+        news_filt = HighImpactNewsFilter(Path("data/news/usd_high_impact_news.csv"))
+        news_blocked, ev_name, news_reason, mins_to_ev = news_filt.evaluate_timestamp(latest_time)
+        news_badge = f"🔴 BLACKOUT ACTIVE (`{news_reason}`)" if news_blocked else "🟢 CLEAR (No Blackout)"
+        with c_news:
+            st.markdown(f"**USD News Protection:** {news_badge}")
+            if ev_name and mins_to_ev is not None:
+                st.caption(f"• Nearest: `{ev_name}`\n• Delta: `{mins_to_ev:+.1f} min`")
+            else:
+                st.caption("• No high-impact releases in immediate window")
+
+        # 4. Volatility (ATR) & Risk Sizing
+        atr_series = compute_atr(df, period=14)
+        current_atr = float(atr_series.iloc[-1]) if len(atr_series) > 0 else 2.50
+        min_stop_pts = current_atr * 1.5
+        sample_sizing = calculate_xauusd_lot_size(10_000.0, 0.005, last_close, last_close - min_stop_pts)
+        with c_atr:
+            st.markdown(f"**Volatility (ATR-14):** `${current_atr:.2f}/oz`")
+            st.caption(f"• Min Stop (1.5x ATR): `${min_stop_pts:.2f}`\n• Recommended 0.5% Lot: `{sample_sizing.lots:.2f} lots`")
+
+    # Interactive Chart Controls Toolbar
+    c_preset, c_zoom, c_weekends, c_autoscale, c_height = st.columns([3, 2, 2, 2, 2])
+    with c_preset:
+        preset_display = st.selectbox(
+            "🎨 Chart Preset",
+            [
+                "🎯 SMC Analysis (Recommended)",
+                "⚡ Clean Price Action",
+                "🔬 Full SMC Research",
+                "⚙️ Custom Configuration",
+            ],
+            index=0,
+            help=(
+                "• SMC Analysis: Institutional view of active nearby order blocks, confirmed breaks, and key liquidity.\n"
+                "• Clean Price Action: Candlesticks, volume, and major breaks only.\n"
+                "• Full SMC Research: All historical zones, mitigated OBs, and full history.\n"
+                "• Custom: Manually toggle individual overlays."
+            ),
+        )
+        preset_slug_map = {
+            "🎯 SMC Analysis (Recommended)": "smc_analysis",
+            "⚡ Clean Price Action": "clean",
+            "🔬 Full SMC Research": "full_research",
+            "⚙️ Custom Configuration": "custom",
+        }
+        selected_preset = preset_slug_map[preset_display]
+
+    with c_zoom:
+        zoom_choice = st.selectbox(
+            "🔍 Visible Window",
+            ["Last 200 bars", "Last 500 bars", "Last 1,000 bars", "All Available Bars"],
+            index=1,
+            help="Zoom to recent candles for high-detail inspection without modifying canonical data on disk."
+        )
+        zoom_map = {"Last 200 bars": 200, "Last 500 bars": 500, "Last 1,000 bars": 1000, "All Available Bars": None}
+        selected_visible_bars = zoom_map[zoom_choice]
+
+    with c_weekends:
+        hide_weekends = st.checkbox("Hide Weekend Gaps", value=True, help="Suppress non-trading weekend periods for continuous chart/volume flow.")
+
+    with c_autoscale:
+        autoscale_y = st.checkbox("Focus Price Axis", value=True, help="Lock vertical axis to visible candles (+8% margin), preventing distant levels from compressing price.")
+        expand_research_y = False
+        if selected_preset == "full_research":
+            expand_research_y = st.checkbox(
+                "🌐 Autoscale to Distant Zones",
+                value=False,
+                help="In Full SMC Research, expand the vertical scale to encompass all unmitigated historical levels ($2,800–$5,500).",
+            )
+
+    with c_height:
+        chart_height = st.slider("Chart Height", min_value=500, max_value=900, value=700, step=40)
+
+    # Secondary toggle row
+    c_trade_toggle, c_dr_toggle = st.columns([2, 2])
+    with c_trade_toggle:
+        show_trade_overlay = st.checkbox("Overlay Backtest Trades", value=True, help="Plot entry arrows, SL/TP lines, and exit points from the strategy trade ledger.")
+    with c_dr_toggle:
+        show_dr_overlay = st.checkbox("Show 50% Dealing Range", value=True, help="Display swing high/low boundary and 50% equilibrium level.")
+
+    # Custom overlay controls drawer (when Custom Preset selected)
+    if selected_preset == "custom":
+        with st.expander("🔧 Custom Overlay Configuration", expanded=True):
+            oc1, oc2, oc3, oc4 = st.columns(4)
+            with oc1:
+                show_smc_breaks = st.checkbox("BOS & CHoCH Breaks", value=show_smc_breaks)
+                show_smc_swings = st.checkbox("Confirmed Swings", value=show_smc_swings)
+            with oc2:
+                show_smc_obs = st.checkbox("Order Blocks", value=show_smc_obs)
+                show_smc_breakers = st.checkbox("Breaker Blocks", value=show_smc_breakers)
+            with oc3:
+                show_smc_fvgs = st.checkbox("Fair Value Gaps (FVG)", value=show_smc_fvgs)
+                show_smc_pools = st.checkbox("Liquidity Pools", value=show_smc_pools)
+            with oc4:
+                show_smc_sweeps = st.checkbox("Liquidity Sweeps", value=show_smc_sweeps)
+
+    # Load backtest trade ledger if available
+    trades_to_overlay = None
+    if show_trade_overlay:
+        for t_candidate in [
+            Path("reports/smc_backtest_trades_full_history.csv"),
+            Path("reports/smc_mtf_trades.csv"),
+            Path("reports/smc_backtest_trades.csv"),
+        ]:
+            if t_candidate.exists():
+                try:
+                    tdf = pd.read_csv(t_candidate)
+                    if "timeframe" in tdf.columns and "status" in tdf.columns:
+                        matched = tdf[(tdf["timeframe"] == report.timeframe) & (tdf["status"] == "CLOSED")]
+                        if not matched.empty:
+                            trades_to_overlay = matched
+                            break
+                except Exception:
+                    pass
 
     # Interactive Candlestick Chart with selected SMC or ICT overlays
     fig = create_candlestick_chart(
@@ -442,23 +720,32 @@ if df is not None and not df.empty and report is not None:
         timeframe=report.timeframe,
         show_volume=True,
         dark_theme=True,
-        height=640,
+        height=chart_height,
         ict_result=ict_res,
         smc_result=smc_res,
         show_swings=show_smc_swings if smc_res else show_swings,
         show_structure_breaks=show_smc_breaks if smc_res else show_breaks,
-        show_fvgs=show_fvgs if ict_res else False,
+        show_fvgs=show_smc_fvgs if smc_res else show_fvgs,
         show_sweeps=show_smc_sweeps if smc_res else show_sweeps,
         show_order_blocks=show_smc_obs if smc_res else show_obs,
+        show_breakers=show_smc_breakers if smc_res else False,
         show_displacements=show_displacements if ict_res else False,
         show_liquidity_pools=show_smc_pools if smc_res else False,
+        show_dealing_range=show_dr_overlay,
+        trades=trades_to_overlay,
+        show_trades=show_trade_overlay,
+        visible_bars=selected_visible_bars,
+        preset=selected_preset,
+        hide_weekends=hide_weekends,
+        autoscale_y_to_visible=(autoscale_y and not expand_research_y),
     )
     st.plotly_chart(fig, use_container_width=True)
 
     # Transparency & Analytics Tabs
     first_tab_title = "🧭 SMC Structure & Liquidity" if smc_res is not None or analysis_framework == "SMC (Primary)" else "🏛️ ICT Market Structure & Order Flow"
-    tab_ict, tab_quality, tab_data, tab_export = st.tabs([
+    tab_ict, tab_trades_view, tab_quality, tab_data, tab_export = st.tabs([
         first_tab_title,
+        "🎯 Strategy Trades in Window",
         "📋 Data Quality & Integrity Report",
         "📊 Summary Statistics & Raw Data",
         "💾 Audit Export & Download",
@@ -473,11 +760,13 @@ if df is not None and not df.empty and report is not None:
             m2.metric("BOS", smc_res.bos_count)
             m3.metric("CHoCH", smc_res.choch_count)
             m4.metric("Initial Breaks", smc_res.initial_break_count)
-            m5, m6, m7, m8 = st.columns(4)
+            m5, m6, m7, m8, m9, m10 = st.columns(6)
             m5.metric("Liquidity Pools", len(smc_res.liquidity_pools))
             m6.metric("Liquidity Sweeps", len(smc_res.liquidity_sweeps))
             m7.metric("SMC Order Blocks", len(smc_res.order_blocks))
-            m8.metric("Current Dealing Zone", smc_res.current_zone)
+            m8.metric("Breaker Blocks", f"{len(smc_res.active_breaker_blocks)} active / {len(smc_res.breaker_blocks)}")
+            m9.metric("Fair Value Gaps", f"{len(smc_res.active_fair_value_gaps)} open / {len(smc_res.fair_value_gaps)}")
+            m10.metric("Dealing Zone", smc_res.current_zone)
             st.metric("SMC Setup Candidates", len(smc_setup_candidates))
             if smc_res.equilibrium is not None:
                 st.caption(
@@ -550,6 +839,36 @@ if df is not None and not df.empty and report is not None:
                 } for setup in smc_setup_candidates]), use_container_width=True)
             else:
                 st.info("No setup met the configured Sweep → CHoCH → OB Retest sequence.")
+            st.markdown("#### 6. SMC Fair Value Gaps (3-Candle Imbalances)")
+            if smc_res.fair_value_gaps:
+                st.dataframe(pd.DataFrame([{
+                    "Type": fvg.fvg_type.value,
+                    "Origin UTC": fvg.origin_time.strftime("%Y-%m-%d %H:%M"),
+                    "Confirmed UTC": fvg.creation_time.strftime("%Y-%m-%d %H:%M"),
+                    "Top ($)": round(fvg.top, 2),
+                    "Bottom ($)": round(fvg.bottom, 2),
+                    "Midpoint CE ($)": round(fvg.midpoint, 2),
+                    "Gap Size ($)": round(fvg.size, 2),
+                    "Status": fvg.status.value,
+                    "First Touch UTC": fvg.first_touch_time.strftime("%Y-%m-%d %H:%M") if fvg.first_touch_time else "—",
+                    "CE Filled UTC": fvg.ce_time.strftime("%Y-%m-%d %H:%M") if fvg.ce_time else "—",
+                    "Closed UTC": fvg.closed_time.strftime("%Y-%m-%d %H:%M") if fvg.closed_time else "—",
+                } for fvg in smc_res.fair_value_gaps]), use_container_width=True)
+            else:
+                st.info("No SMC 3-candle Fair Value Gaps met the configured minimum gap size.")
+            st.markdown("#### 7. SMC Breaker Blocks (Inverted Order Blocks)")
+            if smc_res.breaker_blocks:
+                st.dataframe(pd.DataFrame([{
+                    "Type": bb.breaker_type.value,
+                    "Inverted At UTC": bb.created_time.strftime("%Y-%m-%d %H:%M"),
+                    "Zone High ($)": round(bb.high, 2),
+                    "Zone Low ($)": round(bb.low, 2),
+                    "Status": bb.status.value,
+                    "Retest UTC": bb.retest_time.strftime("%Y-%m-%d %H:%M") if bb.retest_time else "—",
+                    "Invalidated UTC": bb.invalidation_time.strftime("%Y-%m-%d %H:%M") if bb.invalidation_time else "—",
+                } for bb in smc_res.breaker_blocks]), use_container_width=True)
+            else:
+                st.info("No Order Blocks were invalidated to form Breaker Blocks in this dataset.")
             st.info("These are research setup candidates only, not orders or claims of profitability. Reference entry is the retest-rejection candle close. Dataset-end OB lifecycle is retrospective. The Phase 3B real-data readiness gate remains mandatory before performance research.")
         elif ict_res:
             st.subheader("🏛️ Institutional Structure Summary")
@@ -695,7 +1014,33 @@ if df is not None and not df.empty and report is not None:
         else:
             st.info("Enable the selected analysis engine in the sidebar to view market structure analytics.")
 
-    # TAB 2: Data Quality & Integrity Report
+    # TAB 2: Strategy Trades in Window
+    with tab_trades_view:
+        st.subheader(f"🎯 Strategy Trade Executions in {report.timeframe}")
+        if trades_to_overlay is not None and not trades_to_overlay.empty:
+            t_col1, t_col2, t_col3, t_col4 = st.columns(4)
+            t_total = len(trades_to_overlay)
+            t_net = float(trades_to_overlay["net_pnl"].sum())
+            t_wins = trades_to_overlay[trades_to_overlay["net_pnl"] > 0]
+            t_wr = (len(t_wins) / t_total) * 100.0 if t_total > 0 else 0.0
+            loss_sum = abs(float(trades_to_overlay[trades_to_overlay["net_pnl"] <= 0]["net_pnl"].sum()))
+            t_pf_val = (float(t_wins["net_pnl"].sum()) / loss_sum) if loss_sum > 0 else None
+
+            t_col1.metric("Closed Trades", f"{t_total:,}")
+            t_col2.metric("Net Realized P&L", f"${t_net:,.2f}", delta=f"{t_net:,.2f}")
+            t_col3.metric("Win Rate", f"{t_wr:.1f}%")
+            t_col4.metric("Profit Factor", f"{t_pf_val:.2f}" if t_pf_val is not None else "N/A")
+
+            display_cols = [c for c in [
+                "setup_id", "side", "entry_time", "entry_price", "exit_time", "exit_price",
+                "stop_loss", "take_profit", "lots", "gross_pnl", "total_transaction_costs",
+                "net_pnl", "R_multiple", "exit_reason", "bars_held"
+            ] if c in trades_to_overlay.columns]
+            st.dataframe(trades_to_overlay[display_cols], use_container_width=True, hide_index=True)
+        else:
+            st.info(f"No backtest trades found matching timeframe {report.timeframe}. Run a backtest in 'Backtesting' page to populate the trade ledger.")
+
+    # TAB 3: Data Quality & Integrity Report
     with tab_quality:
         st.subheader("Integrity Audit Breakdown")
         q1, q2, q3 = st.columns(3)
@@ -716,7 +1061,9 @@ if df is not None and not df.empty and report is not None:
             st.markdown("**Dataset Boundary**")
             st.write(f"- Period Start: `{report.start_date}`")
             st.write(f"- Period End: `{report.end_date}`")
-            st.write(f"- Incomplete Candle Excluded: `True`")
+            incomplete_excluded = getattr(report, "incomplete_candle_excluded", None)
+            inc_label = "✅ Verified Excluded" if incomplete_excluded is True else ("❌ Not Excluded" if incomplete_excluded is False else "⚠️ Unverified / Declared")
+            st.write(f"- Incomplete Candle Status: {inc_label}")
 
         if report.warnings:
             st.warning("⚠️ **Pipeline Warnings:**\n" + "\n".join([f"- {w}" for w in report.warnings]))

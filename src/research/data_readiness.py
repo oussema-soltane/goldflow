@@ -353,7 +353,7 @@ def audit_all_datasets(data_dir: str = "data/processed") -> Dict[str, Dict[str, 
         results[timeframe]["filename"] = csv_path.name
 
     # Cross-check for identical OHLC sequences across timeframes
-    hashes: Dict[str, str] = {tf: r["ohlc_hash"] for tf, r in results.items()}
+    hashes: Dict[str, str] = {tf: r["ohlc_hash"] for tf, r in results.items() if not tf.endswith("_VALIDATION_WINDOW")}
     for tf_a, h_a in hashes.items():
         for tf_b, h_b in hashes.items():
             if tf_a < tf_b and h_a == h_b:
@@ -364,6 +364,38 @@ def audit_all_datasets(data_dir: str = "data/processed") -> Dict[str, Dict[str, 
                 )
                 results[tf_a]["warnings"].append(msg)
                 results[tf_b]["warnings"].append(msg)
+
+    # Cross-check validation-window datasets for contamination / overlap
+    for val_path in sorted(base.glob("*_validation_window.csv")):
+        import re
+        match = re.search(r"_(M5|M15|H1|H4)_validation_window$", val_path.stem, flags=re.IGNORECASE)
+        tf = match.group(1).upper() if match else "UNKNOWN"
+        df_val = pd.read_csv(val_path, parse_dates=["time"])
+        if "time" in df_val.columns:
+            df_val["time"] = pd.to_datetime(df_val["time"], utc=True)
+        val_meta_path = val_path.with_suffix(".meta.json")
+        val_meta = load_meta(val_meta_path)
+        val_report = audit_dataset(df_val, val_meta, f"{tf}_VAL")
+        val_report["filename"] = val_path.name
+        val_report["ohlc_hash"] = ohlc_hash(df_val)
+        results[f"{tf}_VALIDATION_WINDOW"] = val_report
+
+        # Check contamination against the clean dataset of the same timeframe
+        if tf in results:
+            clean_df_path = base / results[tf]["filename"]
+            df_clean = pd.read_csv(clean_df_path, parse_dates=["time"])
+            if "time" in df_clean.columns:
+                df_clean["time"] = pd.to_datetime(df_clean["time"], utc=True)
+                clean_times = set(df_clean["time"])
+                val_times = set(df_val["time"])
+                overlap = clean_times.intersection(val_times)
+                if overlap:
+                    msg = (
+                        f"CRITICAL CONTAMINATION: {val_path.name} overlaps with {clean_df_path.name} "
+                        f"({len(overlap)} matching timestamps). Development and holdout validation data leak into each other."
+                    )
+                    results[tf]["warnings"].append(msg)
+                    val_report["warnings"].append(msg)
 
     return results
 

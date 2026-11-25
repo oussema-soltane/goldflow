@@ -1,0 +1,44 @@
+{
+  "registration_id": "REG-20261117-SMC-V2",
+  "candidate_id": "SMC_CONFLUENCE_V2",
+  "candidate_name": "GoldFlow SMC Multi-Confluence Strategy V2",
+  "registration_timestamp": "2026-11-17T13:30:00Z",
+  "governance_status": "PRE_REGISTERED_LOCKED",
+  "source_commit": "9566e6e",
+  "git_branch": "audit/phase3f-3h",
+  "configuration_file": "configs/candidate_specs/smc_confluence_v2.json",
+  "configuration_sha256": "1eaa40373f9e89c3f65fb216badd6604fa7df428c973cf495902bf8a0bd7eb8c",
+  "specification_file": "configs/candidate_specs/SMC_CONFLUENCE_V2_SPECIFICATION.md",
+  "data_governance": {
+    "consumed_datasets": [
+      "data/processed/XAUUSD_M15_clean.csv",
+      "data/processed/XAUUSD_M15_validation_window.csv",
+      "data/research/phase3/processed/XAUUSD_M15_extended.csv"
+    ],
+    "unseen_data_requirement": "Must be evaluated exclusively on an unconsumed historical dataset (e.g. external broker feed or future forward window strictly disjoint from all consumed data)",
+    "retrospective_tuning_permitted": false
+  },
+  "pre_registered_hypotheses": [
+    {
+      "hypothesis_id": "H1",
+      "statement": "Enforcing ADX(14) > 22.0 eliminates negative-expectancy trades during low-volatility ranging regimes, raising out-of-sample win rate above 42%."
+    },
+    {
+      "hypothesis_id": "H2",
+      "statement": "Restricting execution to London and NY overlap (07:00-17:00 UTC) eliminates Asian session drag (-$429.16), improving overall profit factor by >= 0.35."
+    },
+    {
+      "hypothesis_id": "H3",
+      "statement": "Buffering stops by 1.5x ATR reduces premature stop-outs during institutional liquidity sweeps without degrading risk-reward expectancy."
+    }
+  ],
+  "institutional_promotion_gates": {
+    "minimum_out_of_sample_trades": 100,
+    "minimum_walk_forward_positive_fold_ratio": 0.70,
+    "minimum_aggregate_oos_profit_factor": 1.30,
+    "minimum_bootstrap_pf_ci_lower_bound_95pct": 1.000,
+    "maximum_strategy_drawdown_pct": 0.10,
+    "parametric_t_test_alpha": 0.05,
+    "execution_cost_stress_multiplier": 2.0
+  }
+}

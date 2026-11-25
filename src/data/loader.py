@@ -828,6 +828,8 @@ def save_raw_data(
     symbol: str,
     timeframe: str,
     output_dir: Union[str, Path] = "data/raw",
+    *,
+    synthetic: bool = False,
 ) -> Path:
     """
     Save the extracted dataframe with original MT5 epoch integers and normalized UTC
@@ -836,23 +838,59 @@ def save_raw_data(
 
     DATA SAFETY: Written atomically via a temp file. If the write fails, any existing
     valid dataset at the target path is preserved.
+
+    Parameters
+    ----------
+    synthetic : bool, default False
+        When True, data is routed to ``data/synthetic/raw/`` regardless of
+        ``output_dir``. This prevents any synthetic generation from touching
+        canonical ``data/raw/`` files.  The caller MUST NOT pass
+        ``synthetic=True`` for live MT5 data.
     """
     import tempfile
     import os
-    out_path = Path(output_dir)
-    out_path.mkdir(parents=True, exist_ok=True)
+
+    # CANONICAL DATA PROTECTION: synthetic data must never land in data/raw/.
+    # Override output_dir unconditionally when synthetic=True so that even a
+    # misconfigured caller cannot silently overwrite live datasets.
+    if synthetic:
+        effective_dir = Path("data/synthetic/raw")
+    else:
+        effective_dir = Path(output_dir)
+
+    # PATH CONTAINMENT: Ensure output path is strictly contained within repository data root or test tempdir
+    repo_root = Path(__file__).resolve().parents[2]
+    allowed_root = (repo_root / "data").resolve()
+    temp_root = Path(tempfile.gettempdir()).resolve()
+    resolved_dir = effective_dir.resolve()
+    is_contained = False
+    try:
+        resolved_dir.relative_to(allowed_root)
+        is_contained = True
+    except ValueError:
+        pass
+    if not is_contained:
+        try:
+            resolved_dir.relative_to(temp_root)
+            is_contained = True
+        except ValueError:
+            pass
+    if not is_contained:
+        raise ValueError(f"Path containment violation: directory '{resolved_dir}' is outside '{allowed_root}' and system temp directory.")
+
+    effective_dir.mkdir(parents=True, exist_ok=True)
     safe_symbol = sanitize_symbol_for_filename(symbol)
     filename = f"{safe_symbol}_{timeframe}_raw.csv"
-    full_path = out_path / filename
+    full_path = effective_dir / filename
 
     # Write to temp file first; only rename when complete and non-empty.
-    fd, tmp_name = tempfile.mkstemp(dir=out_path, prefix=f"{filename}.tmp.", suffix=".csv")
+    fd, tmp_name = tempfile.mkstemp(dir=effective_dir, prefix=f"{filename}.tmp.", suffix=".csv")
     try:
         with os.fdopen(fd, "w", newline="", encoding="utf-8") as fh:
             df.to_csv(fh, index=False)
         tmp_path = Path(tmp_name)
         if tmp_path.stat().st_size == 0:
-            raise RuntimeError("Temp file written for {full_path} has zero bytes; aborting atomic swap.")
+            raise RuntimeError(f"Temp file written for {full_path} has zero bytes; aborting atomic swap.")
         # os.replace is atomic on POSIX; on Windows it uses MoveFileEx which is close enough.
         os.replace(tmp_name, full_path)
     except Exception:
