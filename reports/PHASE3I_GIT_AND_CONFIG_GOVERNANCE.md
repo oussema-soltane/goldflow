@@ -109,3 +109,4 @@ Get-ChildItem -Recurse -Filter '*.py' | Select-String -Pattern 'order_send'
    In `src/backtesting/engine.py`, trades are processed through an in-memory event loop (`run_event_backtest`) that operates purely on pandas DataFrames and writes to Python dictionaries. There is no network socket, broker gateway, or IPC mechanism to transmit orders to MetaTrader5 or any external broker.
 4. **Conclusion:**  
    The statement "live trading is permanently disabled" is an **architectural reality**. GoldFlow is structurally incapable of placing real market orders.
+

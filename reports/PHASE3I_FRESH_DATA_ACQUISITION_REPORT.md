@@ -93,3 +93,4 @@ In accordance with strict quantitative research governance:
 - `SMC_CONFLUENCE_V2` evaluation is **SUSPENDED** pending acquisition of unconsumed data.
 - The evaluation runner `scripts/run_prospective_evaluation.py` will automatically reject execution on any consumed dataset.
 - Research integrity is certified intact.
+

@@ -19,3 +19,4 @@ except ImportError:
     print("MetaTrader5 python package not installed.")
 except Exception as e:
     print(f"MT5 check error: {e}")
+

@@ -85,3 +85,4 @@ To prevent ambiguity, GoldFlow research reports must never conflate the followin
    A $p$-value of $0.1141$ means that the null hypothesis (zero edge) cannot be rejected at the 5% level. It does not prove the edge is zero; it indicates that the sample size ($N=36$) lacks sufficient statistical power to confirm an edge.
 3. **Never claim statistical edge based on Profit Factor alone.**  
    A backtest Profit Factor of $1.602$ is an unweighted point estimate. Without evaluating its confidence interval and out-of-sample persistence, a point estimate is vulnerable to regime clustering and survivorship bias.
+

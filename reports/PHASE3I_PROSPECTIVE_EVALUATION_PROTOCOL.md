@@ -93,3 +93,4 @@ To achieve qualification for Demo Trading Incubation, `SMC_CONFLUENCE_V2` must p
 | **GATE-6** | Friction Stress Resilience | Positive Net P&L at 2.0x costs | **FAIL (REMAIN IN RESEARCH)** |
 
 **Strict Fiduciary Rule:** No gate may be lowered, waived, or averaged out. Failure of any single gate results in an immediate **FAIL** verdict. The strategy will remain in research.
+

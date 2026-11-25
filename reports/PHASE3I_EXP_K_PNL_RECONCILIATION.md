@@ -108,3 +108,4 @@ Whether evaluated as **-$107.04** or **-$132.04**, the strategic verdict remains
 - Out-of-sample Profit Factor: **0.610**.
 
 This proves conclusively that `EXP_K_FULL` was an in-sample overfitted candidate and cannot be promoted.
+

@@ -84,3 +84,4 @@ In accordance with strict research governance:
 2. The cryptographic SHA-256 hash `1eaa40373f9e89c3f65fb216badd6604fa7df428c973cf495902bf8a0bd7eb8c` is locked.
 3. Zero parameters have been or will be adjusted on this corrective branch.
 4. Evaluation of V2 is deferred until an unconsumed, pristine dataset is acquired and verified.
+

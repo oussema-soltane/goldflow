@@ -187,3 +187,4 @@ df = pd.DataFrame(findings)
 df.to_csv("reports/PHASE3I_FINDINGS_LEDGER.csv", index=False)
 df.to_csv("reports/PHASE3F_FINDINGS_LEDGER.csv", index=False)
 print(f"Generated reports/PHASE3I_FINDINGS_LEDGER.csv and updated reports/PHASE3F_FINDINGS_LEDGER.csv with {len(df)} audit items.")
+

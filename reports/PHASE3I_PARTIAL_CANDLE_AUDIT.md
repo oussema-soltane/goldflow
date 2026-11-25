@@ -87,3 +87,4 @@ To scientifically quantify whether partial candles distorted research conclusion
    - Attach completeness metadata (`is_complete`, `observed_m5_count`) to all aggregated bars.
    - For indicator calculation, optionally mask or exclude incomplete boundary bars.
    - The original Phase 3 dataset `data/research/phase3/processed/XAUUSD_M15_extended.csv` is preserved unmodified to maintain research provenance.
+

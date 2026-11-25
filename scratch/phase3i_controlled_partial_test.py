@@ -92,3 +92,4 @@ df_comp = pd.DataFrame(comparison_rows)
 df_comp.to_csv("scratch/PHASE3I_PARTIAL_CANDLE_COMPARISON.csv", index=False)
 print("=== CONTROLLED PARTIAL CANDLE COMPARISON ===")
 print(df_comp.to_string(index=False))
+

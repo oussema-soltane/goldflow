@@ -20,3 +20,4 @@ if hashlib.sha256(content_lf).hexdigest() == expected:
     print("MATCHES WITH LF!")
 elif hashlib.sha256(content_crlf).hexdigest() == expected:
     print("MATCHES WITH CRLF!")
+

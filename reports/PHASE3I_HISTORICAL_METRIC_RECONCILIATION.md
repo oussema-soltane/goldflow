@@ -83,3 +83,4 @@ In `src/backtesting/engine.py`, infinite profit factor is tagged as $999.0$.
 | **EXP_K In-Sample Profit Factor** | **1.602** | `PHASE3_TRADE_LEDGER.csv` | Gross Profit \$1,431.73 / Gross Loss \$893.60. |
 | **EXP_K Bootstrap PF 95% CI (L=5)** | **[0.797, 2.790]** | `BOOTSTRAP_SENSITIVITY_EXP_K.csv` | Lower bound strictly $< 1.000$ across all valid $L$. |
 | **EXP_K Empirical $P(\text{Net} \le 0)$** | **7.7% – 7.9%** | 10,000 resamples | Failure to meet institutional gate ($p < 0.05$). |
+
